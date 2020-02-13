@@ -178,6 +178,9 @@ return [
         //Laravel Collective Forms
         Collective\Html\HtmlServiceProvider::class,
 
+        //SweetAlert2
+        RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+
     ],
 
     /*
@@ -230,6 +233,9 @@ return [
         //Laravel Collective Forms
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+
+        //SweetAlert2
+        'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
     ],
 
 ];
