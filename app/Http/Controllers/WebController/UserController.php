@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use RealRashid\SweetAlert\Facades\Alert;
 
 
-class UsersController extends Controller
+class UserController extends Controller
 {
     use AuthenticatesUsers;
 
@@ -34,13 +34,13 @@ class UsersController extends Controller
             Alert::error('Login Failed', 'Invalid Email/Password');
             return redirect()->back()->withInput();
         }
-
-        Alert::success('Login Success', 'Successfully Logged In!');
-        return redirect()->back();
+        
+        return redirect()->route('admin.dashboard');
     }
 
-    public function dashboard()
+    public function sign_out(Request $request)
     {
-        return view('dashboard');
+        auth()->logout();
+        return redirect()->route('login');
     }
 }
