@@ -7,8 +7,8 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-use App\Models\User;
-
+use App\User;
+use App\Product;
 
 class Controller extends BaseController
 {
@@ -24,5 +24,11 @@ class Controller extends BaseController
     {
         $user = new User();
         return $user;
+    }
+
+    public function product()
+    {
+        $product = new Product();
+        return $product;
     }
 }
