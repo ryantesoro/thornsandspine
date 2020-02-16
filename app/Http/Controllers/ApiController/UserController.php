@@ -98,11 +98,11 @@ class UserController extends Controller
             'last_name' => 'required|min:3|max:30',
             'address' => 'required',
             'city' => 'required',
-            'contact_number' => 'required|min:7|max:11',
-            'shipping_address' => 'required',
-            'shipping_city' => 'required',
-            'shipping_region' => 'required',
-            'shipping_location_type' => 'required'
+            'contact_number' => 'required|min:7|max:11'
+            // 'shipping_address' => 'required',
+            // 'shipping_city' => 'required',
+            // 'shipping_region' => 'required',
+            // 'shipping_location_type' => 'required'
         );
 
         $validator = Validator::make($registration_details, $options);
