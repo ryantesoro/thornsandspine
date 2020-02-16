@@ -12,7 +12,17 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('login', ['as' => 'login', 'uses' => 'UserController@login']);
+Route::post('register', ['as' => 'register', 'uses' => 'UserController@register']);
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('email/verify', ['as' => 'email.verify', 'uses' => 'VerificationController@verify']);
+Route::post('email/resend', ['as' => 'email.resend', 'uses' => 'VerificationController@resend']);
+
+Route::post('password/request', ['as' => 'password.request', 'uses' => 'ResetPasswordController@req']);
+Route::post('password/verify', ['as' => 'password.verify', 'uses' => 'ResetPasswordController@verify']);
+Route::post('password/reset', ['as' => 'password.reset', 'uses' => 'ResetPasswordController@reset']);
+
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('user', ['as' => 'user', 'uses' => 'UserController@user']);
+    Route::get('test', ['as' => 'test', 'uses' => 'UserController@test']);
 });

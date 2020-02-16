@@ -9,6 +9,10 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 use App\User;
 use App\Product;
+use App\Customer;
+use App\Shipping;
+use App\EmailVerification;
+use App\ResetPassword;
 
 class Controller extends BaseController
 {
@@ -30,5 +34,29 @@ class Controller extends BaseController
     {
         $product = new Product();
         return $product;
+    }
+
+    public function customer()
+    {
+        $customer = new Customer();
+        return $customer;
+    }
+
+    public function shipping()
+    {
+        $shipping = new Shipping();
+        return $shipping;
+    }
+
+    public function verification()
+    {
+        $verification = new EmailVerification();
+        return $verification;
+    }
+
+    public function reset_password()
+    {
+        $reset_password = new ResetPassword();
+        return $reset_password;
     }
 }
