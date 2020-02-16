@@ -15,8 +15,12 @@ use Illuminate\Http\Request;
 Route::post('login', ['as' => 'login', 'uses' => 'UserController@login']);
 Route::post('register', ['as' => 'register', 'uses' => 'UserController@register']);
 
-Route::post('verify', ['as' => 'verify', 'uses' => 'VerificationController@verify']);
-Route::post('resend', ['as' => 'resend', 'uses' => 'VerificationController@resend']);
+Route::post('email/verify', ['as' => 'email.verify', 'uses' => 'VerificationController@verify']);
+Route::post('email/resend', ['as' => 'email.resend', 'uses' => 'VerificationController@resend']);
+
+Route::post('password/request', ['as' => 'password.request', 'uses' => 'ResetPasswordController@req']);
+Route::post('password/verify', ['as' => 'password.verify', 'uses' => 'ResetPasswordController@verify']);
+Route::post('password/reset', ['as' => 'password.reset', 'uses' => 'ResetPasswordController@reset']);
 
 Route::group(['middleware' => 'auth:api'], function() {
     Route::get('user', ['as' => 'user', 'uses' => 'UserController@user']);
