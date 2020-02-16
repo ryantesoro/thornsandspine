@@ -16,8 +16,8 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $credentials = [
-            'email' => $request->get('email'),
-            'password' => $request->get('password')
+            'email' => $request->post('email'),
+            'password' => $request->post('password')
         ];
 
         $login_attempt = auth()->attempt($credentials);
@@ -38,43 +38,26 @@ class UserController extends Controller
         ]);
     }
 
-    public function test()
-    {
-        $customer_id = auth()->user()->customer()->value('id');
-        $shipping_details = [
-            'address' => 'asd',
-            'city' => 'asd',
-            'region' => 'asd',
-            'location_type' => 'asd'
-        ];
-
-        $details = $this->customer()->find($customer_id)->shipping()->create($shipping_details);
-        return response()->json([
-            "success" => true,
-            "data" => $details
-        ]);
-    }
-
     public function register(Request $request)
     {
         $credentials = [
-            'email' => $request->get('email'),
-            'password' => $request->get('password')
+            'email' => $request->post('email'),
+            'password' => $request->post('password')
         ];
 
         $customer_details = [
-            'first_name' => $request->get('first_name'),
-            'last_name' => $request->get('last_name'),
-            'address' => $request->get('address'),
-            'city' => $request->get('city'),
-            'contact_number' => $request->get('contact_number')
+            'first_name' => $request->post('first_name'),
+            'last_name' => $request->post('last_name'),
+            'address' => $request->post('address'),
+            'city' => $request->post('city'),
+            'contact_number' => $request->post('contact_number')
         ];
 
         $shipping_details = [
-            'shipping_address' => $request->get('shipping_address'),
-            'shipping_city' => $request->get('shipping_city'),
-            'shipping_region' => $request->get('shipping_region'),
-            'shipping_location_type' => $request->get('shipping_location_type')
+            'shipping_address' => $request->post('shipping_address'),
+            'shipping_city' => $request->post('shipping_city'),
+            'shipping_region' => $request->post('shipping_region'),
+            'shipping_location_type' => $request->post('shipping_location_type')
         ];
 
         $registration_details = array_merge($credentials, $customer_details, $shipping_details);
