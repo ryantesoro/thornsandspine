@@ -59,6 +59,15 @@ class User extends Authenticatable
         return $user;
     }
 
+    //Change User Password
+    public function changePassword($where, $password)
+    {
+        $user = User::where($where)
+            ->update(['password' => bcrypt($password)]);
+        
+        return $user;
+    }
+
     public function customer()
     {
         return $this->belongsToMany('App\Customer', 'user_customer');
