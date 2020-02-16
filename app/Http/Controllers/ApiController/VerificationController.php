@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Notifications\EmailVerification;
-use Carbon\Carbon;
 
 
 class VerificationController extends Controller
@@ -43,12 +42,16 @@ class VerificationController extends Controller
     {
         $email = $request->get('email');
 
-        // if ($validator->fails()) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'msg' => 'Email address is invalid'
-        //     ]);
-        //}
+        $validator = Validator::make(['token' => $email], [
+            'email' => 'required|exists:users,email'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Email address is invalid'
+            ]);
+        }
 
         $user = $this->user()->getUser(['email' => $email]);
 
