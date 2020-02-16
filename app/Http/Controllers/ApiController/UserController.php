@@ -53,14 +53,14 @@ class UserController extends Controller
             'contact_number' => $request->post('contact_number')
         ];
 
-        $shipping_details = [
-            'shipping_address' => $request->post('shipping_address'),
-            'shipping_city' => $request->post('shipping_city'),
-            'shipping_region' => $request->post('shipping_region'),
-            'shipping_location_type' => $request->post('shipping_location_type')
-        ];
+        // $shipping_details = [
+        //     'shipping_address' => $request->post('shipping_address'),
+        //     'shipping_city' => $request->post('shipping_city'),
+        //     'shipping_region' => $request->post('shipping_region'),
+        //     'shipping_location_type' => $request->post('shipping_location_type')
+        // ];
 
-        $registration_details = array_merge($credentials, $customer_details, $shipping_details);
+        $registration_details = array_merge($credentials, $customer_details);
 
         $registration_details_validator = $this->validateRegistrationDetails($registration_details);
 
@@ -80,8 +80,8 @@ class UserController extends Controller
         $customer = $this->customer()->registerCustomer($customer_details);
         $user->customer()->save($customer);
         
-        $shipping = $this->shipping()->addShipping($shipping_details);
-        $customer->shipping()->save($shipping);
+        // $shipping = $this->shipping()->addShipping($shipping_details);
+        // $customer->shipping()->save($shipping);
 
         return response()->json([
             'success' => true,
