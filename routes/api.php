@@ -44,9 +44,9 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('/', ['as' => 'cart.store', 'uses' => 'CartController@store']);
 
         //Update Cart
-        Route::post('update/{id}', ['as' => 'cart.update', 'uses' => 'CartController@update']);
+        Route::post('update/{cart_id}', ['as' => 'cart.update', 'uses' => 'CartController@update']);
 
         //Delete Cart
-        Route::post('delete/{id}', ['as' => 'cart.destroy', 'uses' => 'CartController@destroy']);
+        Route::post('delete/{cart_id}', ['as' => 'cart.destroy', 'uses' => 'CartController@destroy']);
     });
 });
