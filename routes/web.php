@@ -25,7 +25,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     //PRODUCTS
     Route::group(['prefix' => 'products'], function() {
-        
+
         //Products Index
         Route::get('/', ['as' => 'admin.product.index', 'uses' => 'ProductController@index']);
 
@@ -49,6 +49,12 @@ Route::group(['middleware' => 'auth'], function() {
 
         //Product Restore
         Route::post('restore/{code}', ['as' => 'admin.product.restore', 'uses' => 'ProductController@restore']);
+    });
+
+    Route::group(['prefix' => 'pots'], function() {
+
+        //Pot Index
+        Route::get('/', ['as' => 'admin.pot.index', 'uses' => 'PotController@index']);
     });
 
     //Orders Page
