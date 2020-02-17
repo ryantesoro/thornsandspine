@@ -33,6 +33,20 @@ class Product extends Model
         return $list_of_products;
     }
 
+    //Browse products
+    public function browseProducts($where)
+    {
+        $list_of_products = Product::select('*');
+        if ($where != null || !empty($where)) {
+            $search = '%'.$where.'%';
+            $list_of_products = Product::whereRaw('products.name LIKE ?', [
+                $search
+            ]);
+        }
+    
+        return $list_of_products->get();
+    }
+
     //Check Product
     public function productExists($code)
     {
@@ -101,5 +115,10 @@ class Product extends Model
             ->restore();
 
         return $restore_product;
+    }
+
+    public function cart()
+    {
+        return $this->belongsToMany('App\Cart', 'cart_product');
     }
 }
