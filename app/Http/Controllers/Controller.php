@@ -13,6 +13,7 @@ use App\Customer;
 use App\Shipping;
 use App\EmailVerification;
 use App\ResetPassword;
+use App\Order;
 
 class Controller extends BaseController
 {
@@ -58,5 +59,11 @@ class Controller extends BaseController
     {
         $reset_password = new ResetPassword();
         return $reset_password;
+    }
+
+    public function order()
+    {
+        $order = new Order();
+        return $order;
     }
 }

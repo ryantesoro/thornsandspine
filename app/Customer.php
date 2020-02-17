@@ -32,4 +32,9 @@ class Customer extends Model
     {
         return $this->belongsToMany('App\Shipping', 'customer_shipping');
     }
+
+    public function order()
+    {
+        return $this->belongsToMany('App\Order', 'customer_order');
+    }
 }
