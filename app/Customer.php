@@ -42,6 +42,14 @@ class Customer extends Model
         return $cart;
     }
 
+    //Get Customer Orders
+    public function getCustomerOrders($customer_model)
+    {
+        $orders = $customer_model->order();
+
+        return $orders;
+    }
+
     public function user()
     {
         return $this->belongsToMany('App\User', 'user_customer');
