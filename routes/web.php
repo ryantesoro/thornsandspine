@@ -55,6 +55,12 @@ Route::group(['middleware' => 'auth'], function() {
 
         //Pot Index
         Route::get('/', ['as' => 'admin.pot.index', 'uses' => 'PotController@index']);
+
+        //Pot Create
+        Route::get('create', ['as' => 'admin.pot.create', 'uses' => 'PotController@create']);
+
+        //Pot Post
+        Route::post('store', ['as' => 'admin.pot.store', 'uses' => 'PotController@store']);
     });
 
     //Orders Page
