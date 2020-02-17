@@ -13,7 +13,11 @@ use App\Customer;
 use App\Shipping;
 use App\EmailVerification;
 use App\ResetPassword;
+<<<<<<< HEAD
 use App\Order;
+=======
+use App\Cart;
+>>>>>>> develop
 
 class Controller extends BaseController
 {
@@ -61,9 +65,16 @@ class Controller extends BaseController
         return $reset_password;
     }
 
+<<<<<<< HEAD
     public function order()
     {
         $order = new Order();
         return $order;
+=======
+    public function cart()
+    {
+        $cart = new Cart();
+        return $cart;
+>>>>>>> develop
     }
 }

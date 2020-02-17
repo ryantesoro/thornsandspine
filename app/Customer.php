@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class Customer extends Model
 {
@@ -23,6 +24,24 @@ class Customer extends Model
         return $customer;
     }
 
+    //Get customer by user id
+    public function getCustomerDetailsByUser($user_id)
+    {
+        $user = User::find($user_id);
+        $customer_id = $user->customer()->value('id');
+        $customer = Customer::find($customer_id);
+
+        return $customer;
+    }
+
+    //Get Customer Cart
+    public function getCustomerCart($customer_model)
+    {
+        $cart = $customer_model->cart();
+
+        return $cart;
+    }
+
     public function user()
     {
         return $this->belongsToMany('App\User', 'user_customer');
@@ -33,8 +52,14 @@ class Customer extends Model
         return $this->belongsToMany('App\Shipping', 'customer_shipping');
     }
 
+<<<<<<< HEAD
     public function order()
     {
         return $this->belongsToMany('App\Order', 'customer_order');
+=======
+    public function cart()
+    {
+        return $this->belongsToMany('App\Cart', 'customer_cart');
+>>>>>>> develop
     }
 }
