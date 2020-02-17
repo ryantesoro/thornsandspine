@@ -26,8 +26,11 @@ class Product extends Model
     //Get product model
     public function getProductModel($code)
     {
-        $product_details = Product::where('code', $code)->get()->first();
+        $product_details = Product::where('code', $code)
+            ->get()
+            ->first();
         $product_model = Product::find($product_details->id);
+        
         return $product_model;
     }
 
@@ -128,5 +131,10 @@ class Product extends Model
     public function cart()
     {
         return $this->belongsToMany('App\Cart', 'cart_product');
+    }
+
+    public function order()
+    {
+        return $this->belongsToMany('App\Order', 'order_product');
     }
 }
