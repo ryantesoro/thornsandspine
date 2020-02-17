@@ -19,6 +19,7 @@ class CreateOrdersTable extends Migration
             $table->string('recipient');
             $table->text('remarks');
             $table->integer('total');
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }
