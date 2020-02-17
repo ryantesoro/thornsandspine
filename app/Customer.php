@@ -52,14 +52,13 @@ class Customer extends Model
         return $this->belongsToMany('App\Shipping', 'customer_shipping');
     }
 
-<<<<<<< HEAD
     public function order()
     {
         return $this->belongsToMany('App\Order', 'customer_order');
-=======
+    }
+    
     public function cart()
     {
         return $this->belongsToMany('App\Cart', 'customer_cart');
->>>>>>> develop
     }
 }
