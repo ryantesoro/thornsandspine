@@ -23,6 +23,14 @@ class Product extends Model
 
     public $timestamps = true;
 
+    //Get product model
+    public function getProductModel($code)
+    {
+        $product_details = Product::where('code', $code)->get()->first();
+        $product_model = Product::find($product_details->id);
+        return $product_model;
+    }
+
     //Gets all products
     public function getProducts()
     {

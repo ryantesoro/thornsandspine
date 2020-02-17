@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class Customer extends Model
 {
@@ -20,6 +21,15 @@ class Customer extends Model
     public function registerCustomer($customer_details)
     {
         $customer = Customer::create($customer_details);
+        return $customer;
+    }
+
+    public function getCustomerDetailsByUser($user_id)
+    {
+        $user = User::find($user_id);
+        $customer_id = $user->customer()->value('id');
+        $customer = Customer::find($customer_id);
+
         return $customer;
     }
 

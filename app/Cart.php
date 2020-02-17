@@ -18,6 +18,13 @@ class Cart extends Model
 
     public $timestamps = true;
 
+    //Store Cart
+    public function storeCart($quantity)
+    {
+        $cart_details = Cart::create(['quantity' => $quantity]);
+        return $cart_details;
+    }
+
     public function product()
     {
         return $this->belongsToMany('App\Product', 'cart_product');
