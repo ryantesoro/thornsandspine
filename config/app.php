@@ -181,6 +181,8 @@ return [
         //SweetAlert2
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
 
+        //Image Intervention
+        Intervention\Image\ImageServiceProvider::class,
     ],
 
     /*
@@ -236,6 +238,9 @@ return [
 
         //SweetAlert2
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+
+        //Image Intervention
+        'Image' => Intervention\Image\Facades\Image::class,
     ],
 
 ];
