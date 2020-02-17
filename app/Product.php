@@ -23,6 +23,14 @@ class Product extends Model
 
     public $timestamps = true;
 
+    //Get product model
+    public function getProductModel($code)
+    {
+        $product_details = Product::where('code', $code)->get()->first();
+        $product_model = Product::find($product_details->id);
+        return $product_model;
+    }
+
     //Gets all products
     public function getProducts()
     {
@@ -31,6 +39,20 @@ class Product extends Model
             ->sortByDesc('created_at');
 
         return $list_of_products;
+    }
+
+    //Browse products
+    public function browseProducts($where)
+    {
+        $list_of_products = Product::select('*');
+        if ($where != null || !empty($where)) {
+            $search = '%'.$where.'%';
+            $list_of_products = Product::whereRaw('products.name LIKE ?', [
+                $search
+            ]);
+        }
+    
+        return $list_of_products->get();
     }
 
     //Check Product
@@ -101,5 +123,10 @@ class Product extends Model
             ->restore();
 
         return $restore_product;
+    }
+
+    public function cart()
+    {
+        return $this->belongsToMany('App\Cart', 'cart_product');
     }
 }
