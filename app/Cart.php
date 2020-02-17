@@ -18,6 +18,14 @@ class Cart extends Model
 
     public $timestamps = true;
 
+    //Get Cart Model
+    public function getCartModel($cart_id)
+    {
+        $cart_model = Cart::find($cart_id);
+
+        return $cart_model;
+    }
+
     //Store Cart
     public function storeCart($quantity)
     {
