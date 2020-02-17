@@ -34,4 +34,19 @@ Route::group(['middleware' => 'auth:api'], function() {
         //Show Product
         Route::get('{code}', ['as' => 'product.show', 'uses' => 'ProductController@show']);
     });
+
+    //CART
+    Route::group(['prefix' => 'cart'], function() {
+        //Browse Cart
+        Route::get('/', ['as' => 'cart.index', 'uses' => 'CartController@index']);
+
+        //Store Cart
+        Route::post('/', ['as' => 'cart.store', 'uses' => 'CartController@store']);
+
+        //Update Cart
+        Route::post('update/{id}', ['as' => 'cart.update', 'uses' => 'CartController@update']);
+
+        //Delete Cart
+        Route::post('delete/{id}', ['as' => 'cart.destroy', 'uses' => 'CartController@destroy']);
+    });
 });
