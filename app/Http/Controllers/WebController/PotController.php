@@ -10,6 +10,6 @@ class PotController extends Controller
     public function index(Request $request)
     {
         $pots = $this->pot()->getPots();
-        return view('pages.pot.pot_index');
+        return view('pages.pot.pot_index')->with('pots', $pots);
     }
 }

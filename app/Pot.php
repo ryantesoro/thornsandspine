@@ -3,9 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 
 class Pot extends Model
 {
+    use SoftDeletes;
+
     protected $table = "pots";
 
     protected $hidden = ['pivot'];
@@ -19,7 +23,7 @@ class Pot extends Model
     //Fetch all pots
     public function getPots()
     {
-        $pots = Pot::all();
+        $pots = Pot::withTrashed();
         return $pots;
     }
 
