@@ -25,6 +25,15 @@ class Cart extends Model
         return $cart_details;
     }
 
+    //Update Cart
+    public function updateCart($cart_details)
+    {
+        $update_cart = Cart::find($cart_details['cart_id'])
+            ->update(['quantity' => $cart_details['quantity']]);
+
+        return $update_cart;
+    }
+
     public function product()
     {
         return $this->belongsToMany('App\Product', 'cart_product');

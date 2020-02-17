@@ -53,6 +53,33 @@ class CartController extends Controller
         ]);
     }
 
+    public function update(Request $request, $cart_id)
+    {
+        $cart_details = [
+            'cart_id' => $cart_id,
+            'quantity' => $request->post('quantity')
+        ];
+
+        $validator = Validator::make($cart_details, [
+            'cart_id' => 'required|exists:carts,id',
+            'quantity' => 'required' 
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+
+        $update_cart = $this->cart()->updateCart($cart_details);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Successfully updated cart!'
+        ]);
+    }
+
     private function setUserId($user_id)
     {
         $this->user_id = $user_id;
