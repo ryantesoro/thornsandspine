@@ -93,6 +93,13 @@ class CartController extends Controller
             ]);
         }
 
+        $this->setUserId(auth()->user()->id);
+        $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
+
+        $cart = $this->customer()->getCustomerCart($customer);
+
+        $cart->customer()->detach();
+        $cart->product()->detach();
         $destroy_cart = $this->cart()->destroyCart($cart_id);
 
         return response()->json([
@@ -101,7 +108,26 @@ class CartController extends Controller
         ]);
     }
 
-    
+    public function clear(Request $request)
+    {
+        $this->setUserId(auth()->user()->id);
+        $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
+
+        $carts = $this->customer()->getCustomerCart($customer);
+        foreach ($carts->get() as $cart) {
+            $cart_model = $this->cart()->getCartModel($cart->id);
+            $cart_model->product()->detach();
+
+            $destroy_cart = $this->cart()->destroyCart($cart->id);
+        }
+
+        $customer->cart()->detach();
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Successfully cleared cart!'
+        ]);
+    }
 
     private function setUserId($user_id)
     {
