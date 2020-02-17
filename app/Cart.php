@@ -34,6 +34,15 @@ class Cart extends Model
         return $update_cart;
     }
 
+    //Destroy Cart (1 row)
+    public function destroyCart($cart_id)
+    {
+        $destroy_cart = Cart::find($cart_id)
+            ->delete();
+        
+        return $destroy_cart;
+    }
+
     public function product()
     {
         return $this->belongsToMany('App\Product', 'cart_product');

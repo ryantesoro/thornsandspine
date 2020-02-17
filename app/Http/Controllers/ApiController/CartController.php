@@ -80,6 +80,29 @@ class CartController extends Controller
         ]);
     }
 
+    public function destroy(Request $request, $cart_id)
+    {
+        $validator = Validator::make(['cart_id' => $cart_id], [
+            'cart_id' => 'required|exists:carts,id'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+
+        $destroy_cart = $this->cart()->destroyCart($cart_id);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Successfully deleted product in cart!'
+        ]);
+    }
+
+    
+
     private function setUserId($user_id)
     {
         $this->user_id = $user_id;
