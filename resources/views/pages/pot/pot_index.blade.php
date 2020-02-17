@@ -12,7 +12,7 @@
                 <h4>List Of Pots</h4>
             </div>
             <div>
-                <a class="btn btn-success font-weight-bold" href="{{ route('admin.product.create') }}">Create Pot</a>
+                <a class="btn btn-success font-weight-bold" href="{{ route('admin.pot.create') }}">Create Pot</a>
             </div>
         </div>
         <hr>
@@ -28,7 +28,7 @@
                 <tbody>
                     @foreach($pots as $pot)
                     <tr>
-                        <td></td>
+                        <td>{{ $pot['name'] }}</td>
                         <td class="pt-3">
                             @if (empty($pot['deleted_at']))
                             <span class="badge badge-pill badge-info">shown</span>
