@@ -52,4 +52,11 @@ Route::group(['middleware' => 'auth:api'], function() {
         //Delete Cart
         Route::get('clear', ['as' => 'cart.clear', 'uses' => 'CartController@clear']);
     });
+
+    //ORDERS
+    Route::group(['prefix' => 'order'], function () {
+
+        //Browse Orders
+        Route::get('/', ['as' => 'order.index', 'uses' => 'CartController@order']);
+    });
 });
