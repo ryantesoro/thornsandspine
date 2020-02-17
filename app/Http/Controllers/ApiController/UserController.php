@@ -42,7 +42,8 @@ class UserController extends Controller
     {
         $credentials = [
             'email' => $request->post('email'),
-            'password' => $request->post('password')
+            'password' => $request->post('password'),
+            'password1' => $request->post('password1')
         ];
 
         $customer_details = [
@@ -94,6 +95,7 @@ class UserController extends Controller
         $options = array(
             'email' => 'required|unique:users,email',
             'password' => 'required|min:8|max:21',
+            'password1' => 'required|min:8|max:21|same:password',
             'first_name' => 'required|min:3|max:30',
             'last_name' => 'required|min:3|max:30',
             'address' => 'required',
