@@ -48,5 +48,8 @@ Route::group(['middleware' => 'auth:api'], function() {
 
         //Delete Cart
         Route::post('delete/{cart_id}', ['as' => 'cart.destroy', 'uses' => 'CartController@destroy']);
+
+        //Delete Cart
+        Route::get('clear', ['as' => 'cart.clear', 'uses' => 'CartController@clear']);
     });
 });
