@@ -129,4 +129,9 @@ class Product extends Model
     {
         return $this->belongsToMany('App\Cart', 'cart_product');
     }
+
+    public function order()
+    {
+        return $this->belongsToMany('App\Order', 'order_product');
+    }
 }
