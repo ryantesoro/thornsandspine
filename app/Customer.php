@@ -24,6 +24,7 @@ class Customer extends Model
         return $customer;
     }
 
+    //Get customer by user id
     public function getCustomerDetailsByUser($user_id)
     {
         $user = User::find($user_id);
@@ -31,6 +32,14 @@ class Customer extends Model
         $customer = Customer::find($customer_id);
 
         return $customer;
+    }
+
+    //Get Customer Cart
+    public function getCustomerCart($customer_model)
+    {
+        $cart = $customer_model->cart();
+
+        return $cart;
     }
 
     public function user()
