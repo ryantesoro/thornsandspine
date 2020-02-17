@@ -26,8 +26,11 @@ class Product extends Model
     //Get product model
     public function getProductModel($code)
     {
-        $product_details = Product::where('code', $code)->get()->first();
+        $product_details = Product::where('code', $code)
+            ->get()
+            ->first();
         $product_model = Product::find($product_details->id);
+        
         return $product_model;
     }
 

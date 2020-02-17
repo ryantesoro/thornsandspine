@@ -55,8 +55,10 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     //ORDERS
     Route::group(['prefix' => 'order'], function () {
-
         //Browse Orders
-        Route::get('/', ['as' => 'order.index', 'uses' => 'CartController@order']);
+        Route::get('/', ['as' => 'order.index', 'uses' => 'OrderController@index']);
+
+        //Store Order
+        Route::post('/', ['as' => 'order.store', 'uses' => 'OrderController@store']);
     });
 });

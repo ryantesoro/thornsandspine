@@ -18,6 +18,24 @@ class Cart extends Model
 
     public $timestamps = true;
 
+    //Get Cart Total
+    public function getCartTotal($customer_model)
+    {
+        $cart_model = $customer_model->cart();
+        
+        $total = 0;
+        foreach ($cart_model->get() as $cart) {
+            $product = $cart->product();
+            
+            $quantity = $cart->quantity;
+            $price = $product->value('price');
+
+            $total += $quantity * $price;
+        }
+
+        return $total;
+    }
+
     //Get Cart Model
     public function getCartModel($cart_id)
     {
