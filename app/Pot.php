@@ -23,8 +23,21 @@ class Pot extends Model
     //Fetch all pots
     public function getPots()
     {
-        $pots = Pot::withTrashed();
+        $pots = Pot::withTrashed()->get();
+
         return $pots;
+    }
+
+    //Store pot
+    public function storePot($pot_details)
+    {
+        $pot_new_details = [
+            'name' => $pot_details['pot_name'],
+            'description' => $pot_details['pot_description']
+        ];
+        
+        $pot = Pot::create($pot_new_details);
+        return $pot;
     }
 
     public function order()
