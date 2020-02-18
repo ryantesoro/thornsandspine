@@ -64,7 +64,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/', ['as' => 'admin.pot.store', 'uses' => 'PotController@store']);
 
         //Pot Show
-        Route::get('{pot_id}', ['as' => 'admin.pot.show', 'uses' => 'PotController@show']);
+        Route::get('show/{pot_id}', ['as' => 'admin.pot.show', 'uses' => 'PotController@show']);
 
         //Pot Edit
         Route::get('edit/{pot_id}', ['as' => 'admin.pot.edit', 'uses' => 'PotController@edit']);
@@ -96,7 +96,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/', ['as' => 'admin.shipping_province.index', 'uses' => 'ShippingProvinceController@index']);
 
         //Shipping Province Create
-        Route::get('{province_id}', ['as' => 'admin.shipping_province.show', 'uses' => 'ShippingProvinceController@show']);
+        Route::get('show/{province_id}', ['as' => 'admin.shipping_province.show', 'uses' => 'ShippingProvinceController@show']);
 
         //Shipping Province Create
         Route::get('create', ['as' => 'admin.shipping_province.create', 'uses' => 'ShippingProvinceController@create']);

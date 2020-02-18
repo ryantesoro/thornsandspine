@@ -25,7 +25,7 @@
                             Name
                         </td>
                         <td>
-                            {{ $province_details['name'] }}
+                            {{ ucwords($province_details['name']) }}
                         </td>
                     </tr>
                 </tbody>

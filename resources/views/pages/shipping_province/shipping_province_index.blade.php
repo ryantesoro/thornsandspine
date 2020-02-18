@@ -27,7 +27,7 @@
                 <tbody>
                     @foreach($provinces as $province)
                     <tr>
-                        <td>{{ $province['name'] }}</td>
+                        <td>{{ ucwords($province['name']) }}</td>
                         <td>
                             <a href="{{ route('admin.shipping_province.show', $province['id']) }}"
                                 class="btn btn-sm btn-primary font-weight-bold">View</a>
