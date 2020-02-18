@@ -100,6 +100,12 @@ Route::group(['middleware' => 'auth'], function() {
 
         //Shipping Province Store
         Route::post('/', ['as' => 'admin.shipping_province.store', 'uses' => 'ShippingProvinceController@store']);
+
+        //Shipping Province Edit
+        Route::get('edit/{province_id}', ['as' => 'admin.shipping_province.edit', 'uses' => 'ShippingProvinceController@edit']);
+
+        //Shipping Province Update
+        Route::post('update/{province_id}', ['as' => 'admin.shipping_province.update', 'uses' => 'ShippingProvinceController@update']);
      });
 
     //Orders Page

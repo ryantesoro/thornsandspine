@@ -40,4 +40,36 @@ class ShippingProvinceController extends Controller
         Alert::success('Add Province Successful', 'Success!');
         return redirect()->route('admin.shipping_province.index');
     }
+
+    public function edit($province_id)
+    {
+        if (!$this->shipping_province()->provinceExists($province_id)) {
+            Alert::error('Edit Province Failed', 'Province does not exist!');
+            return redirect()->route('admin.shipping_province.index');
+        }
+
+        $province_details = $this->shipping_province()->getProvince($province_id);
+
+        return view('pages.shipping_province.shipping_province_edit')
+            ->with('province_details', $province_details);
+    }
+
+    public function update(Request $request, $province_id)
+    {
+        $province_name = $request->post('shipping_province');
+
+        $validator = Validator::make(['shipping_province' => $province_name], [
+            'shipping_province' => 'required|unique:shipping_provinces,name'
+        ]);
+
+        if ($validator->fails()) {
+            Alert::warning('Update Province Failed', 'Invalid Input');
+            return redirect()->back()
+                ->withErrors($validator->errors());
+        }
+
+        $update_province = $this->shipping_province()->updateProvince($province_id, $province_name);
+        Alert::success('Update Province Successful', 'Success!');
+        return redirect()->route('admin.shipping_province.index');
+    }
 }

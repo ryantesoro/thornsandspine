@@ -31,7 +31,7 @@
                         <td>
                             <a href="{{ route('admin.pot.show', $province['id']) }}"
                                 class="btn btn-sm btn-primary font-weight-bold">View</a>
-                            <a href="{{ route('admin.pot.edit', $province['id']) }}"
+                            <a href="{{ route('admin.shipping_province.edit', $province['id']) }}"
                                 class="btn btn-sm btn-warning font-weight-bold">Edit</a>
                         </td>
                     </tr>
