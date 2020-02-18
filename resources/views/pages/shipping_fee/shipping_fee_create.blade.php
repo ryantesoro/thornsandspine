@@ -17,7 +17,7 @@
         @include('layouts.header')
         <div class="row">
             <div class="col text-left">
-                <h4>Create Pot</h4>
+                <h4>Create Shipping Fee</h4>
             </div>
             <div>
                 <a class="btn btn-secondary font-weight-bold" href="{{ route('admin.shipping_fee.index') }}">Go Back</a>
@@ -61,7 +61,7 @@
                     [
                     'class' => 'form-control',
                     'placeholder' => 'Name',
-                    'tab_index' => '1',
+                    'tab_index' => '2',
                     'data-toggle' => 'popover',
                     'data-trigger' => 'focus',
                     'title' => 'Shipping City',
@@ -75,7 +75,7 @@
             <div class="col-2">
                 <div class="form-group">
                     <label class="font-weight-bold">Shipping Price (PHP) ₱</label>
-                    {!! Form::number('shipping_price', $product['price'] ?? '',
+                    {!! Form::number('shipping_price', old('shipping_price') ?? '',
                     [
                     'class' => 'form-control',
                     'placeholder' => 'Peso',
