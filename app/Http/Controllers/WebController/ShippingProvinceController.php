@@ -16,6 +16,13 @@ class ShippingProvinceController extends Controller
             ->with('provinces', $provinces);
     }
 
+    public function show($province_id)
+    {
+        $province_details = $this->shipping_province()->getProvince($province_id);
+        return view('pages.shipping_province.shipping_province_show')
+            ->with('province_details', $province_details);
+    }
+
     public function create()
     {
         return view('pages.shipping_province.shipping_province_create');

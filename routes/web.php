@@ -18,13 +18,13 @@ Route::get('/', ['as' => 'login', 'uses' => 'HomeController@login']);
 Route::post('login', ['as' => 'admin.login', 'uses' => 'UserController@login']);
 
 //When Logged In
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => 'auth'], function () {
 
     //Dashboard Page
     Route::get('dashboard', ['as' => 'admin.dashboard', 'uses' => 'HomeController@dashboard']);
 
     //PRODUCTS
-    Route::group(['prefix' => 'products'], function() {
+    Route::group(['prefix' => 'products'], function () {
 
         //Products Index
         Route::get('/', ['as' => 'admin.product.index', 'uses' => 'ProductController@index']);
@@ -52,7 +52,7 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     //POTS
-    Route::group(['prefix' => 'pots'], function() {
+    Route::group(['prefix' => 'pots'], function () {
 
         //Pot Index
         Route::get('/', ['as' => 'admin.pot.index', 'uses' => 'PotController@index']);
@@ -80,7 +80,7 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     //SHIPPING FEES
-    Route::group(['prefix' => 'shipping_fees'], function() {
+    Route::group(['prefix' => 'shipping_fees'], function () {
 
         //Shipping Fee Index
         Route::get('/', ['as' => 'admin.shipping_fee.index', 'uses' => 'ShippingFeeController@index']);
@@ -89,11 +89,14 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('create', ['as' => 'admin.shipping_fee.create', 'uses' => 'ShippingFeeController@create']);
     });
 
-     //SHIPPING PROVINCES
-     Route::group(['prefix' => 'shipping_province'], function() {
+    //SHIPPING PROVINCES
+    Route::group(['prefix' => 'shipping_province'], function () {
 
         //Shipping Province Index
         Route::get('/', ['as' => 'admin.shipping_province.index', 'uses' => 'ShippingProvinceController@index']);
+
+        //Shipping Province Create
+        Route::get('{province_id}', ['as' => 'admin.shipping_province.show', 'uses' => 'ShippingProvinceController@show']);
 
         //Shipping Province Create
         Route::get('create', ['as' => 'admin.shipping_province.create', 'uses' => 'ShippingProvinceController@create']);
@@ -106,7 +109,7 @@ Route::group(['middleware' => 'auth'], function() {
 
         //Shipping Province Update
         Route::post('update/{province_id}', ['as' => 'admin.shipping_province.update', 'uses' => 'ShippingProvinceController@update']);
-     });
+    });
 
     //Orders Page
     Route::get('orders', ['as' => 'admin.order.index', 'uses' => 'OrderController@index']);
