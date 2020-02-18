@@ -25,7 +25,18 @@ class UserController extends Controller
         if (!$login_attempt) {
             return response()->json([
                 'success' => true,
-                'msg' => 'Invalid Email/Password'
+                'msg' => 'Invalid Email/Password',
+                'verification' => true
+            ]);
+        }
+
+        $user_id = auth()->user()->id;
+
+        if ($this->user()->isVerified($user_id)) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'You must verify your email first!',
+                'verification' => true
             ]);
         }
 
@@ -93,7 +104,7 @@ class UserController extends Controller
     private function validateRegistrationDetails($registration_details)
     {
         $options = array(
-            'email' => 'required|unique:users,email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|max:21',
             'password1' => 'required|min:8|max:21|same:password',
             'first_name' => 'required|min:3|max:30',
