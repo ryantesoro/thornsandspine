@@ -92,8 +92,14 @@ Route::group(['middleware' => 'auth'], function() {
      //SHIPPING PROVINCES
      Route::group(['prefix' => 'shipping_province'], function() {
 
-        //Shipping Fee Index
+        //Shipping Province Index
         Route::get('/', ['as' => 'admin.shipping_province.index', 'uses' => 'ShippingProvinceController@index']);
+
+        //Shipping Province Create
+        Route::get('create', ['as' => 'admin.shipping_province.create', 'uses' => 'ShippingProvinceController@create']);
+
+        //Shipping Province Store
+        Route::post('/', ['as' => 'admin.shipping_province.store', 'uses' => 'ShippingProvinceController@store']);
      });
 
     //Orders Page

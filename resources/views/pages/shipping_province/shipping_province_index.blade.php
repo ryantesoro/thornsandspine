@@ -25,24 +25,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @foreach($pots as $pot)
+                    @foreach($provinces as $province)
                     <tr>
-                        <td>{{ $pot['name'] }}</td>
-                        <td class="pt-3">
-                            @if ($pot['active'] == 1)
-                            <span class="badge badge-pill badge-info">shown</span>
-                            @else
-                            <span class="badge badge-pill badge-secondary">hidden</span>
-                            @endif
-                        </td>
+                        <td>{{ $province['name'] }}</td>
                         <td>
-                            <a href="{{ route('admin.pot.show', $pot['id']) }}"
+                            <a href="{{ route('admin.pot.show', $province['id']) }}"
                                 class="btn btn-sm btn-primary font-weight-bold">View</a>
-                            <a href="{{ route('admin.pot.edit', $pot['id']) }}"
+                            <a href="{{ route('admin.pot.edit', $province['id']) }}"
                                 class="btn btn-sm btn-warning font-weight-bold">Edit</a>
                         </td>
                     </tr>
-                    @endforeach --}}
+                    @endforeach
                 </tbody>
             </table>
     </main>
