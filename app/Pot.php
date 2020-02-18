@@ -47,6 +47,20 @@ class Pot extends Model
         return $pot;
     }
 
+    //Update pot
+    public function updatePot($pot_id, $pot_details)
+    {
+        $pot_new_details = [
+            'name' => $pot_details['pot_name'],
+            'description' => $pot_details['pot_description']
+        ];
+
+        $pot = Pot::where('id', $pot_id)
+            ->update($pot_new_details);
+        
+        return $pot;
+    }
+
     //Check if pot exists
     public function potExists($pot_id)
     {
