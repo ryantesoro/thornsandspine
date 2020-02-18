@@ -34,23 +34,21 @@
             </button>
         </div>
         @endif
-        {!! Form::open(['route' => 'admin.pot.store']) !!}
+        {!! Form::open(['route' => 'admin.shipping_fee.store']) !!}
         <div class="row pl-3">
             <div class="col-5">
                 <div class="form-group">
                     <label class="font-weight-bold">Shipping Province</label>
-                    {!! Form::select('shipping_province', old('shipping_province') ?? '',
+                    {!! Form::select('shipping_province', $provinces, old('shipping_province') ?? '',
                     [
                     'class' => 'form-control',
-                    'placeholder' => 'Name',
                     'tab_index' => '1',
                     'required' => true
                     ]) !!}
                     <div class="d-flex justify-content-end pt-2">
-                        <button type="button" class="btn btn-sm btn-info" data-toggle="modal"
-                            data-target="#add_province">
+                        <a href="{{ route('admin.shipping_province.create') }}" class="btn btn-sm btn-info">
                             <b>Add Province</b>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -77,7 +75,7 @@
             <div class="col-2">
                 <div class="form-group">
                     <label class="font-weight-bold">Shipping Price (PHP) ₱</label>
-                    {!! Form::number('product_price', $product['price'] ?? '',
+                    {!! Form::number('shipping_price', $product['price'] ?? '',
                     [
                     'class' => 'form-control',
                     'placeholder' => 'Peso',
