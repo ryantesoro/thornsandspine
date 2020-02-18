@@ -59,8 +59,14 @@ Route::group(['middleware' => 'auth'], function() {
         //Pot Create
         Route::get('create', ['as' => 'admin.pot.create', 'uses' => 'PotController@create']);
 
-        //Pot Post
-        Route::post('store', ['as' => 'admin.pot.store', 'uses' => 'PotController@store']);
+        //Pot Store
+        Route::post('/', ['as' => 'admin.pot.store', 'uses' => 'PotController@store']);
+
+        //Pot Show
+        Route::get('{pot_id}', ['as' => 'admin.pot.show', 'uses' => 'PotController@show']);
+
+        //Pot Edit
+        Route::post('edit/{pot_id}', ['as' => 'admin.pot.edit', 'uses' => 'PotController@edit']);
     });
 
     //Orders Page

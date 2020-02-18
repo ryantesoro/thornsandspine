@@ -13,7 +13,7 @@ class PotController extends Controller
     public function index(Request $request)
     {
         $pots = $this->pot()->getPots();
-        
+
         return view('pages.pot.pot_index')->with('pots', $pots);
     }
 
@@ -44,5 +44,17 @@ class PotController extends Controller
         $store_pot = $this->pot()->storePot($pot_details);
         Alert::success('Add Pot Successful', 'Successfully added pot');
         return redirect()->route('admin.pot.index');
+    }
+
+    public function show(Request $request, $pot_id)
+    {
+        if (!$this->pot()->potExists($pot_id)) {
+            Alert::error('View Pot Failed', 'Pot does not exist!');
+            return redirect()->route('admin.pot.index');
+        }
+
+        $pot_details = $this->pot()->getPot($pot_id);
+        
+        return view('pages.pot.pot_show')->with('pot_details', $pot_details);
     }
 }
