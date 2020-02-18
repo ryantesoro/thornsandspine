@@ -33,7 +33,7 @@
                         <td>{{ $shipping_fee['city'] }}</td>
                         <td>{{ $shipping_fee['price'] }}</td>
                         <td>
-                            <a href="{{ route('admin.pot.show', $shipping_fee['id']) }}"
+                            <a href="{{ route('admin.shipping_fee.show', $shipping_fee['id']) }}"
                                 class="btn btn-sm btn-primary font-weight-bold">View</a>
                             <a href="{{ route('admin.shipping_fee.edit', $shipping_fee['id']) }}"
                                 class="btn btn-sm btn-warning font-weight-bold">Edit</a>
