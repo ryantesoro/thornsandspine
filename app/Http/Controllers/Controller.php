@@ -15,6 +15,7 @@ use App\EmailVerification;
 use App\ResetPassword;
 use App\Order;
 use App\Cart;
+use App\Pot;
 
 class Controller extends BaseController
 {
@@ -72,5 +73,11 @@ class Controller extends BaseController
     {
         $cart = new Cart();
         return $cart;
+    }
+
+    public function pot()
+    {
+        $pot = new Pot();
+        return $pot;
     }
 }

@@ -25,7 +25,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     //PRODUCTS
     Route::group(['prefix' => 'products'], function() {
-        
+
         //Products Index
         Route::get('/', ['as' => 'admin.product.index', 'uses' => 'ProductController@index']);
 
@@ -49,6 +49,33 @@ Route::group(['middleware' => 'auth'], function() {
 
         //Product Restore
         Route::post('restore/{code}', ['as' => 'admin.product.restore', 'uses' => 'ProductController@restore']);
+    });
+
+    Route::group(['prefix' => 'pots'], function() {
+
+        //Pot Index
+        Route::get('/', ['as' => 'admin.pot.index', 'uses' => 'PotController@index']);
+
+        //Pot Create
+        Route::get('create', ['as' => 'admin.pot.create', 'uses' => 'PotController@create']);
+
+        //Pot Store
+        Route::post('/', ['as' => 'admin.pot.store', 'uses' => 'PotController@store']);
+
+        //Pot Show
+        Route::get('{pot_id}', ['as' => 'admin.pot.show', 'uses' => 'PotController@show']);
+
+        //Pot Edit
+        Route::get('edit/{pot_id}', ['as' => 'admin.pot.edit', 'uses' => 'PotController@edit']);
+
+        //Pot Update
+        Route::post('update/{pot_id}', ['as' => 'admin.pot.update', 'uses' => 'PotController@update']);
+
+        //Pot Delete
+        Route::post('delete/{pot_id}', ['as' => 'admin.pot.destroy', 'uses' => 'PotController@destroy']);
+
+        //Pot Delete
+        Route::post('restore/{pot_id}', ['as' => 'admin.pot.restore', 'uses' => 'PotController@restore']);
     });
 
     //Orders Page
