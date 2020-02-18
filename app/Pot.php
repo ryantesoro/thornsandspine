@@ -61,6 +61,15 @@ class Pot extends Model
         return $pot;
     }
 
+    //Change status of pot
+    public function changePotStatus($pot_id, $active)
+    {
+        $pot = Pot::where('id', $pot_id)
+            ->update(['active' => $active]);
+
+        return $pot;
+    }
+
     //Check if pot exists
     public function potExists($pot_id)
     {
