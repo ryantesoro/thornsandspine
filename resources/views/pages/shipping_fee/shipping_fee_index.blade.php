@@ -27,24 +27,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @foreach($pots as $pot)
+                    @foreach($shipping_fees as $shipping_fee)
                     <tr>
-                        <td>{{ $pot['name'] }}</td>
-                        <td class="pt-3">
-                            @if ($pot['active'] == 1)
-                            <span class="badge badge-pill badge-info">shown</span>
-                            @else
-                            <span class="badge badge-pill badge-secondary">hidden</span>
-                            @endif
-                        </td>
+                        <td>{{ $shipping_fee['province'] }}</td>
+                        <td>{{ $shipping_fee['city'] }}</td>
+                        <td>{{ $shipping_fee['price'] }}</td>
                         <td>
-                            <a href="{{ route('admin.pot.show', $pot['id']) }}"
+                            <a href="{{ route('admin.pot.show', $shipping_fee['id']) }}"
                                 class="btn btn-sm btn-primary font-weight-bold">View</a>
-                            <a href="{{ route('admin.pot.edit', $pot['id']) }}"
+                            <a href="{{ route('admin.pot.edit', $shipping_fee['id']) }}"
                                 class="btn btn-sm btn-warning font-weight-bold">Edit</a>
                         </td>
                     </tr>
-                    @endforeach --}}
+                    @endforeach
                 </tbody>
             </table>
     </main>
