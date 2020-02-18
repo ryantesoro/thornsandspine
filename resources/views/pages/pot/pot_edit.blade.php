@@ -86,4 +86,5 @@
     </main>
 </div>
 </div>
+@include('pages.pot.pot_modal')
 @endsection
