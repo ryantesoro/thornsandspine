@@ -90,6 +90,12 @@ Route::group(['middleware' => 'auth'], function () {
 
         //Shipping Fee Store
         Route::post('/', ['as' => 'admin.shipping_fee.store', 'uses' => 'ShippingFeeController@store']);
+
+        //Shipping Fee Edit
+        Route::get('edit/{shipping_fee_id}', ['as' => 'admin.shipping_fee.edit', 'uses' => 'ShippingFeeController@edit']);
+
+        //Shipping Fee Update
+        Route::post('update/{shipping_fee_id}', ['as' => 'admin.shipping_fee.update', 'uses' => 'ShippingFeeController@update']);
     });
 
     //SHIPPING PROVINCES
