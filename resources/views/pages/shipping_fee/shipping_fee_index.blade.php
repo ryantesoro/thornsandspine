@@ -12,7 +12,7 @@
                 <h4>List Of Shipping Fees</h4>
             </div>
             <div>
-                <a class="btn btn-success font-weight-bold" href="{{ route('admin.pot.create') }}">Create Shipping Fee</a>
+                <a class="btn btn-success font-weight-bold" href="{{ route('admin.shipping_fee.create') }}">Create Shipping Fee</a>
             </div>
         </div>
         <hr>

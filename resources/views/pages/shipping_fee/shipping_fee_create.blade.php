@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('header_name', 'Pots')
+@section('header_name', 'Shipping Fees')
 @section('content')
 @include('layouts.nav')
 
@@ -17,10 +17,10 @@
         @include('layouts.header')
         <div class="row">
             <div class="col text-left">
-                <h4>Edit Pot</h4>
+                <h4>Create Pot</h4>
             </div>
             <div>
-                <a class="btn btn-secondary font-weight-bold" href="{{ route('admin.pot.index') }}">Go Back</a>
+                <a class="btn btn-secondary font-weight-bold" href="{{ route('admin.shipping_fee.index') }}">Go Back</a>
             </div>
         </div>
         <hr>
@@ -34,41 +34,59 @@
             </button>
         </div>
         @endif
-        {!! Form::open(['route' => ['admin.pot.update', $pot_details['id']]]) !!}
+        {!! Form::open(['route' => 'admin.pot.store']) !!}
         <div class="row pl-3">
             <div class="col-5">
                 <div class="form-group">
-                    <label class="font-weight-bold">Pot Name</label>
-                    {!! Form::text('pot_name', $pot_details['name'] ?? '',
+                    <label class="font-weight-bold">Shipping Province</label>
+                    {!! Form::select('shipping_province', old('shipping_province') ?? '',
                     [
                     'class' => 'form-control',
                     'placeholder' => 'Name',
-                    'tab_index' => '2',
-                    'data-toggle' => 'popover',
-                    'data-trigger' => 'focus',
-                    'title' => 'Pot Name',
-                    'data-content' => 'This is the name of the pot you are selling. (Minimum of 3 characters in
-                    length)',
+                    'tab_index' => '1',
                     'required' => true
                     ]) !!}
+                    <div class="d-flex justify-content-end pt-2">
+                        <button type="button" class="btn btn-sm btn-info" data-toggle="modal"
+                            data-target="#add_province">
+                            <b>Add Province</b>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="row pl-3">
             <div class="col-5">
                 <div class="form-group">
-                    <label class="font-weight-bold">Pot Description</label>
-                    {!! Form::textarea('pot_description', $pot_details['description'] ?? '',
+                    <label class="font-weight-bold">Shipping City</label>
+                    {!! Form::text('shipping_city', old('shipping_city') ?? '',
                     [
                     'class' => 'form-control',
-                    'placeholder' => 'Description',
+                    'placeholder' => 'Name',
                     'tab_index' => '1',
                     'data-toggle' => 'popover',
                     'data-trigger' => 'focus',
-                    'title' => 'Pot Description',
-                    'data-content' => 'Describe the pot you are selling',
-                    'required' => true,
-                    'rows' => 3
+                    'title' => 'Shipping City',
+                    'data-content' => 'The city must be in the philippines',
+                    'required' => true
+                    ]) !!}
+                </div>
+            </div>
+        </div>
+        <div class="row pl-3">
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="font-weight-bold">Shipping Price (PHP) ₱</label>
+                    {!! Form::number('product_price', $product['price'] ?? '',
+                    [
+                    'class' => 'form-control',
+                    'placeholder' => 'Peso',
+                    'tab_index' => '3',
+                    'data-toggle' => 'popover',
+                    'data-trigger' => 'focus',
+                    'title' => 'Shipping Price',
+                    'data-content' => 'This must be in PHP(₱)',
+                    'required' => true
                     ]) !!}
                 </div>
             </div>
@@ -86,5 +104,5 @@
     </main>
 </div>
 </div>
-@include('pages.pot.pot_modal')
+@include('pages.shipping_fee.shipping_fee_modal')
 @endsection

@@ -11,4 +11,9 @@ class ShippingFeeController extends Controller
     {
         return view('pages.shipping_fee.shipping_fee_index');
     }
+
+    public function create()
+    {
+        return view('pages.shipping_fee.shipping_fee_create');
+    }
 }
