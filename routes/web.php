@@ -66,7 +66,10 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('{pot_id}', ['as' => 'admin.pot.show', 'uses' => 'PotController@show']);
 
         //Pot Edit
-        Route::post('edit/{pot_id}', ['as' => 'admin.pot.edit', 'uses' => 'PotController@edit']);
+        Route::get('edit/{pot_id}', ['as' => 'admin.pot.edit', 'uses' => 'PotController@edit']);
+
+        //Pot Update
+        Route::post('update/{pot_id}', ['as' => 'admin.pot.update', 'uses' => 'PotController@update']);
     });
 
     //Orders Page
