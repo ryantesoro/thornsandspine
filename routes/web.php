@@ -51,6 +51,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('restore/{product_id}', ['as' => 'admin.product.restore', 'uses' => 'ProductController@restore']);
     });
 
+    //POTS
     Route::group(['prefix' => 'pots'], function() {
 
         //Pot Index
@@ -76,6 +77,13 @@ Route::group(['middleware' => 'auth'], function() {
 
         //Pot Delete
         Route::post('restore/{pot_id}', ['as' => 'admin.pot.restore', 'uses' => 'PotController@restore']);
+    });
+
+    //SHIPPING FEES
+    Route::group(['prefix' => 'shipping_fees'], function() {
+
+        //Shipping Fee Index
+        Route::get('/', ['as' => 'admin.shipping_fee.index', 'uses' => 'ShippingFeeController@index']);
     });
 
     //Orders Page
