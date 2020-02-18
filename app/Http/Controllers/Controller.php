@@ -16,6 +16,8 @@ use App\ResetPassword;
 use App\Order;
 use App\Cart;
 use App\Pot;
+use App\ShippingFee;
+use App\ShippingProvince;
 
 class Controller extends BaseController
 {
@@ -79,5 +81,17 @@ class Controller extends BaseController
     {
         $pot = new Pot();
         return $pot;
+    }
+
+    public function shipping_fee()
+    {
+        $shipping_fee = new ShippingFee();
+        return $shipping_fee;
+    }
+
+    public function shipping_province()
+    {
+        $shipping_province = new ShippingProvince();
+        return $shipping_province;
     }
 }

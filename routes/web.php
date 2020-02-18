@@ -18,13 +18,13 @@ Route::get('/', ['as' => 'login', 'uses' => 'HomeController@login']);
 Route::post('login', ['as' => 'admin.login', 'uses' => 'UserController@login']);
 
 //When Logged In
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => 'auth'], function () {
 
     //Dashboard Page
     Route::get('dashboard', ['as' => 'admin.dashboard', 'uses' => 'HomeController@dashboard']);
 
     //PRODUCTS
-    Route::group(['prefix' => 'products'], function() {
+    Route::group(['prefix' => 'products'], function () {
 
         //Products Index
         Route::get('/', ['as' => 'admin.product.index', 'uses' => 'ProductController@index']);
@@ -51,7 +51,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('restore/{product_id}', ['as' => 'admin.product.restore', 'uses' => 'ProductController@restore']);
     });
 
-    Route::group(['prefix' => 'pots'], function() {
+    //POTS
+    Route::group(['prefix' => 'pots'], function () {
 
         //Pot Index
         Route::get('/', ['as' => 'admin.pot.index', 'uses' => 'PotController@index']);
@@ -63,7 +64,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/', ['as' => 'admin.pot.store', 'uses' => 'PotController@store']);
 
         //Pot Show
-        Route::get('{pot_id}', ['as' => 'admin.pot.show', 'uses' => 'PotController@show']);
+        Route::get('show/{pot_id}', ['as' => 'admin.pot.show', 'uses' => 'PotController@show']);
 
         //Pot Edit
         Route::get('edit/{pot_id}', ['as' => 'admin.pot.edit', 'uses' => 'PotController@edit']);
@@ -76,6 +77,50 @@ Route::group(['middleware' => 'auth'], function() {
 
         //Pot Delete
         Route::post('restore/{pot_id}', ['as' => 'admin.pot.restore', 'uses' => 'PotController@restore']);
+    });
+
+    //SHIPPING FEES
+    Route::group(['prefix' => 'shipping_fees'], function () {
+
+        //Shipping Fee Index
+        Route::get('/', ['as' => 'admin.shipping_fee.index', 'uses' => 'ShippingFeeController@index']);
+
+        //Shipping Fee Show
+        Route::get('view/{shipping_fee_id}', ['as' => 'admin.shipping_fee.show', 'uses' => 'ShippingFeeController@show']);
+
+        //Shipping Fee Create
+        Route::get('create', ['as' => 'admin.shipping_fee.create', 'uses' => 'ShippingFeeController@create']);
+
+        //Shipping Fee Store
+        Route::post('/', ['as' => 'admin.shipping_fee.store', 'uses' => 'ShippingFeeController@store']);
+
+        //Shipping Fee Edit
+        Route::get('edit/{shipping_fee_id}', ['as' => 'admin.shipping_fee.edit', 'uses' => 'ShippingFeeController@edit']);
+
+        //Shipping Fee Update
+        Route::post('update/{shipping_fee_id}', ['as' => 'admin.shipping_fee.update', 'uses' => 'ShippingFeeController@update']);
+    });
+
+    //SHIPPING PROVINCES
+    Route::group(['prefix' => 'shipping_province'], function () {
+
+        //Shipping Province Index
+        Route::get('/', ['as' => 'admin.shipping_province.index', 'uses' => 'ShippingProvinceController@index']);
+
+        //Shipping Province Create
+        Route::get('show/{province_id}', ['as' => 'admin.shipping_province.show', 'uses' => 'ShippingProvinceController@show']);
+
+        //Shipping Province Create
+        Route::get('create', ['as' => 'admin.shipping_province.create', 'uses' => 'ShippingProvinceController@create']);
+
+        //Shipping Province Store
+        Route::post('/', ['as' => 'admin.shipping_province.store', 'uses' => 'ShippingProvinceController@store']);
+
+        //Shipping Province Edit
+        Route::get('edit/{province_id}', ['as' => 'admin.shipping_province.edit', 'uses' => 'ShippingProvinceController@edit']);
+
+        //Shipping Province Update
+        Route::post('update/{province_id}', ['as' => 'admin.shipping_province.update', 'uses' => 'ShippingProvinceController@update']);
     });
 
     //Orders Page

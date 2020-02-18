@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('header_name', 'Pots')
+@section('header_name', 'Shipping Provinces')
 @section('content')
 @include('layouts.nav')
 
@@ -17,10 +17,10 @@
         @include('layouts.header')
         <div class="row">
             <div class="col text-left">
-                <h4>Edit Pot</h4>
+                <h4>Create Shipping Province</h4>
             </div>
             <div>
-                <a class="btn btn-secondary font-weight-bold" href="{{ route('admin.pot.index') }}">Go Back</a>
+                <a class="btn btn-secondary font-weight-bold" href="{{ route('admin.shipping_province.index') }}">Go Back</a>
             </div>
         </div>
         <hr>
@@ -34,41 +34,21 @@
             </button>
         </div>
         @endif
-        {!! Form::open(['route' => ['admin.pot.update', $pot_details['id']]]) !!}
+        {!! Form::open(['route' => 'admin.shipping_province.store']) !!}
         <div class="row pl-3">
             <div class="col-5">
                 <div class="form-group">
-                    <label class="font-weight-bold">Pot Name</label>
-                    {!! Form::text('pot_name', $pot_details['name'] ?? '',
+                    <label class="font-weight-bold">Shipping Province</label>
+                    {!! Form::text('shipping_province', old('shipping_province') ?? '',
                     [
                     'class' => 'form-control',
                     'placeholder' => 'Name',
-                    'tab_index' => '2',
-                    'data-toggle' => 'popover',
-                    'data-trigger' => 'focus',
-                    'title' => 'Pot Name',
-                    'data-content' => 'This is the name of the pot you are selling. (Minimum of 3 characters in
-                    length)',
-                    'required' => true
-                    ]) !!}
-                </div>
-            </div>
-        </div>
-        <div class="row pl-3">
-            <div class="col-5">
-                <div class="form-group">
-                    <label class="font-weight-bold">Pot Description</label>
-                    {!! Form::textarea('pot_description', $pot_details['description'] ?? '',
-                    [
-                    'class' => 'form-control',
-                    'placeholder' => 'Description',
                     'tab_index' => '1',
                     'data-toggle' => 'popover',
                     'data-trigger' => 'focus',
-                    'title' => 'Pot Description',
-                    'data-content' => 'Describe the pot you are selling',
-                    'required' => true,
-                    'rows' => 3
+                    'title' => 'Shipping Province',
+                    'data-content' => 'The province must be in the philippines',
+                    'required' => true
                     ]) !!}
                 </div>
             </div>
@@ -86,5 +66,4 @@
     </main>
 </div>
 </div>
-@include('pages.pot.pot_modal')
 @endsection
