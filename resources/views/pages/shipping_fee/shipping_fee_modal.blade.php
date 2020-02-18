@@ -19,37 +19,3 @@
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="add_province" tabindex="-1" role="dialog"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Add Province</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="font-weight-bold">Shipping Province</label>
-                    {!! Form::text('shipping_province', old('shipping_province') ?? '',
-                    [
-                    'class' => 'form-control',
-                    'placeholder' => 'Name',
-                    'tab_index' => '1',
-                    'data-toggle' => 'popover',
-                    'data-trigger' => 'focus',
-                    'title' => 'Shipping Province',
-                    'data-content' => 'The province must be in the philippines',
-                    'required' => true
-                    ]) !!}
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary">Add Province</button>
-            </div>
-        </div>
-    </div>
-</div>
