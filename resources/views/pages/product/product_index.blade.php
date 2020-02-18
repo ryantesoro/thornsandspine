@@ -34,7 +34,7 @@
             <td>{{$product['name']}}</td>
             <td>{{$product['price']}}</td>
             <td class="pt-3">
-              @if (empty($product['deleted_at']))
+              @if ($product['active'] == 1)
                 <span class="badge badge-pill badge-info">shown</span>
               @else
                 <span class="badge badge-pill badge-secondary">hidden</span>

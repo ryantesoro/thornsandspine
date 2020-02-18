@@ -3,13 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 
 class Product extends Model
 {
-    use SoftDeletes;
-
     protected $dates = ['deleted_at'];
 
     protected $table = "products";
@@ -26,16 +23,18 @@ class Product extends Model
     //Get product model
     public function getProductModel($code)
     {
-        $product_details = Product::where('code', $code)->get()->first();
+        $product_details = Product::where('code', $code)
+            ->get()
+            ->first();
         $product_model = Product::find($product_details->id);
+        
         return $product_model;
     }
 
     //Gets all products
     public function getProducts()
     {
-        $list_of_products = Product::withTrashed()
-            ->get()
+        $list_of_products = Product::all()
             ->sortByDesc('created_at');
 
         return $list_of_products;
@@ -58,36 +57,29 @@ class Product extends Model
     //Check Product
     public function productExists($code)
     {
-        return Product::withTrashed()->where('code', $code)->count() > 0;
+        return Product::where('code', $code)->count() > 0;
+    }
+
+    //Get Product
+    public function getProduct($product_id)
+    {
+        $product = Product::where('id', $product_id)
+            ->get()
+            ->first();
+
+        return $product;
     }
 
     //Show product
     public function showProduct($code)
     {
-        $product_details = Product::withTrashed()
-            ->where('code', $code)
+        $product_details = Product::where('code', $code)
             ->first()
             ->toArray();
 
         $product_details['created_at'] = Carbon::parse($product_details['created_at'])->format('m-d-Y g:i A');
         $product_details['updated_at'] = Carbon::parse($product_details['updated_at'])->format('m-d-Y g:i A');
-
-        if (!empty($product_details['deleted_at'])) {
-            $product_details['deleted_at'] = Carbon::parse($product_details['deleted_at'])->format('m-d-Y g:i A');
-        }
         
-        return $product_details;
-    }
-
-    //Get Latest Product
-    public function getLatestProduct()
-    {
-        $product_details = Product::withTrashed()
-            ->select('id')
-            ->latest()
-            ->first()
-            ->toArray();
-
         return $product_details;
     }
 
@@ -99,34 +91,29 @@ class Product extends Model
     }
 
     //Update Product
-    public function updateProduct($product_details, $code)
+    public function updateProduct($product_details, $product_id)
     {
-        $update_product = Product::withTrashed()
-            ->where('code', $code)
+        $update_product = Product::where('id', $product_id)
             ->update($product_details);
         return $update_product;
     }
 
-    //Soft Delete Product
-    public function softDeleteProduct($code)
+    //Change Product Status
+    public function changeProductStatus($product_id, $active)
     {
-        $delete_product = Product::where('code', $code)
-            ->delete();
-        return $delete_product;
-    }
-    
-    //Restore Deleted Product
-    public function restoreProduct($code)
-    {
-        $restore_product = Product::withTrashed()
-            ->where('code', $code)
-            ->restore();
+        $update_product = Product::where('id', $product_id)
+            ->update(['active' => $active]);
 
-        return $restore_product;
+        return $update_product;
     }
 
     public function cart()
     {
         return $this->belongsToMany('App\Cart', 'cart_product');
+    }
+
+    public function order()
+    {
+        return $this->belongsToMany('App\Order', 'order_product');
     }
 }

@@ -21,7 +21,7 @@
             </div>
             <div>
                 <a class="btn btn-secondary font-weight-bold" href="{{ route('admin.product.index') }}">Go Back</a>
-                @if (empty($product['deleted_at']))
+                @if ($product['active'] == 1)
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#hide_confirmation">
                     <b>Hide Product</b>
                 </button>
@@ -43,7 +43,7 @@
             </button>
         </div>
         @endif
-        {!! Form::open(['route' => ['admin.product.update', $product['code']], 'files' => true]) !!}
+        {!! Form::open(['route' => ['admin.product.update', $product['id']], 'files' => true]) !!}
         <div class="row pl-3">
             <div class="col-5">
                 <img class="border" src="{{ route('image', ['image_name' => $product['img'].'?size=medium']) }}">

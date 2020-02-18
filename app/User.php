@@ -68,6 +68,14 @@ class User extends Authenticatable
         return $user;
     }
 
+    //Check if user is verified
+    public function userVerified($user_id)
+    {
+        $user = User::where('id', $user_id)->get();
+
+        return ($user->verified_at != null || !empty($user->verified_at));
+    }
+
     public function customer()
     {
         return $this->belongsToMany('App\Customer', 'user_customer');
