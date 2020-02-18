@@ -3,27 +3,34 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 
 class Pot extends Model
 {
-    use SoftDeletes;
-
     protected $table = "pots";
 
     protected $hidden = ['pivot'];
 
     protected $fillable = [
-        'name', 'description'
+        'name', 'description', 'active'
     ];
 
     public $timestamps = true;
 
+    //Get Pot
+    public function getPot($pot_id)
+    {
+        $pot = Pot::where('id', $pot_id)
+            ->get()
+            ->first();
+        
+        return $pot;
+    }
+
     //Fetch all pots
     public function getPots()
     {
-        $pots = Pot::withTrashed()->get();
+        $pots = Pot::all();
 
         return $pots;
     }
@@ -38,6 +45,14 @@ class Pot extends Model
         
         $pot = Pot::create($pot_new_details);
         return $pot;
+    }
+
+    //Check if pot exists
+    public function potExists($pot_id)
+    {
+        $pot = Pot::find($pot_id)->count();
+
+        return $pot != 0;
     }
 
     public function order()
