@@ -30,16 +30,16 @@
                     <tr>
                         <td>{{ $pot['name'] }}</td>
                         <td class="pt-3">
-                            @if (empty($pot['deleted_at']))
+                            @if ($pot['active'] == 1)
                             <span class="badge badge-pill badge-info">shown</span>
                             @else
                             <span class="badge badge-pill badge-secondary">hidden</span>
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('admin.product.show', $pot['id']) }}"
+                            <a href="{{ route('admin.pot.show', $pot['id']) }}"
                                 class="btn btn-sm btn-primary font-weight-bold">View</a>
-                            <a href="{{ route('admin.product.edit', $pot['id']) }}"
+                            <a href="{{ route('admin.pot.edit', $pot['id']) }}"
                                 class="btn btn-sm btn-warning font-weight-bold">Edit</a>
                         </td>
                     </tr>
