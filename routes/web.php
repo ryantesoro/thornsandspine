@@ -42,13 +42,13 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('edit/{code}', ['as' => 'admin.product.edit', 'uses' => 'ProductController@edit']);
 
         //Product Update
-        Route::post('edit/{code}', ['as' => 'admin.product.update', 'uses' => 'ProductController@update']);
+        Route::post('edit/{product_id}', ['as' => 'admin.product.update', 'uses' => 'ProductController@update']);
 
         //Product Delete
-        Route::post('delete/{code}', ['as' => 'admin.product.destroy', 'uses' => 'ProductController@destroy']);
+        Route::post('delete/{product_id}', ['as' => 'admin.product.destroy', 'uses' => 'ProductController@destroy']);
 
         //Product Restore
-        Route::post('restore/{code}', ['as' => 'admin.product.restore', 'uses' => 'ProductController@restore']);
+        Route::post('restore/{product_id}', ['as' => 'admin.product.restore', 'uses' => 'ProductController@restore']);
     });
 
     Route::group(['prefix' => 'pots'], function() {

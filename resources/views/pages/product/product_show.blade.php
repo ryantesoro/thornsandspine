@@ -13,8 +13,9 @@
             </div>
             <div>
                 <a class="btn btn-secondary font-weight-bold" href="{{ route('admin.product.index') }}">Go Back</a>
-                <a class="btn btn-warning font-weight-bold" href="{{ route('admin.product.edit', ['code' => $product['code']]) }}">Edit</a>
-                @if (empty($product['deleted_at']))
+                <a class="btn btn-warning font-weight-bold"
+                    href="{{ route('admin.product.edit', ['code' => $product['code']]) }}">Edit</a>
+                @if ($product['active'] == 1)
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#hide_confirmation">
                     <b>Hide Product</b>
                 </button>
@@ -34,7 +35,7 @@
                             Image
                         </td>
                         <td>
-                            <img src ="{{ route('image', ['image_name' => $product['img'].'?size=medium']) }}">
+                            <img src="{{ route('image', ['image_name' => $product['img'].'?size=medium']) }}">
                         </td>
                     </tr>
                     <tr>
@@ -85,16 +86,18 @@
                             {{ $product['updated_at'] }}
                         </td>
                     </tr>
-                    @if (!empty($product['deleted_at']))
                     <tr>
                         <td class="font-weight-bold">
-                            Deleted At
+                            Status
                         </td>
                         <td>
-                            {{ $product['deleted_at'] }}
+                            @if ($product['active'] == 1)
+                            <span class="badge badge-pill badge-info">shown</span>
+                            @else
+                            <span class="badge badge-pill badge-secondary">hidden</span>
+                            @endif
                         </td>
                     </tr>
-                    @endif
                 </tbody>
             </table>
         </div>
