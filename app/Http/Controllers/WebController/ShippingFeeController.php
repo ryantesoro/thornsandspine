@@ -14,20 +14,33 @@ class ShippingFeeController extends Controller
         $shipping_fees = $this->shipping_fee()->getShippingFees();
 
         foreach ($shipping_fees as $shipping_fee) {
-            $province_id = $shipping_fee['province_id'];
-            $province = $this->shipping_province()->getProvince($province_id);
-            $shipping_fee['province'] = $province->name;
+            $shipping_fee['province'] = $this->getProvinceName($shipping_fee['province_id']);
         }
 
         return view('pages.shipping_fee.shipping_fee_index')
             ->with('shipping_fees', $shipping_fees);
     }
 
+    public function show($shipping_fee_id)
+    {
+        if (!$this->shipping_fee()->shippingFeeExists($shipping_fee_id)) {
+            Alert::error('View Shipping Fee Failed', 'Shipping Fee does not exist!');
+            return redirect()->route('admin.shipping_fee.index');
+        }
+
+        $shipping_fee_details = $this->shipping_fee()->getShippingFee($shipping_fee_id);
+        $shipping_fee_details['province'] = $this->getProvinceName($shipping_fee_details['province_id']);
+
+        $provinces = $this->getPluckedProvinces();
+
+        return view('pages.shipping_fee.shipping_fee_show')
+            ->with('shipping_fee_details', $shipping_fee_details)
+            ->with('provinces', $provinces);
+    }
+
     public function create()
     {
-        $provinces = $this->shipping_province()
-            ->getProvinces()
-            ->pluck('name', 'id');
+        $provinces = $this->getPluckedProvinces();
 
         return view('pages.shipping_fee.shipping_fee_create')
             ->with('provinces', $provinces);
@@ -55,7 +68,7 @@ class ShippingFeeController extends Controller
         }
 
         $store_shipping_fee = $this->shipping_fee()->storeShippingFee($shipping_fee_details);
-        
+
         Alert::success('Add Shipping Fee Successful', 'Success!');
         return redirect()->route('admin.shipping_fee.index');
     }
@@ -67,11 +80,9 @@ class ShippingFeeController extends Controller
             return redirect()->route('admin.shipping_fee.index');
         }
 
-        $shipping_fee_details = $this->shipping_fee()->getShippingFee($shipping_fee_id)->toArray();
+        $shipping_fee_details = $this->shipping_fee()->getShippingFee($shipping_fee_id);
 
-        $provinces = $this->shipping_province()
-            ->getProvinces()
-            ->pluck('name', 'id');
+        $provinces = $this->getPluckedProvinces();
 
         return view('pages.shipping_fee.shipping_fee_edit')
             ->with('shipping_fee_details', $shipping_fee_details)
@@ -98,10 +109,27 @@ class ShippingFeeController extends Controller
                 ->withInput($request->all())
                 ->withErrors($validator->errors());
         }
-        
+
         $update_shipping_fee = $this->shipping_fee()->updateShippingFee($shipping_fee_id, $shipping_fee_details);
 
         Alert::success('Update Shipping Fee Successful', 'Success!');
         return redirect()->route('admin.shipping_fee.index');
+    }
+
+    private function getPluckedProvinces()
+    {
+        $provinces = $this->shipping_province()
+            ->getProvinces()
+            ->pluck('name', 'id');
+
+        return $provinces;
+    }
+
+    private function getProvinceName($province_id)
+    {
+        $province = $this->shipping_province()->getProvince($province_id);
+        $province_name = $province->name;
+
+        return $province_name;
     }
 }
