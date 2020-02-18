@@ -85,6 +85,9 @@ Route::group(['middleware' => 'auth'], function () {
         //Shipping Fee Index
         Route::get('/', ['as' => 'admin.shipping_fee.index', 'uses' => 'ShippingFeeController@index']);
 
+        //Shipping Fee Show
+        Route::get('view/{shipping_fee_id}', ['as' => 'admin.shipping_fee.show', 'uses' => 'ShippingFeeController@show']);
+
         //Shipping Fee Create
         Route::get('create', ['as' => 'admin.shipping_fee.create', 'uses' => 'ShippingFeeController@create']);
 
