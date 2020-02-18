@@ -92,4 +92,20 @@ class PotController extends Controller
         Alert::success('Update Pot Successful', 'Successfully updated pot');
         return redirect()->route('admin.pot.index');
     }
+
+    public function destroy(Request $request, $pot_id)
+    {
+        $delete_pot = $this->pot()->changePotStatus($pot_id, 0);
+
+        Alert::success('Delete Pot Successful', 'Successfully deleted pot');
+        return redirect()->route('admin.pot.index');
+    }
+
+    public function restore(Request $request, $pot_id)
+    {
+        $restore_pot = $this->pot()->changePotStatus($pot_id, 1);
+
+        Alert::success('Restore Pot Successful', 'Successfully restored pot');
+        return redirect()->route('admin.pot.index');
+    }
 }
