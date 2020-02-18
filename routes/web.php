@@ -70,6 +70,12 @@ Route::group(['middleware' => 'auth'], function() {
 
         //Pot Update
         Route::post('update/{pot_id}', ['as' => 'admin.pot.update', 'uses' => 'PotController@update']);
+
+        //Pot Delete
+        Route::post('delete/{pot_id}', ['as' => 'admin.pot.destroy', 'uses' => 'PotController@destroy']);
+
+        //Pot Delete
+        Route::post('restore/{pot_id}', ['as' => 'admin.pot.restore', 'uses' => 'PotController@restore']);
     });
 
     //Orders Page
