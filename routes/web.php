@@ -89,6 +89,13 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('create', ['as' => 'admin.shipping_fee.create', 'uses' => 'ShippingFeeController@create']);
     });
 
+     //SHIPPING PROVINCES
+     Route::group(['prefix' => 'shipping_province'], function() {
+
+        //Shipping Fee Index
+        Route::get('/', ['as' => 'admin.shipping_province.index', 'uses' => 'ShippingProvinceController@index']);
+     });
+
     //Orders Page
     Route::get('orders', ['as' => 'admin.order.index', 'uses' => 'OrderController@index']);
 
