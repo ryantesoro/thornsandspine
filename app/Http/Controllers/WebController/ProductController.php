@@ -51,14 +51,13 @@ class ProductController extends Controller
         }
 
         $product_details = $this->inputToArray($request);
+        $product = $this->product()->storeProduct($product_details);
 
-        $code = $this->generateCode();
+        $code = $this->generateCode($product->id);
         $file_name = $code.".jpg";
         $this->saveImageFile($product_details['img'], $file_name);
 
-        $product_details['img'] = $file_name;
-        $product_details['code'] = $code;
-        $this->product()->storeProduct($product_details);
+        $update_product = $this->product()->updateProduct(['code' => $code, 'img' => $file_name], $product->id);
 
         Alert::success('Add Product Successful', 'Success!');
         return redirect()->route('admin.product.index');
@@ -74,7 +73,7 @@ class ProductController extends Controller
         return view('pages.product.product_edit')->with('product', $product_details);
     }
 
-    public function update(Request $request, $code)
+    public function update(Request $request, $product_id)
     {
         $with_pic = !empty($request->file('product_image')) && $request->file('product_image') != null;
         $validator = $this->validateInput($request->all(), $with_pic);
@@ -86,31 +85,33 @@ class ProductController extends Controller
                 ->withErrors($validator->errors());
         }
 
+        $product = $this->product()->getProduct($product_id);
+
         $product_details = $this->inputToArray($request);
 
         if ($with_pic) {
-            $file_name = $code.".jpg";
+            $file_name = $product->code.".jpg";
             $this->saveImageFile($product_details['img'], $file_name);
         }
 
         unset($product_details['img']);
-        $this->product()->updateProduct($product_details, $code);
+        $this->product()->updateProduct($product_details, $product_id);
 
         Alert::success('Update Product Successful', 'Success!');
         return redirect()->route('admin.product.index');
     }
 
-    public function destroy($code)
+    public function destroy($product_id)
     {
-        $this->product()->softDeleteProduct($code);
+        $delete_product = $this->product()->changeProductStatus($product_id, 0);
 
         Alert::success('Hide Product Successful', 'Success!');
         return redirect()->route('admin.product.index');
     }
 
-    public function restore($code)
+    public function restore($product_id)
     {
-        $this->product()->restoreProduct($code);
+        $restore_product = $this->product()->changeProductStatus($product_id, 1);
 
         Alert::success('Restore Product Successful', 'Success!');
         return redirect()->route('admin.product.index');
@@ -145,11 +146,10 @@ class ProductController extends Controller
         return $validator;
     }
 
-    private function generateCode()
+    private function generateCode($product_id)
     {
-        $latest_product = $this->product()->getLatestProduct();
         $year = Carbon::now()->format('Y');
-        $code = sprintf('%s%04s', $year, strVal($latest_product['id']+1));
+        $code = sprintf('%s%04s', $year, strVal($product_id));
 
         return $code;
     }

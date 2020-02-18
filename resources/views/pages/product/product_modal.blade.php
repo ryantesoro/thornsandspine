@@ -1,5 +1,5 @@
-@if (empty($product['deleted_at']))
-{!! Form::open(['route' => ['admin.product.destroy', $product['code']]]) !!}
+@if ($product['active'] == 1))
+{!! Form::open(['route' => ['admin.product.destroy', $product['id']]]) !!}
 <div class="modal fade" id="hide_confirmation" tabindex="-1" role="dialog"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -23,7 +23,7 @@
 </div>
 {!! Form::close() !!}
 @else
-{!! Form::open(['route' => ['admin.product.restore', $product['code']]]) !!}
+{!! Form::open(['route' => ['admin.product.restore', $product['id']]]) !!}
 <div class="modal fade" id="restore_confirmation" tabindex="-1" role="dialog"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
