@@ -87,6 +87,9 @@ Route::group(['middleware' => 'auth'], function () {
 
         //Shipping Fee Create
         Route::get('create', ['as' => 'admin.shipping_fee.create', 'uses' => 'ShippingFeeController@create']);
+
+        //Shipping Fee Store
+        Route::post('/', ['as' => 'admin.shipping_fee.store', 'uses' => 'ShippingFeeController@store']);
     });
 
     //SHIPPING PROVINCES
