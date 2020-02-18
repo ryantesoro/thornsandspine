@@ -29,7 +29,8 @@ class ShippingProvince extends Model
     //Get all provinces
     public function getProvinces()
     {
-        $provinces = ShippingProvince::all();
+        $provinces = ShippingProvince::all()
+            ->sortBy('name');
 
         return $provinces;
     }
