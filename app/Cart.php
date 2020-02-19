@@ -36,6 +36,16 @@ class Cart extends Model
         return $total;
     }
 
+    //Get Cart
+    public function getCart($where)
+    {
+        $cart = Cart::where($where)
+            ->get()
+            ->first();
+
+        return $cart;
+    }
+
     //Get Cart Model
     public function getCartModel($cart_id)
     {

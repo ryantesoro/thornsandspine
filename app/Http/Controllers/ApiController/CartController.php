@@ -16,7 +16,7 @@ class CartController extends Controller
         $this->setUserId(auth()->user()->id);
         $customer_model = $this->customer()->getCustomerDetailsByUser($this->user_id);
         $customer_cart = $this->customer()->getCustomerCart($customer_model)->get();
-    
+
         return response()->json([
             'success' => true,
             'data' => $customer_cart
@@ -46,9 +46,29 @@ class CartController extends Controller
             ]);
         }
 
-        $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
-        $cart = $this->cart()->storeCart($cart_details);
-        $customer->cart()->save($cart);
+        $customer_model = $this->customer()->getCustomerDetailsByUser($this->user_id);
+        $customer_cart = $this->customer()->getCustomerCart($customer_model)->get();
+        $is_duplicate = false;
+
+        foreach ($customer_cart as $cart) {
+            $existing_cart = $cart->getCart([
+                'product_id' => $cart_details['product_id'],
+                'pot_id' => $cart_details['pot_id']
+            ]);
+
+            if (!empty($existing_cart)) {
+                $cart_id = $existing_cart->id;
+                $quantity = $existing_cart->quantity + $cart_details['quantity'];
+                $update_cart = $this->cart()->updateCart($cart_id, ['quantity' => $quantity]);
+                $is_duplicate = true;
+                break;
+            }
+        }
+
+        if (!$is_duplicate) {
+            $cart = $this->cart()->storeCart($cart_details);
+            $customer_model->cart()->save($cart);
+        }
 
         return response()->json([
             'success' => true,
@@ -67,7 +87,7 @@ class CartController extends Controller
         $validator = Validator::make($cart_details, [
             'cart_id' => 'required|exists:carts,id',
             'pot_id' => 'required|exists:pots,id',
-            'quantity' => 'required' 
+            'quantity' => 'required'
         ]);
 
         if ($validator->fails()) {
