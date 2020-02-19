@@ -58,10 +58,10 @@ class UserController extends Controller
         ];
 
         $customer_details = [
-            'first_name' => $request->post('first_name'),
-            'last_name' => $request->post('last_name'),
-            'address' => $request->post('address'),
-            'city' => $request->post('city'),
+            'first_name' => strtolower($request->post('first_name')),
+            'last_name' => strtolower($request->post('last_name')),
+            'address' => strtolower($request->post('address')),
+            'shipping_fees_id' => $request->post('shipping_fees_id'),
             'contact_number' => $request->post('contact_number')
         ];
 
@@ -84,10 +84,16 @@ class UserController extends Controller
         }
 
         $user = $this->user()->registerUser($credentials);
-
-        $this->verification()->checkVerification($user->id);
         $verification = $this->verification()->insertVerification($user->id);
         $user->notify(new EmailVerification($verification->token));
+
+        $shipping_fees_id = $customer_details['shipping_fees_id'];
+        $shipping_fee = $this->shipping_fee()->getShippingFee($shipping_fees_id);
+        
+        unset($customer_details['shipping_fees_id']);
+        $province_id = $shipping_fee->province_id;
+        $customer_details['province'] = $this->shipping_province()->getProvince($province_id)->name;
+        $customer_details['city'] = $shipping_fee->city;
 
         $customer = $this->customer()->registerCustomer($customer_details);
         $user->customer()->save($customer);
@@ -110,7 +116,7 @@ class UserController extends Controller
             'first_name' => 'required|min:3|max:30',
             'last_name' => 'required|min:3|max:30',
             'address' => 'required',
-            'city' => 'required',
+            'shipping_fees_id' => 'required|exists:shipping_fees,id',
             'contact_number' => 'required|min:7|max:11'
             // 'shipping_address' => 'required',
             // 'shipping_city' => 'required',

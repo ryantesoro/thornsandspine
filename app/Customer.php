@@ -10,7 +10,7 @@ class Customer extends Model
     protected $table = "customers";
 
     protected $fillable = [
-        'first_name', 'last_name', 'address', 'city', 'contact_number'
+        'first_name', 'last_name', 'address', 'city', 'contact_number', 'province'
     ];
 
     protected $hidden = ['pivot'];
