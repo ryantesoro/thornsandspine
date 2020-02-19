@@ -42,8 +42,8 @@ class VerificationController extends Controller
     {
         $email = $request->get('email');
 
-        $validator = Validator::make(['token' => $email], [
-            'email' => 'required|exists:users,email'
+        $validator = Validator::make(['email' => $email], [
+            'email' => 'required|exists:users,email|email'
         ]);
 
         if ($validator->fails()) {
