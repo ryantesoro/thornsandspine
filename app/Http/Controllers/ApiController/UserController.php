@@ -32,7 +32,7 @@ class UserController extends Controller
 
         $user_id = auth()->user()->id;
 
-        if ($this->user()->isVerified($user_id)) {
+        if ($this->user()->userVerified($user_id)) {
             return response()->json([
                 'success' => false,
                 'msg' => 'You must verify your email first!',
