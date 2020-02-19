@@ -14,9 +14,13 @@ class CartController extends Controller
     public function index(Request $request)
     {
         $this->setUserId(auth()->user()->id);
-        $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
-    
-        return $customer->cart()->get();
+        $customer_model = $this->customer()->getCustomerDetailsByUser($this->user_id);
+        $customer_cart = $this->customer()->getCustomerCart($customer_model)->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $customer_cart
+        ]);
     }
 
     public function store(Request $request)
@@ -24,12 +28,14 @@ class CartController extends Controller
         $this->setUserId(auth()->user()->id);
 
         $cart_details = [
-            'product_code' => $request->post('code'),
+            'product_id' => $request->post('product_id'),
+            'pot_id' => $request->post('pot_id'),
             'quantity' => $request->post('quantity')
         ];
 
         $validator = Validator::make($cart_details, [
-            'product_code' => 'required|exists:products,code',
+            'product_id' => 'required|exists:products,id',
+            'pot_id' => 'required|exists:pots,id',
             'quantity' => 'required'
         ]);
 
@@ -40,12 +46,29 @@ class CartController extends Controller
             ]);
         }
 
-        $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
-        $cart = $this->cart()->storeCart($cart_details['quantity']);
-        $customer->cart()->save($cart);
+        $customer_model = $this->customer()->getCustomerDetailsByUser($this->user_id);
+        $customer_cart = $this->customer()->getCustomerCart($customer_model)->get();
+        $is_duplicate = false;
 
-        $product = $this->product()->getProductModel($cart_details['product_code']);
-        $product->cart()->save($cart);
+        foreach ($customer_cart as $cart) {
+            $existing_cart = $cart->getCart([
+                'product_id' => $cart_details['product_id'],
+                'pot_id' => $cart_details['pot_id']
+            ]);
+
+            if (!empty($existing_cart)) {
+                $cart_id = $existing_cart->id;
+                $quantity = $existing_cart->quantity + $cart_details['quantity'];
+                $update_cart = $this->cart()->updateCart($cart_id, ['quantity' => $quantity]);
+                $is_duplicate = true;
+                break;
+            }
+        }
+
+        if (!$is_duplicate) {
+            $cart = $this->cart()->storeCart($cart_details);
+            $customer_model->cart()->save($cart);
+        }
 
         return response()->json([
             'success' => true,
@@ -57,12 +80,14 @@ class CartController extends Controller
     {
         $cart_details = [
             'cart_id' => $cart_id,
-            'quantity' => $request->post('quantity')
+            'quantity' => $request->post('quantity'),
+            'pot_id' => $request->post('pot_id')
         ];
 
         $validator = Validator::make($cart_details, [
             'cart_id' => 'required|exists:carts,id',
-            'quantity' => 'required' 
+            'pot_id' => 'required|exists:pots,id',
+            'quantity' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -72,7 +97,8 @@ class CartController extends Controller
             ]);
         }
 
-        $update_cart = $this->cart()->updateCart($cart_details);
+        unset($cart_details['cart_id']);
+        $update_cart = $this->cart()->updateCart($cart_id, $cart_details);
 
         return response()->json([
             'success' => true,
@@ -96,10 +122,9 @@ class CartController extends Controller
         $this->setUserId(auth()->user()->id);
         $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
 
-        $cart = $this->customer()->getCustomerCart($customer);
+        $cart_model = $this->cart()->getCartModel($cart_id);
+        $cart_model->customer()->detach();
 
-        $cart->customer()->detach();
-        $cart->product()->detach();
         $destroy_cart = $this->cart()->destroyCart($cart_id);
 
         return response()->json([
@@ -114,14 +139,12 @@ class CartController extends Controller
         $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
 
         $carts = $this->customer()->getCustomerCart($customer);
-        foreach ($carts->get() as $cart) {
-            $cart_model = $this->cart()->getCartModel($cart->id);
-            $cart_model->product()->detach();
 
-            $destroy_cart = $this->cart()->destroyCart($cart->id);
+        foreach ($carts->get() as $cart) {
+            $delete_cart = $this->cart()->destroyCart($cart->id);
         }
 
-        $customer->cart()->detach();
+        $carts->detach();
 
         return response()->json([
             'success' => true,

@@ -20,17 +20,6 @@ class Product extends Model
 
     public $timestamps = true;
 
-    //Get product model
-    public function getProductModel($code)
-    {
-        $product_details = Product::where('code', $code)
-            ->get()
-            ->first();
-        $product_model = Product::find($product_details->id);
-        
-        return $product_model;
-    }
-
     //Gets all products
     public function getProducts()
     {
@@ -105,11 +94,6 @@ class Product extends Model
             ->update(['active' => $active]);
 
         return $update_product;
-    }
-
-    public function cart()
-    {
-        return $this->belongsToMany('App\Cart', 'cart_product');
     }
 
     public function order()
