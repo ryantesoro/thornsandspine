@@ -24,12 +24,14 @@ class CartController extends Controller
         $this->setUserId(auth()->user()->id);
 
         $cart_details = [
-            'product_code' => $request->post('code'),
+            'product_id' => $request->post('product_id'),
+            'pot_id' => $request->post('pot_id'),
             'quantity' => $request->post('quantity')
         ];
 
         $validator = Validator::make($cart_details, [
-            'product_code' => 'required|exists:products,code',
+            'product_id' => 'required|exists:products,id',
+            'pot_id' => 'required|exists:pots,id',
             'quantity' => 'required'
         ]);
 
@@ -41,11 +43,8 @@ class CartController extends Controller
         }
 
         $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
-        $cart = $this->cart()->storeCart($cart_details['quantity']);
+        $cart = $this->cart()->storeCart($cart_details);
         $customer->cart()->save($cart);
-
-        $product = $this->product()->getProductModel($cart_details['product_code']);
-        $product->cart()->save($cart);
 
         return response()->json([
             'success' => true,
