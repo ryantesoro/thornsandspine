@@ -26,6 +26,15 @@ class ShippingFee extends Model
         return $shipping_fee;
     }
 
+    //Get Shipping Fee by province_id
+    public function getCitiesByProvince($province_id)
+    {
+        $shipping_fee = ShippingFee::where('province_id', $province_id)
+            ->get();
+        
+        return $shipping_fee;
+    }
+
     //Fetch all shipping fees
     public function getShippingFees()
     {

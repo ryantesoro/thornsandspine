@@ -17,4 +17,21 @@ class ShippingFeeController extends Controller
             'data' => $plucked_provinces
         ]);
     }
+
+    public function city(Request $request, $province_id)
+    {
+        $shipping_fees = $this->shipping_fee()->getCitiesByProvince($province_id);
+        
+        $cities = array();
+        foreach($shipping_fees as $shipping_fee) {
+            $city = $shipping_fee->city;
+            $shipping_id = $shipping_fee->id;
+            $cities[$shipping_id] = $city;
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $cities
+        ]);
+    }
 }

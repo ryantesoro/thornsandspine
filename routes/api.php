@@ -27,6 +27,9 @@ Route::post('password/reset', ['as' => 'password.reset', 'uses' => 'ResetPasswor
 Route::group(['prefix' => 'shipping'], function () { 
     //Shipping province
     Route::get('province', ['as' => 'shipping_fee.province', 'uses' => 'ShippingFeeController@province']);
+
+    //Shipping province
+    Route::get('city/{province_id}', ['as' => 'shipping_fee.province', 'uses' => 'ShippingFeeController@city']);
 });
 
 //WHEN LOGGED IN
