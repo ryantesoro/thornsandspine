@@ -29,7 +29,7 @@ Route::group(['prefix' => 'shipping'], function () {
     Route::get('province', ['as' => 'shipping_fee.province', 'uses' => 'ShippingFeeController@province']);
 
     //Shipping province
-    Route::get('city/{province_id}', ['as' => 'shipping_fee.province', 'uses' => 'ShippingFeeController@city']);
+    Route::get('province/{province_id}/city', ['as' => 'shipping_fee.province', 'uses' => 'ShippingFeeController@city']);
 });
 
 //WHEN LOGGED IN
