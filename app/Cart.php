@@ -53,10 +53,10 @@ class Cart extends Model
     }
 
     //Update Cart
-    public function updateCart($cart_details)
+    public function updateCart($cart_id, $cart_details)
     {
-        $update_cart = Cart::find($cart_details['cart_id'])
-            ->update(['quantity' => $cart_details['quantity']]);
+        $update_cart = Cart::find($cart_id)
+            ->update($cart_details);
 
         return $update_cart;
     }

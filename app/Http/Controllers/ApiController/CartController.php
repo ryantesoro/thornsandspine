@@ -56,11 +56,13 @@ class CartController extends Controller
     {
         $cart_details = [
             'cart_id' => $cart_id,
-            'quantity' => $request->post('quantity')
+            'quantity' => $request->post('quantity'),
+            'pot_id' => $request->post('pot_id')
         ];
 
         $validator = Validator::make($cart_details, [
             'cart_id' => 'required|exists:carts,id',
+            'pot_id' => 'required|exists:pots,id',
             'quantity' => 'required' 
         ]);
 
@@ -71,7 +73,8 @@ class CartController extends Controller
             ]);
         }
 
-        $update_cart = $this->cart()->updateCart($cart_details);
+        unset($cart_details['cart_id']);
+        $update_cart = $this->cart()->updateCart($cart_id, $cart_details);
 
         return response()->json([
             'success' => true,
