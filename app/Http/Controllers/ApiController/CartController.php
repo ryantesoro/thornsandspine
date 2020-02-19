@@ -14,9 +14,13 @@ class CartController extends Controller
     public function index(Request $request)
     {
         $this->setUserId(auth()->user()->id);
-        $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
+        $customer_model = $this->customer()->getCustomerDetailsByUser($this->user_id);
+        $customer_cart = $this->customer()->getCustomerCart($customer_model)->get();
     
-        return $customer->cart()->get();
+        return response()->json([
+            'success' => true,
+            'data' => $customer_cart
+        ]);
     }
 
     public function store(Request $request)
