@@ -97,11 +97,8 @@ class CartController extends Controller
 
         $this->setUserId(auth()->user()->id);
         $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
+        $cart = $this->customer()->getCustomerCart($customer)->detach();
 
-        $cart = $this->customer()->getCustomerCart($customer);
-
-        $cart->customer()->detach();
-        $cart->product()->detach();
         $destroy_cart = $this->cart()->destroyCart($cart_id);
 
         return response()->json([
