@@ -13,7 +13,7 @@ class Cart extends Model
     const UPDATED_AT = null;
 
     protected $fillable = [
-        'quantity'
+        'quantity', 'product_id', 'pot_id'
     ];
 
     public $timestamps = true;
@@ -36,6 +36,16 @@ class Cart extends Model
         return $total;
     }
 
+    //Get Cart
+    public function getCart($where)
+    {
+        $cart = Cart::where($where)
+            ->get()
+            ->first();
+
+        return $cart;
+    }
+
     //Get Cart Model
     public function getCartModel($cart_id)
     {
@@ -45,17 +55,18 @@ class Cart extends Model
     }
 
     //Store Cart
-    public function storeCart($quantity)
+    public function storeCart($cart_details)
     {
-        $cart_details = Cart::create(['quantity' => $quantity]);
-        return $cart_details;
+        $store_cart = Cart::create($cart_details);
+
+        return $store_cart;
     }
 
     //Update Cart
-    public function updateCart($cart_details)
+    public function updateCart($cart_id, $cart_details)
     {
-        $update_cart = Cart::find($cart_details['cart_id'])
-            ->update(['quantity' => $cart_details['quantity']]);
+        $update_cart = Cart::find($cart_id)
+            ->update($cart_details);
 
         return $update_cart;
     }
@@ -67,11 +78,6 @@ class Cart extends Model
             ->delete();
         
         return $destroy_cart;
-    }
-
-    public function product()
-    {
-        return $this->belongsToMany('App\Product', 'cart_product');
     }
 
     public function customer()
