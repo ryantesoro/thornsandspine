@@ -20,6 +20,15 @@ class Order extends Model
 
     protected $hidden = ['pivot'];
 
+    //Get Orders by status
+    public function getOrdersByStatus($order_model, $status)
+    {
+        $orders = $order_model->where('status', $status)
+            ->get();
+        
+        return $orders;
+    }
+
     //Store Order
     public function storeOrder($order_details)
     {

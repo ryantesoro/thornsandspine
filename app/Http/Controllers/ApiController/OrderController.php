@@ -13,9 +13,12 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $this->setUserId(auth()->user()->id);
-        
+        $status = $request->get('status');
+
         $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
-        $orders = $this->customer()->getCustomerOrders($customer)->get();
+        $order_model = $this->customer()->getCustomerOrders($customer);
+        
+        $orders = $this->order()->getOrdersByStatus($order_model, $status ?? 0);
 
         return response()->json([
             'success' => true,
