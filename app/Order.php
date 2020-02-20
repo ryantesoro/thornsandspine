@@ -3,21 +3,36 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+
 
 class Order extends Model
 {
     protected $table = "orders";
 
     protected $fillable = [
-        'code', 'recipient', 'remarks',
-        'total'
+        'code', 'recipient_first', 'recipient_last',
+        'total', 'shipping_fees_id', 'remarks',
+        'expires_at'
     ];
 
     public $timestamps = true;
 
+    protected $hidden = ['pivot'];
+
+    //Get Orders by status
+    public function getOrdersByStatus($order_model, $status)
+    {
+        $orders = $order_model->where('status', $status)
+            ->get();
+        
+        return $orders;
+    }
+
     //Store Order
     public function storeOrder($order_details)
     {
+        $order_details['expires_at'] = Carbon::now()->addDays(2);
         $store_order = Order::create($order_details);
 
         return $store_order;

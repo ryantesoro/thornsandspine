@@ -26,6 +26,16 @@ class ShippingProvince extends Model
         return $province;         
     }
 
+    //Get Province by name
+    public function getProvinceByName($province_name)
+    {
+        $province = ShippingProvince::where('name', $province_name)
+            ->get()
+            ->first();
+
+        return $province;
+    }
+
     //Get all provinces
     public function getProvinces()
     {
