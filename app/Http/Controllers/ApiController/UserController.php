@@ -24,9 +24,8 @@ class UserController extends Controller
 
         if (!$login_attempt) {
             return response()->json([
-                'success' => true,
-                'msg' => 'Invalid Email/Password',
-                'verification' => true
+                'success' => false,
+                'msg' => 'Invalid Email/Password'
             ]);
         }
 
