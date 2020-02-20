@@ -9,8 +9,8 @@ class Order extends Model
     protected $table = "orders";
 
     protected $fillable = [
-        'code', 'recipient', 'remarks',
-        'total'
+        'code', 'recipient_first', 'recipient_last',
+        'total', 'shipping_fees_id', 'remarks'
     ];
 
     public $timestamps = true;
