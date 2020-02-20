@@ -34,8 +34,6 @@ Route::group(['prefix' => 'shipping'], function () {
 
 //WHEN LOGGED IN
 Route::group(['middleware' => 'auth:api'], function () {
-    Route::get('user', ['as' => 'user', 'uses' => 'UserController@user']);
-    Route::get('test', ['as' => 'test', 'uses' => 'UserController@test']);
 
     //PRODUCTS
     Route::group(['prefix' => 'product'], function () {
