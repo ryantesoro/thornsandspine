@@ -15,7 +15,10 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $list_of_products = $this->product()->getProducts();
+        $product_name = $request->get('name');
+        $sort_by = $request->get('sort_by');
+        $asc = $request->get('sort');
+        $list_of_products = $this->product()->getProducts($product_name, $sort_by, $asc);
 
         return view('pages.product.product_index')
             ->with('products', $list_of_products);

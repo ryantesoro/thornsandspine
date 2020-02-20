@@ -21,11 +21,23 @@ class Product extends Model
     public $timestamps = true;
 
     //Gets all products
-    public function getProducts()
+    public function getProducts($product_name, $sort_by = 'created_at', $asc = true)
     {
-        $list_of_products = Product::all()
-            ->sortByDesc('created_at');
+        $list_of_products = Product::select('*');
 
+        if ($product_name != '' || !empty($product_name)) {
+            $product_name = '%'.$product_name.'%';
+            $list_of_products->whereRaw('name LIKE ?', [
+                $product_name
+            ]);
+        }
+
+        $list_of_products = $list_of_products->get();
+        if ($asc) {
+            $list_of_products = $list_of_products->sortBy($sort_by);
+        } else {
+            $list_of_products = $list_of_products->sortByDesc($sort_by);
+        }
         return $list_of_products;
     }
 
