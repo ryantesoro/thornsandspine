@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+
 
 class Order extends Model
 {
@@ -10,14 +12,18 @@ class Order extends Model
 
     protected $fillable = [
         'code', 'recipient_first', 'recipient_last',
-        'total', 'shipping_fees_id', 'remarks'
+        'total', 'shipping_fees_id', 'remarks',
+        'expires_at'
     ];
 
     public $timestamps = true;
 
+    protected $hidden = ['pivot'];
+
     //Store Order
     public function storeOrder($order_details)
     {
+        $order_details['expires_at'] = Carbon::now()->addDays(2);
         $store_order = Order::create($order_details);
 
         return $store_order;
