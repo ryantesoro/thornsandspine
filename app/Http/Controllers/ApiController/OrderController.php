@@ -75,6 +75,11 @@ class OrderController extends Controller
         ]);
     }
 
+    public function customerUpdate(Request $request)
+    {
+        
+    }
+
     private function setUserId($user_id)
     {
         $this->user_id = $user_id;
