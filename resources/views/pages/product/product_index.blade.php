@@ -43,25 +43,41 @@
                   'name' => Request::input('name'), 
                   'sort_by' => 'code',
                   'sort' => (Request::input('sort_by') == 'code' && Request::input('sort') == 1 ? 0 : 1)
-                ]) }}">Code</a>
+                ]) }}">Code
+                @if (Request::input('sort_by') == 'code')
+                  @include('inc.table_symbol')
+                @endif
+                </a>
             </th>
             <th><a href="{{ route('admin.product.index', [
                   'name' => Request::input('name'),
                   'sort_by' => 'name',
                   'sort' => (Request::input('sort_by') == 'name' && Request::input('sort') == 1 ? 0 : 1)
-                ]) }}">Name</a>
+                ]) }}">Name
+                @if (Request::input('sort_by') == 'name')
+                  @include('inc.table_symbol')
+                @endif
+                </a>
             </th>
             <th><a href="{{ route('admin.product.index', [
                   'name' => Request::input('name'), 
                   'sort_by' => 'price',
                   'sort' => (Request::input('sort_by') == 'price' && Request::input('sort') == 1 ? 0 : 1)
-                ]) }}">Price</a>
+                ]) }}">Price
+                @if (Request::input('sort_by') == 'price')
+                  @include('inc.table_symbol')
+                @endif
+                </a>
             </th>
             <th><a href="{{ route('admin.product.index', [
                   'name' => Request::input('name'), 
                   'sort_by' => 'active',
                   'sort' => (Request::input('sort_by') == 'active' && Request::input('sort') == 1 ? 0 : 1)
-                ]) }}">Status</a>
+                ]) }}">Status
+                @if (Request::input('sort_by') == 'active')
+                  @include('inc.table_symbol')
+                @endif
+                </a>
             </th>
             <th>Options</th>
           </tr>
