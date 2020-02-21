@@ -28,7 +28,7 @@ class Pot extends Model
     }
 
     //Fetch all pots
-    public function getPots($pot_name)
+    public function getPots($pot_name, $with_trashed)
     {
         $list_of_pots = Pot::select(['id', 'name', 'active']);
         if ($pot_name != '' || !empty($product_name)) {
@@ -36,6 +36,10 @@ class Pot extends Model
             $list_of_pots->whereRaw('name LIKE ?', [
                 $pot_name
             ]);
+        }
+
+        if (!$with_trashed) {
+            $list_of_pots = $list_of_pots->where('active', '1');
         }
 
         return $list_of_pots->get()->sortBy('created_at');

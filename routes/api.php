@@ -74,3 +74,6 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/', ['as' => 'order.store', 'uses' => 'OrderController@store']);
     });
 });
+
+//Product Photo
+Route::get('image/{image_name}', ['as' => 'image.api', 'uses' => 'PhotoController@show']);
