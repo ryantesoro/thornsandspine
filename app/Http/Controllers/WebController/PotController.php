@@ -12,7 +12,8 @@ class PotController extends Controller
 {
     public function index(Request $request)
     {
-        $pots = $this->pot()->getPots($request->get('name'));
+        $with_trashed = true;
+        $pots = $this->pot()->getPots($request->get('name'), $with_trashed);
 
         return view('pages.pot.pot_index')->with('pots', $pots);
     }

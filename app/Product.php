@@ -47,7 +47,7 @@ class Product extends Model
             ]);
         }
     
-        return $list_of_products->get();
+        return $list_of_products->where('active', 1)->get();
     }
 
     //Check Product
