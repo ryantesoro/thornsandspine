@@ -34,7 +34,7 @@
                             Name
                         </td>
                         <td>
-                            {{ $pot_details['name'] }}
+                            {{ ucwords($pot_details['name']) }}
                         </td>
                     </tr>
                     <tr>

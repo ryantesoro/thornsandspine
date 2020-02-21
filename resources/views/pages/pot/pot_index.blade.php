@@ -45,7 +45,7 @@
                 <tbody>
                     @foreach($pots as $pot)
                     <tr>
-                        <td>{{ $pot['name'] }}</td>
+                        <td>{{ ucwords($pot['name']) }}</td>
                         <td class="pt-3">
                             @if ($pot['active'] == 1)
                             <span class="badge badge-pill badge-info">shown</span>

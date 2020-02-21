@@ -25,7 +25,7 @@ class PotController extends Controller
     public function store(Request $request)
     {
         $pot_details = [
-            'pot_name' => $request->post('pot_name'),
+            'pot_name' => strtolower($request->post('pot_name')),
             'pot_description' => $request->post('pot_name')
         ];
 
@@ -73,7 +73,7 @@ class PotController extends Controller
     public function update(Request $request, $pot_id)
     {
         $pot_details = [
-            'pot_name' => $request->post('pot_name'),
+            'pot_name' => strtolower($request->post('pot_name')),
             'pot_description' => $request->post('pot_name')
         ];
 

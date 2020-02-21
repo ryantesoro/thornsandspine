@@ -136,7 +136,7 @@ class ProductController extends Controller
         $options = array(
             'product_name' => 'required|min:3|max:50',
             'product_description' => 'required',
-            'product_price' => 'required|numeric|digits_between:1,4|min:0|not_in:0'
+            'product_price' => 'required|numeric|digits_between:1,5|min:0|not_in:0'
         );
 
         if ($with_pic) {
