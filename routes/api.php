@@ -38,7 +38,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     //PRODUCTS
     Route::group(['prefix' => 'product'], function () {
         //Browse Products
-        Route::get('browse', ['as' => 'product.index', 'uses' => 'ProductController@index']);
+        Route::get('/', ['as' => 'product.index', 'uses' => 'ProductController@index']);
+
+        //Search Products
+        Route::get('search', ['as' => 'product.show', 'uses' => 'ProductController@search']);
 
         //Show Product
         Route::get('{code}', ['as' => 'product.show', 'uses' => 'ProductController@show']);
