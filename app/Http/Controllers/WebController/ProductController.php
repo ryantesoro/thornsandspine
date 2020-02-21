@@ -16,12 +16,11 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $product_name = $request->get('name');
-        $sort_by = $request->get('sort_by');
-        $asc = $request->get('sort');
-        $list_of_products = $this->product()->getProducts($product_name, $sort_by, $asc);
+        $list_of_products = $this->product()->getProducts($product_name);
 
         return view('pages.product.product_index')
-            ->with('products', $list_of_products);
+            ->with('products', $list_of_products)
+            ->withInput($request->all());
     }
 
     public function show($code)

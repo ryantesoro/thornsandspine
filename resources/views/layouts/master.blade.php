@@ -12,7 +12,6 @@
 
     <!-- Bootstrap core CSS -->
     <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/font-awesome/css/all.min.css') }}" rel="stylesheet">
 
     <style>
         .bd-placeholder-img {
@@ -68,7 +67,6 @@
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
-<script src="{{ asset('vendor/font-awesome/js/all.min.js') }}"></script>
 @include('sweetalert::alert')
 @yield('js')
 
