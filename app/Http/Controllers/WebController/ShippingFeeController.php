@@ -64,7 +64,7 @@ class ShippingFeeController extends Controller
     {
         $shipping_fee_details = [
             'shipping_province' => $request->post('shipping_province'),
-            'shipping_city' => $request->post('shipping_city'),
+            'shipping_city' => strtolower($request->post('shipping_city')),
             'shipping_price' => $request->post('shipping_price')
         ];
 
@@ -107,7 +107,7 @@ class ShippingFeeController extends Controller
     {
         $shipping_fee_details = [
             'shipping_province' => $request->post('shipping_province'),
-            'shipping_city' => $request->post('shipping_city'),
+            'shipping_city' => strtolower($request->post('shipping_city')),
             'shipping_price' => $request->post('shipping_price')
         ];
 
