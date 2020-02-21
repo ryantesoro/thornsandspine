@@ -64,7 +64,8 @@ class ProductController extends Controller
         $product_details['img'] = route('image.api', [$product_details['img'], 'size' => 'medium']);
 
         $with_trashed = false;
-        $pots = $this->pot()->getPots(null, $with_trashed);
+        $pots = $this->pot()->getPots(null, $with_trashed)
+            ->pluck('name', 'id');
         
         return response()->json([
             'success' => true,
