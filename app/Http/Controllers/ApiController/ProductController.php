@@ -13,7 +13,7 @@ class ProductController extends Controller
 
         $new_products = [];
 
-        $limit = 0;
+        $limit = 1;
         foreach ($products as $product) {
             $new_products[] = [
                 'code' => $product->code,
