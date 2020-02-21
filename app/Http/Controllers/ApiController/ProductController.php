@@ -62,16 +62,23 @@ class ProductController extends Controller
         $product_details = $this->product()->showProduct($code);
 
         $product_details['img'] = route('image.api', [$product_details['img'], 'size' => 'medium']);
+        $product_details['name'] = ucwords($product_details['name']);
 
         $with_trashed = false;
         $pots = $this->pot()->getPots(null, $with_trashed)
             ->pluck('name', 'id');
+
+        $new_pots = [];
+
+        foreach($pots as $id => $name) {
+            $new_pots[$id] = ucwords($name);
+        }
         
         return response()->json([
             'success' => true,
             'data' => [
                 'product_details' => $product_details,
-                'pots' => $pots
+                'pots' => $new_pots
             ]
         ]);
     }
