@@ -43,7 +43,6 @@ class ProductController extends Controller
         $products = $this->product()->browseProducts($request->get('search'));
 
         $new_products = [];
-
         foreach ($products as $product) {
             $new_products[] = [
                 'code' => $product->code,
@@ -63,6 +62,7 @@ class ProductController extends Controller
 
         $product_details['img'] = route('image.api', [$product_details['img'], 'size' => 'medium']);
         $product_details['name'] = ucwords($product_details['name']);
+        unset($product_details['active']);
 
         $with_trashed = false;
         $pots = $this->pot()->getPots(null, $with_trashed)
