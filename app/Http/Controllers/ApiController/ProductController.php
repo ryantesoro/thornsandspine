@@ -13,11 +13,17 @@ class ProductController extends Controller
 
         $new_products = [];
 
+        $limit = 0;
         foreach ($products as $product) {
             $new_products[] = [
                 'code' => $product->code,
                 'img' => route('image.api', [$product->img, 'size' => 'thumbnail'])
             ];
+
+            if ($limit == 8) {
+                break;
+            }
+            $limit++;
         }
 
         $newest_products = $new_products;
