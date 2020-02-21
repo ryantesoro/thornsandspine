@@ -51,11 +51,25 @@ class ShippingFee extends Model
     }
 
     //Fetch all shipping fees
-    public function getShippingFees()
+    public function getShippingFees($city_name, $province_id)
     {
-        $shipping_fees = ShippingFee::all();
+        $shipping_fee_list = ShippingFee::select('id', 'city', 'province_id', 'price');
+        
+        if ($city_name != '' || !empty($city_name)) {
+            $search_query = '%'.$city_name.'%';
+            $shipping_fee_list->whereRaw('city LIKE ?', [
+                $search_query
+            ]);
+        }
+        
+        if ($province_id != 0 && ($province_id != '' || !empty($province_id))) {
+            $shipping_fee_list->where('province_id', $province_id);
+        }
 
-        return $shipping_fees;
+        return $shipping_fee_list->get()
+            ->sortBy('created_at');
+
+        return $shipping_fee_list;
     }
 
     //Store Shipping Fee
