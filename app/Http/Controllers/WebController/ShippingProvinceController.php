@@ -30,7 +30,7 @@ class ShippingProvinceController extends Controller
 
     public function store(Request $request)
     {
-        $province_name = $request->post('shipping_province');
+        $province_name = strtolower($request->post('shipping_province'));
 
         $validator = Validator::make(['shipping_province' => $province_name], [
             'shipping_province' => 'required|unique:shipping_provinces,name'
@@ -63,7 +63,7 @@ class ShippingProvinceController extends Controller
 
     public function update(Request $request, $province_id)
     {
-        $province_name = $request->post('shipping_province');
+        $province_name = strtolower($request->post('shipping_province'));
 
         $validator = Validator::make(['shipping_province' => $province_name], [
             'shipping_province' => 'required|unique:shipping_provinces,name'

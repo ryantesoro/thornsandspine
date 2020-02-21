@@ -55,8 +55,8 @@
                 <tbody>
                     @foreach($shipping_fees as $shipping_fee)
                     <tr>
-                        <td>{{ $shipping_fee['province'] }}</td>
-                        <td>{{ $shipping_fee['city'] }}</td>
+                        <td>{{ ucwords($shipping_fee['province']) }}</td>
+                        <td>{{ ucwords($shipping_fee['city']) }}</td>
                         <td>{{ $shipping_fee['price'] }}</td>
                         <td>
                             <a href="{{ route('admin.shipping_fee.show', $shipping_fee['id']) }}"
