@@ -9,16 +9,30 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class ShippingFeeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $shipping_fees = $this->shipping_fee()->getShippingFees();
+        $city_name = $request->get('city');
+        $province_id = $request->get('province_id');
+
+        $shipping_fees = $this->shipping_fee()->getShippingFees($city_name, $province_id);
 
         foreach ($shipping_fees as $shipping_fee) {
             $shipping_fee['province'] = $this->getProvinceName($shipping_fee['province_id']);
         }
 
+        $provinces = [
+            0 => 'All Provinces'
+        ];
+
+        $fetched_provinces = $this->shipping_province()->getProvinces()
+            ->pluck('name', 'id')
+            ->toArray();
+        
+        $provinces = array_merge($provinces, $fetched_provinces);
+
         return view('pages.shipping_fee.shipping_fee_index')
-            ->with('shipping_fees', $shipping_fees);
+            ->with('shipping_fees', $shipping_fees)
+            ->with('provinces', $provinces);
     }
 
     public function show($shipping_fee_id)
