@@ -29,6 +29,13 @@ class UserController extends Controller
             ]);
         }
 
+        if (auth()->user()->access_level != 0) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Invalid Email/Password'
+            ]);
+        }
+
         $user_id = auth()->user()->id;
 
         if (!$this->user()->userVerified($user_id)) {
