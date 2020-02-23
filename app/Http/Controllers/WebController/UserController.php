@@ -34,6 +34,12 @@ class UserController extends Controller
             Alert::error('Login Failed', 'Invalid Email/Password');
             return redirect()->back()->withInput();
         }
+
+        if (auth()->user()->access_level == 0) {
+            $this->incrementLoginAttempts($request);
+            Alert::error('Login Failed', 'Invalid Email/Password');
+            return redirect()->back()->withInput();
+        }
         
         return redirect()->route('admin.dashboard');
     }
