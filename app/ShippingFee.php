@@ -89,14 +89,8 @@ class ShippingFee extends Model
     //Update Shipping Fee
     public function updateShippingFee($shipping_fee_id, $shipping_fee_details)
     {
-        $new_shipping_fee_details = [
-            'province_id' => $shipping_fee_details['shipping_province'],
-            'city' => $shipping_fee_details['shipping_city'],
-            'price' => $shipping_fee_details['shipping_price']
-        ];
-
         $update_shipping_fee = ShippingFee::where('id', $shipping_fee_id)
-            ->update($new_shipping_fee_details);
+            ->update($shipping_fee_details);
         
         return $update_shipping_fee;
     }
