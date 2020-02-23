@@ -106,17 +106,30 @@ class ShippingFeeController extends Controller
     public function update(Request $request, $shipping_fee_id)
     {
         $shipping_fee_details = [
-            'shipping_province' => $request->post('shipping_province'),
-            'shipping_city' => strtolower($request->post('shipping_city')),
             'shipping_price' => $request->post('shipping_price')
         ];
 
-        $validator = Validator::make($shipping_fee_details, [
-            'shipping_province' => 'required|exists:shipping_provinces,id',
-            'shipping_city' => 'required',
+        $validator_options = [
             'shipping_price' => 'required|numeric|digits_between:1,4|min:0|not_in:0'
-        ]);
+        ];
 
+        $new_shipping_fee_details = [
+            'price' => $shipping_fee_details['shipping_price']
+        ];
+
+        if (auth()->user()->access_level == 2) {
+            $shipping_fee_details['shipping_province'] = $request->post('shipping_province');
+            $shipping_fee_details['shipping_city'] =  strtolower($request->post('shipping_city'));
+
+            $validator_options['shipping_province'] = 'required|exists:shipping_provinces,id';
+            $validator_options['shipping_city'] = 'required';
+
+            $new_shipping_fee_details['province_id'] = $shipping_fee_details['shipping_province'];
+            $new_shipping_fee_details['city'] = $shipping_fee_details['shipping_city']; 
+        }
+
+        $validator = Validator::make($shipping_fee_details, $validator_options);
+        
         if ($validator->fails()) {
             Alert::warning('Update Shipping Fee Failed', 'Invalid Input');
             return redirect()->back()
@@ -124,7 +137,7 @@ class ShippingFeeController extends Controller
                 ->withErrors($validator->errors());
         }
 
-        $update_shipping_fee = $this->shipping_fee()->updateShippingFee($shipping_fee_id, $shipping_fee_details);
+        $update_shipping_fee = $this->shipping_fee()->updateShippingFee($shipping_fee_id, $new_shipping_fee_details);
 
         Alert::success('Update Shipping Fee Successful', 'Success!');
         return redirect()->route('admin.shipping_fee.index');

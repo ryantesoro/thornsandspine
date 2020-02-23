@@ -11,10 +11,12 @@
             <div class="col text-left">
                 <h4>List Of Shipping Fees</h4>
             </div>
+            @if(auth()->user()->access_level == 2)
             <div>
                 <a class="btn btn-success font-weight-bold" href="{{ route('admin.shipping_fee.create') }}">Create
                     Shipping Fee</a>
             </div>
+            @endif
         </div>
         <hr>
         {!! Form::open(['route' => 'admin.shipping_fee.index', 'method' => 'get', 'style' => 'margin-block-end: 0;']) !!}
