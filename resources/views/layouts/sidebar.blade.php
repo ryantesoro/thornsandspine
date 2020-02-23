@@ -24,6 +24,7 @@
                         Orders
                     </a>
                 </li>
+                @if(auth()->user()->access_level == 2)
                 <li class="nav-item">
                     <a class="nav-link {{ Route::is('admin.product.*') ? 'active' : '' }}" href="{{ route('admin.product.index') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -60,6 +61,7 @@
                         Shipping Province
                     </a>
                 </li>
+                @endif
                 <li class="nav-item">
                     <a class="nav-link {{ Route::is('admin.shipping_fee.*') ? 'active' : '' }}" href="{{ route('admin.shipping_fee.index') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -72,6 +74,7 @@
                         Shipping Fees
                     </a>
                 </li>
+                @if(auth()->user()->access_level == 2)
                 <li class="nav-item">
                     <a class="nav-link {{ Route::is('admin.customer.*') ? 'active' : '' }}" href="{{ route('admin.customer.index') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -109,6 +112,7 @@
                         Reports
                     </a>
                 </li>
+                @endif
             </ul>
 
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
