@@ -33,7 +33,7 @@ class Product extends Model
         }
 
         return $list_of_products->get()
-            ->sortBy('created_at');
+            ->sortByDesc('created_at');
     }
 
     //Browse products
