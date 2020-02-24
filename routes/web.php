@@ -125,6 +125,12 @@ Route::group(['middleware' => 'auth'], function () {
 
             //Faq Update
             Route::post('update/{faq_id}', ['as' => 'admin.faq.update', 'uses' => 'FaqController@update']);
+
+            //Faq Update
+            Route::post('delete/{faq_id}', ['as' => 'admin.faq.destroy', 'uses' => 'FaqController@destroy']);
+
+            //Faq Update
+            Route::post('restore/{faq_id}', ['as' => 'admin.faq.restore', 'uses' => 'FaqController@restore']);
         });
     });
 
