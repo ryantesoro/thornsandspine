@@ -21,6 +21,17 @@
             </div>
             <div>
                 <a class="btn btn-secondary font-weight-bold" href="{{ route('admin.faq.index') }}">Go Back</a>
+                @if ($faq_details['active'] == 1)
+                <button type="button" class="btn btn-danger" data-toggle="modal"
+                    data-target="#hide_confirmation">
+                    <b>Hide</b>
+                </button>
+                @else
+                <button type="button" class="btn btn-primary" data-toggle="modal"
+                    data-target="#restore_confirmation">
+                    <b>Restore</b>
+                </button>
+                @endif
             </div>
         </div>
         <hr>
@@ -86,4 +97,5 @@
     </main>
 </div>
 </div>
+@include('pages.faq.faq_modal')
 @endsection
