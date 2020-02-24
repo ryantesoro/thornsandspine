@@ -8,6 +8,13 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Validator;
 use App\Notifications\EmailVerification;
 
+use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Http\File;
+use Carbon\Carbon;
+use Image;
+
+
 
 class UserController extends Controller
 {
@@ -133,5 +140,33 @@ class UserController extends Controller
         $validator = Validator::make($registration_details, $options);
 
         return $validator;
+    }
+
+    public function tester(Request $request)
+    {
+        $imgs = $request->file('img');
+        $indx = 0;
+        foreach($imgs as $img) {
+            $this->saveImageFile($img, strVal($indx).'.jpg');
+            $indx++;
+        }
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
+    private function saveImageFile($image_file, $file_name)
+    {
+        $path = $image_file->getRealPath().'.jpg';
+
+        $whole_pic = Image::make($image_file)->encode('jpg')->save($path);
+        Storage::putFileAs('product', new File($path), $file_name);
+
+        $medium = Image::make($image_file)->resize(300,200)->encode('jpg')->save($path);
+        Storage::putFileAs('product/medium', new File($path), $file_name);
+
+        $thumbnail = Image::make($image_file)->resize(100, 100)->encode('jpg')->save($path);
+        Storage::putFileAs('product/thumbnail', new File($path), $file_name);
     }
 }

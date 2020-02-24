@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::post('test', ['as' => 'test', 'uses' => 'UserController@tester']);
+
 Route::post('login', ['as' => 'login', 'uses' => 'UserController@login']);
 Route::post('register', ['as' => 'register', 'uses' => 'UserController@register']);
 
