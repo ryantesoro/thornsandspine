@@ -29,7 +29,7 @@
                             </div>
 
                             <div class="ml-auto">
-                                <a class="btn btn-sm btn-warning font-weight-bold" href="">
+                                <a class="btn btn-sm btn-warning font-weight-bold" href="{{ route('admin.faq.edit', $faq['id']) }}">
                                     Edit
                                 </a>
                             </div>
