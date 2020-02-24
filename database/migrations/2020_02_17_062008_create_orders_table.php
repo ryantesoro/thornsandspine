@@ -22,6 +22,7 @@ class CreateOrdersTable extends Migration
             $table->integer('total');
             $table->integer('status')->default(0);
             $table->unsignedInteger('shipping_fees_id');
+            $table->string('payment_method');
             $table->text('comment')->nullable();
             $table->datetime('expires_at');
             $table->timestamps();
