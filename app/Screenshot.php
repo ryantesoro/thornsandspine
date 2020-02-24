@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Screenshot extends Model
 {
-    protected $table = 'password_resets';
+    protected $table = 'screenshots';
 
     const UPDATED_AT = null;
 
     protected $fillable = [
-        'email', 'token'
+        'file_name'
     ];
 
     public $timestamps = true;
