@@ -108,6 +108,12 @@ Route::group(['middleware' => 'auth'], function () {
             //Shipping Fee Create
             Route::get('create', ['as' => 'admin.shipping_fee.create', 'uses' => 'ShippingFeeController@create']);
         });
+
+        //FAQs
+        Route::group(['prefix' => 'faq'], function () {
+            //Faq Index
+            Route::get('index', ['as' => 'admin.faq.index', 'uses' => 'FaqController@index']);
+        });
     });
 
     //SHIPPING FEES
