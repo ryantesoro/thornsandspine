@@ -56,4 +56,9 @@ class Order extends Model
     {
         return $this->belongsToMany('App\Product', 'order_product');
     }
+
+    public function screenshot()
+    {
+        return $this->belongsToMany('App\Screenshot', 'order_screenshot');
+    }
 }
