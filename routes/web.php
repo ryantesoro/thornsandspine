@@ -114,11 +114,17 @@ Route::group(['middleware' => 'auth'], function () {
             //Faq Index
             Route::get('index', ['as' => 'admin.faq.index', 'uses' => 'FaqController@index']);
 
-            //Faq Index
+            //Faq Create
             Route::get('create', ['as' => 'admin.faq.create', 'uses' => 'FaqController@create']);
 
-            //Faq Index
+            //Faq Store
             Route::post('store', ['as' => 'admin.faq.store', 'uses' => 'FaqController@store']);
+
+            //Faq Edit
+            Route::get('edit/{faq_id}', ['as' => 'admin.faq.edit', 'uses' => 'FaqController@edit']);
+
+            //Faq Update
+            Route::post('update/{faq_id}', ['as' => 'admin.faq.update', 'uses' => 'FaqController@update']);
         });
     });
 
