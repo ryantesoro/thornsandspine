@@ -50,7 +50,7 @@ class FaqController extends Controller
     {
         if (!$this->faq()->faqExists($faq_id)) {
             Alert::error('Edit FAQ Failed', 'FAQ does not exist!');
-            return redirect()->route('admin.pot.index');
+            return redirect()->route('admin.faq.index');
         }
 
         $faq_details = $this->faq()->getFaq($faq_id);
@@ -80,6 +80,32 @@ class FaqController extends Controller
         $update_faq = $this->faq()->updateFaq($faq_id, $faq_details);
 
         Alert::success('Update FAQ Successful', 'Success!');
+        return redirect()->route('admin.faq.index');
+    }
+
+    public function destroy($faq_id)
+    {
+        if (!$this->faq()->faqExists($faq_id)) {
+            Alert::error('Edit FAQ Failed', 'FAQ does not exist!');
+            return redirect()->route('admin.faq.index');
+        }
+
+        $delete_faq = $this->faq()->updateFaq($faq_id, ['active' => 0]);
+
+        Alert::success('Hide FAQ Successful', 'Success!');
+        return redirect()->route('admin.faq.index');
+    }
+
+    public function restore($faq_id)
+    {
+        if (!$this->faq()->faqExists($faq_id)) {
+            Alert::error('Edit FAQ Failed', 'FAQ does not exist!');
+            return redirect()->route('admin.faq.index');
+        }
+
+        $update_faq = $this->faq()->updateFaq($faq_id, ['active' => 1]);
+
+        Alert::success('Restore FAQ Successful', 'Success!');
         return redirect()->route('admin.faq.index');
     }
 }
