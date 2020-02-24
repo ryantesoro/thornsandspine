@@ -16,6 +16,23 @@
       </div>
     </div>
     <hr>
+    {!! Form::open(['route' => 'admin.product.index', 'method' => 'get', 'style' => 'margin-block-end: 0;']) !!}
+    <div class="row">
+      <div class="col-3 offset-9">
+        <div class="input-group mb-3">
+          {!! Form::text('name', Request::input('name') ?? '',
+          [
+          'class' => 'form-control form-control-sm',
+          'placeholder' => 'Product name',
+          'tab_index' => '1'
+          ]) !!}
+          <div class="input-group-append">
+            <button class="btn btn-primary btn-sm" tab_index="2" type="submit">Search</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {!! Form::close() !!}
     <div class="table-responsive">
       <table class="table table-hover border">
         <thead>
@@ -31,13 +48,13 @@
           @foreach($products as $product)
           <tr>
             <td>{{$product['code']}}</td>
-            <td>{{$product['name']}}</td>
+            <td>{{ucwords($product['name'])}}</td>
             <td>{{$product['price']}}</td>
             <td class="pt-3">
               @if ($product['active'] == 1)
-                <span class="badge badge-pill badge-info">shown</span>
+              <span class="badge badge-pill badge-info">shown</span>
               @else
-                <span class="badge badge-pill badge-secondary">hidden</span>
+              <span class="badge badge-pill badge-secondary">hidden</span>
               @endif
             </td>
             <td>

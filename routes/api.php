@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::post('login', ['as' => 'login', 'uses' => 'UserController@login']);
 Route::post('register', ['as' => 'register', 'uses' => 'UserController@register']);
 
@@ -22,21 +23,32 @@ Route::post('password/request', ['as' => 'password.request', 'uses' => 'ResetPas
 Route::post('password/verify', ['as' => 'password.verify', 'uses' => 'ResetPasswordController@verify']);
 Route::post('password/reset', ['as' => 'password.reset', 'uses' => 'ResetPasswordController@reset']);
 
-Route::group(['middleware' => 'auth:api'], function() {
-    Route::get('user', ['as' => 'user', 'uses' => 'UserController@user']);
-    Route::get('test', ['as' => 'test', 'uses' => 'UserController@test']);
+//SHIPPING FEES
+Route::group(['prefix' => 'shipping'], function () { 
+    //Shipping province
+    Route::get('province', ['as' => 'shipping_fee.province', 'uses' => 'ShippingFeeController@province']);
+
+    //Shipping province
+    Route::get('province/{province_id}/city', ['as' => 'shipping_fee.province', 'uses' => 'ShippingFeeController@city']);
+});
+
+//WHEN LOGGED IN
+Route::group(['middleware' => 'auth:api'], function () {
 
     //PRODUCTS
-    Route::group(['prefix' => 'product'], function() {
+    Route::group(['prefix' => 'product'], function () {
         //Browse Products
-        Route::get('browse', ['as' => 'product.index', 'uses' => 'ProductController@index']);
+        Route::get('/', ['as' => 'product.index', 'uses' => 'ProductController@index']);
+
+        //Search Products
+        Route::get('search', ['as' => 'product.show', 'uses' => 'ProductController@search']);
 
         //Show Product
         Route::get('{code}', ['as' => 'product.show', 'uses' => 'ProductController@show']);
     });
 
     //CART
-    Route::group(['prefix' => 'cart'], function() {
+    Route::group(['prefix' => 'cart'], function () {
         //Browse Cart
         Route::get('/', ['as' => 'cart.index', 'uses' => 'CartController@index']);
 
@@ -62,3 +74,6 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('/', ['as' => 'order.store', 'uses' => 'OrderController@store']);
     });
 });
+
+//Product Photo
+Route::get('image/{image_name}', ['as' => 'image.api', 'uses' => 'PhotoController@show']);

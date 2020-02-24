@@ -11,11 +11,39 @@
             <div class="col text-left">
                 <h4>List Of Shipping Fees</h4>
             </div>
+            @if(auth()->user()->access_level == 2)
             <div>
-                <a class="btn btn-success font-weight-bold" href="{{ route('admin.shipping_fee.create') }}">Create Shipping Fee</a>
+                <a class="btn btn-success font-weight-bold" href="{{ route('admin.shipping_fee.create') }}">Create
+                    Shipping Fee</a>
             </div>
+            @endif
         </div>
         <hr>
+        {!! Form::open(['route' => 'admin.shipping_fee.index', 'method' => 'get', 'style' => 'margin-block-end: 0;']) !!}
+        <div class="row">
+            <div class="col-4 offset-8">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        {!! Form::select('province_id', $provinces, Request::input('province_id') ?? '',
+                        [
+                        'class' => 'form-control form-control-sm',
+                        'tab_index' => '1',
+                        'required' => true
+                        ]) !!}
+                    </div>
+                    {!! Form::text('city', Request::input('city') ?? '',
+                    [
+                    'class' => 'form-control form-control-sm',
+                    'placeholder' => 'City name',
+                    'tab_index' => '2'
+                    ]) !!}
+                    <div class="input-group-append">
+                        <button class="btn btn-primary btn-sm" tab_index="3" type="submit">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {!! Form::close() !!}
         <div class="table-responsive">
             <table class="table table-hover border">
                 <thead>
@@ -29,8 +57,8 @@
                 <tbody>
                     @foreach($shipping_fees as $shipping_fee)
                     <tr>
-                        <td>{{ $shipping_fee['province'] }}</td>
-                        <td>{{ $shipping_fee['city'] }}</td>
+                        <td>{{ ucwords($shipping_fee['province']) }}</td>
+                        <td>{{ ucwords($shipping_fee['city']) }}</td>
                         <td>{{ $shipping_fee['price'] }}</td>
                         <td>
                             <a href="{{ route('admin.shipping_fee.show', $shipping_fee['id']) }}"

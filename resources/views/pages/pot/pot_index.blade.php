@@ -16,6 +16,23 @@
             </div>
         </div>
         <hr>
+        {!! Form::open(['route' => 'admin.pot.index', 'method' => 'get', 'style' => 'margin-block-end: 0;']) !!}
+        <div class="row">
+            <div class="col-3 offset-9">
+                <div class="input-group mb-3">
+                    {!! Form::text('name', Request::input('name') ?? '',
+                    [
+                    'class' => 'form-control form-control-sm',
+                    'placeholder' => 'Pot name',
+                    'tab_index' => '1'
+                    ]) !!}
+                    <div class="input-group-append">
+                        <button class="btn btn-primary btn-sm" tab_index="2" type="submit">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {!! Form::close() !!}
         <div class="table-responsive">
             <table class="table table-hover border">
                 <thead>
@@ -28,7 +45,7 @@
                 <tbody>
                     @foreach($pots as $pot)
                     <tr>
-                        <td>{{ $pot['name'] }}</td>
+                        <td>{{ ucwords($pot['name']) }}</td>
                         <td class="pt-3">
                             @if ($pot['active'] == 1)
                             <span class="badge badge-pill badge-info">shown</span>

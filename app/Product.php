@@ -21,12 +21,19 @@ class Product extends Model
     public $timestamps = true;
 
     //Gets all products
-    public function getProducts()
+    public function getProducts($product_name)
     {
-        $list_of_products = Product::all()
-            ->sortByDesc('created_at');
+        $list_of_products = Product::select('*');
 
-        return $list_of_products;
+        if ($product_name != '' || !empty($product_name)) {
+            $product_name = '%'.$product_name.'%';
+            $list_of_products->whereRaw('name LIKE ?', [
+                $product_name
+            ]);
+        }
+
+        return $list_of_products->get()
+            ->sortByDesc('created_at');
     }
 
     //Browse products
@@ -40,7 +47,7 @@ class Product extends Model
             ]);
         }
     
-        return $list_of_products->get();
+        return $list_of_products->where('active', 1)->get();
     }
 
     //Check Product

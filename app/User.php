@@ -71,9 +71,11 @@ class User extends Authenticatable
     //Check if user is verified
     public function userVerified($user_id)
     {
-        $user = User::where('id', $user_id)->get();
+        $user = User::where('id', $user_id)
+            ->get()
+            ->first();
 
-        return ($user->verified_at != null || !empty($user->verified_at));
+        return ($user->email_verified_at != null || !empty($user->email_verified_at));
     }
 
     public function customer()

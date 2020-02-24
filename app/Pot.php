@@ -28,11 +28,21 @@ class Pot extends Model
     }
 
     //Fetch all pots
-    public function getPots()
+    public function getPots($pot_name, $with_trashed)
     {
-        $pots = Pot::all();
+        $list_of_pots = Pot::select(['id', 'name', 'active']);
+        if ($pot_name != '' || !empty($product_name)) {
+            $pot_name = '%'.$pot_name.'%';
+            $list_of_pots->whereRaw('name LIKE ?', [
+                $pot_name
+            ]);
+        }
 
-        return $pots;
+        if (!$with_trashed) {
+            $list_of_pots = $list_of_pots->where('active', '1');
+        }
+
+        return $list_of_pots->get()->sortBy('created_at');
     }
 
     //Store pot

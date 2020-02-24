@@ -43,13 +43,16 @@
                     [
                     'class' => 'form-control',
                     'tab_index' => '1',
-                    'required' => true
+                    'required' => true,
+                    'disabled' => auth()->user()->access_level != 2
                     ]) !!}
+                    @if (auth()->user()->access_level == 2)
                     <div class="d-flex justify-content-end pt-2">
                         <a href="{{ route('admin.shipping_province.create') }}" class="btn btn-sm btn-info">
                             <b>Add Province</b>
                         </a>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -66,7 +69,8 @@
                     'data-trigger' => 'focus',
                     'title' => 'Shipping City',
                     'data-content' => 'The city must be in the philippines',
-                    'required' => true
+                    'required' => true,
+                    'disabled' => auth()->user()->access_level != 2
                     ]) !!}
                 </div>
             </div>

@@ -4,18 +4,47 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\User;
+use DB;
+
 
 class Customer extends Model
 {
     protected $table = "customers";
 
     protected $fillable = [
-        'first_name', 'last_name', 'address', 'city', 'contact_number'
+        'first_name', 'last_name', 'address', 'city', 'contact_number', 'province'
     ];
 
     protected $hidden = ['pivot'];
 
     public $timestamps = false;
+
+    public function getCustomers($column, $value)
+    {
+        $customers = DB::table('customers')
+            ->selectRaw('customers.id, customers.first_name, customers.last_name, users.email, customers.province, customers.city')
+            ->leftJoin('user_customer', function ($query) {
+                $query->on('user_customer.customer_id', 'customers.id');
+            })
+            ->leftJoin('users', function ($query) {
+                $query->on('users.id', 'user_customer.user_id');
+            });
+        
+        if ($column != null && $value != null) {
+            $search = '%'.$value.'%';
+            $customers = $customers->whereRaw('customers.'.$column.' LIKE ?', [
+                $search
+            ]);
+        } else if ($column == 'email') {
+            $search = '%'.$value.'%';
+            $customers = $customers->whereRaw('users.email LIKE ?', [
+                $search
+            ]);
+
+        }
+
+        return $customers->get()->sortBy('customers.last_name');;
+    }
 
     //Register New Customer
     public function registerCustomer($customer_details)

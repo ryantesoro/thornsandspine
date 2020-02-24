@@ -21,6 +21,8 @@ class CreateOrdersTable extends Migration
             $table->text('remarks')->nullable();
             $table->integer('total');
             $table->integer('status')->default(0);
+            $table->unsignedInteger('shipping_fees_id');
+            $table->datetime('expires_at');
             $table->timestamps();
         });
     }

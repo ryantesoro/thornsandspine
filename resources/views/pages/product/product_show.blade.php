@@ -51,7 +51,7 @@
                             Name
                         </td>
                         <td>
-                            {{ $product['name'] }}
+                            {{ ucwords($product['name']) }}
                         </td>
                     </tr>
                     <tr>

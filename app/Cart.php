@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Product;
 
 class Cart extends Model
 {
@@ -19,16 +20,15 @@ class Cart extends Model
     public $timestamps = true;
 
     //Get Cart Total
-    public function getCartTotal($customer_model)
+    public function getCartTotal($customer_cart)
     {
-        $cart_model = $customer_model->cart();
-        
         $total = 0;
-        foreach ($cart_model->get() as $cart) {
-            $product = $cart->product();
+        foreach ($customer_cart->get() as $cart) {
+            $product_id = $cart->product_id;
+            $product = Product::find($product_id);
             
+            $price = $product->price;
             $quantity = $cart->quantity;
-            $price = $product->value('price');
 
             $total += $quantity * $price;
         }
@@ -78,6 +78,15 @@ class Cart extends Model
             ->delete();
         
         return $destroy_cart;
+    }
+
+    //Clears cart
+    public function clearCart($customer_cart)
+    {
+        foreach ($customer_cart->get() as $cart) {
+            $this->destroyCart($cart->id);
+        }
+        $customer_cart->detach();
     }
 
     public function customer()

@@ -15,10 +15,12 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $list_of_products = $this->product()->getProducts();
+        $product_name = $request->get('name');
+        $list_of_products = $this->product()->getProducts($product_name);
 
         return view('pages.product.product_index')
-            ->with('products', $list_of_products);
+            ->with('products', $list_of_products)
+            ->withInput($request->all());
     }
 
     public function show($code)
@@ -134,7 +136,7 @@ class ProductController extends Controller
         $options = array(
             'product_name' => 'required|min:3|max:50',
             'product_description' => 'required',
-            'product_price' => 'required|numeric|digits_between:1,4|min:0|not_in:0'
+            'product_price' => 'required|numeric|digits_between:1,5|min:0|not_in:0'
         );
 
         if ($with_pic) {
