@@ -41,6 +41,9 @@ class UserController extends Controller
             return redirect()->back()->withInput();
         }
         
+        if (auth()->user()->access_level == 1) {
+            return redirect()->route('admin.order.index');
+        }
         return redirect()->route('admin.dashboard');
     }
 
