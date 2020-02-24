@@ -108,6 +108,30 @@ Route::group(['middleware' => 'auth'], function () {
             //Shipping Fee Create
             Route::get('create', ['as' => 'admin.shipping_fee.create', 'uses' => 'ShippingFeeController@create']);
         });
+
+        //FAQs
+        Route::group(['prefix' => 'faq'], function () {
+            //Faq Index
+            Route::get('index', ['as' => 'admin.faq.index', 'uses' => 'FaqController@index']);
+
+            //Faq Create
+            Route::get('create', ['as' => 'admin.faq.create', 'uses' => 'FaqController@create']);
+
+            //Faq Store
+            Route::post('store', ['as' => 'admin.faq.store', 'uses' => 'FaqController@store']);
+
+            //Faq Edit
+            Route::get('edit/{faq_id}', ['as' => 'admin.faq.edit', 'uses' => 'FaqController@edit']);
+
+            //Faq Update
+            Route::post('update/{faq_id}', ['as' => 'admin.faq.update', 'uses' => 'FaqController@update']);
+
+            //Faq Update
+            Route::post('delete/{faq_id}', ['as' => 'admin.faq.destroy', 'uses' => 'FaqController@destroy']);
+
+            //Faq Update
+            Route::post('restore/{faq_id}', ['as' => 'admin.faq.restore', 'uses' => 'FaqController@restore']);
+        });
     });
 
     //SHIPPING FEES
