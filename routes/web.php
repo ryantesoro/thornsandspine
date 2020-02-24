@@ -113,6 +113,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix' => 'faq'], function () {
             //Faq Index
             Route::get('index', ['as' => 'admin.faq.index', 'uses' => 'FaqController@index']);
+
+            //Faq Index
+            Route::get('create', ['as' => 'admin.faq.create', 'uses' => 'FaqController@create']);
+
+            //Faq Index
+            Route::post('store', ['as' => 'admin.faq.store', 'uses' => 'FaqController@store']);
         });
     });
 
