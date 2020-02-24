@@ -15,6 +15,7 @@ use App\EmailVerification;
 use App\ResetPassword;
 use App\Order;
 use App\Cart;
+use App\Faq;
 use App\Pot;
 use App\ShippingFee;
 use App\ShippingProvince;
@@ -93,5 +94,11 @@ class Controller extends BaseController
     {
         $shipping_province = new ShippingProvince();
         return $shipping_province;
+    }
+
+    public function faq()
+    {
+        $faq = new Faq();
+        return $faq;
     }
 }
