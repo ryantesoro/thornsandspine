@@ -37,9 +37,10 @@ class Cart extends Model
     }
 
     //Get Cart
-    public function getCart($where)
+    public function getCart($customer_model, $where)
     {
-        $cart = Cart::where($where)
+        $cart = $customer_model->cart()
+            ->where($where)
             ->get()
             ->first();
 

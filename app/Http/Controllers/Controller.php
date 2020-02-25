@@ -16,7 +16,9 @@ use App\ResetPassword;
 use App\Order;
 use App\Cart;
 use App\Faq;
+use App\OrderProduct;
 use App\Pot;
+use App\Screenshot;
 use App\ShippingFee;
 use App\ShippingProvince;
 
@@ -100,5 +102,17 @@ class Controller extends BaseController
     {
         $faq = new Faq();
         return $faq;
+    }
+
+    public function screenshot()
+    {
+        $screenshot = new Screenshot();
+        return $screenshot;
+    }
+
+    public function order_product()
+    {
+        $order_product = new OrderProduct();
+        return $order_product;
     }
 }

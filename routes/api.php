@@ -72,6 +72,9 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         //Store Order
         Route::post('/', ['as' => 'order.store', 'uses' => 'OrderController@store']);
+
+        //Store Update (Customer)
+        Route::post('update/{order_code}', ['as' => 'order.update', 'uses' => 'OrderController@update']);
     });
 });
 

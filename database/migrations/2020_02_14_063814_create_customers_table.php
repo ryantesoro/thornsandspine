@@ -21,6 +21,7 @@ class CreateCustomersTable extends Migration
             $table->string('province');
             $table->string('city');
             $table->string('contact_number');
+            $table->integer('loyalty_points')->default(0);
         });
     }
 
