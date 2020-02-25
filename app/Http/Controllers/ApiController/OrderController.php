@@ -158,12 +158,12 @@ class OrderController extends Controller
         $path = $image_file->getRealPath().'.jpg';
 
         $whole_pic = Image::make($image_file)->encode('jpg')->save($path);
-        Storage::putFileAs('product', new File($path), $file_name);
+        Storage::putFileAs('screenshot', new File($path), $file_name);
 
         $medium = Image::make($image_file)->resize(300,200)->encode('jpg')->save($path);
-        Storage::putFileAs('product/medium', new File($path), $file_name);
+        Storage::putFileAs('screenshot/medium', new File($path), $file_name);
 
         $thumbnail = Image::make($image_file)->resize(100, 100)->encode('jpg')->save($path);
-        Storage::putFileAs('product/thumbnail', new File($path), $file_name);
+        Storage::putFileAs('screenshot/thumbnail', new File($path), $file_name);
     }
 }
