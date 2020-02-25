@@ -49,9 +49,9 @@ class CartController extends Controller
         $customer_model = $this->customer()->getCustomerDetailsByUser($this->user_id);
         $customer_cart = $this->customer()->getCustomerCart($customer_model)->get();
         $is_duplicate = false;
-
+        
         foreach ($customer_cart as $cart) {
-            $existing_cart = $cart->getCart([
+            $existing_cart = $cart->getCart($customer_model, [
                 'product_id' => $cart_details['product_id'],
                 'pot_id' => $cart_details['pot_id']
             ]);
