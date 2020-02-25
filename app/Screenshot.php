@@ -16,6 +16,14 @@ class Screenshot extends Model
 
     public $timestamps = true;
 
+    //Store Screenshot
+    public function storeScreenshot($screenshot_details)
+    {
+        $store_screenshot = Screenshot::create($screenshot_details);
+
+        return $store_screenshot;
+    }
+
     public function order()
     {
         return $this->belongsToMany('App\Order', 'order_screenshot');
