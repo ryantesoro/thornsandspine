@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use DB;
 
 
 class Order extends Model
@@ -19,6 +20,22 @@ class Order extends Model
     public $timestamps = true;
 
     protected $hidden = ['pivot'];
+
+    //Get All Orders
+    public function getOrders()
+    {
+        $orders = DB::table('orders')
+            ->selectRaw('orders.code, orders.recipient_first, orders.recipient_last, customers.first_name, customers.last_name, orders.status')
+            ->leftJoin('customer_order', function ($query) {
+                $query->on('customer_order.order_id', 'orders.id');
+            })
+            ->leftJoin('customers', function ($query) {
+                $query->on('customers.id', 'customer_order.customer_id');
+            })
+            ->get();
+
+        return $orders;
+    }
 
     //Get Order (1 row)
     public function getOrder($order_code) {

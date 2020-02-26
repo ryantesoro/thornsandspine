@@ -9,6 +9,8 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        return view('pages.order.order_index');
+        $orders = $this->order()->getOrders();
+
+        return view('pages.order.order_index')->with('orders', $orders);
     }
 }
