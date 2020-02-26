@@ -22,6 +22,15 @@ Route::group(['middleware' => 'auth'], function () {
 
     //SUPER ADMIN
     Route::group(['middleware' => 'super_admin'], function () {
+        //CONFIGURATIONS
+        Route::group(['prefix' => 'configuration'], function () {
+            //Configuration Index
+            Route::get('/', ['as' => 'admin.config.index', 'uses' => 'ConfigurationController@index']);
+
+            //Configuration Index
+            Route::post('/', ['as' => 'admin.config.update', 'uses' => 'ConfigurationController@update']);
+        });
+
         //Dashboard Page
         Route::get('dashboard', ['as' => 'admin.dashboard', 'uses' => 'HomeController@dashboard']);
 

@@ -24,12 +24,27 @@ Route::post('password/verify', ['as' => 'password.verify', 'uses' => 'ResetPassw
 Route::post('password/reset', ['as' => 'password.reset', 'uses' => 'ResetPasswordController@reset']);
 
 //SHIPPING FEES
-Route::group(['prefix' => 'shipping'], function () { 
+Route::group(['prefix' => 'shipping'], function () {
     //Shipping province
     Route::get('province', ['as' => 'shipping_fee.province', 'uses' => 'ShippingFeeController@province']);
 
     //Shipping province
     Route::get('province/{province_id}/city', ['as' => 'shipping_fee.province', 'uses' => 'ShippingFeeController@city']);
+});
+
+//CONFIGURATION
+Route::group(['prefix' => 'configuration'], function () {
+    //Configuration Index
+    Route::get('/', ['as' => 'configuration.index', 'uses' => 'ConfigurationController@index']);
+
+    //Configuration Bank Information
+    Route::get('bank', ['as' => 'configuration.bank', 'uses' => 'ConfigurationController@bank']);
+
+    //Configuration GCash
+    Route::get('gcash', ['as' => 'configuration.gcash', 'uses' => 'ConfigurationController@gcash']);
+
+    //Configuration Contact
+    Route::get('contact', ['as' => 'configuration.contact', 'uses' => 'ConfigurationController@contact']);
 });
 
 //WHEN LOGGED IN
