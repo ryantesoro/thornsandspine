@@ -100,12 +100,20 @@ class OrderController extends Controller
     {
         $imgs = $request->file('img');
 
-        $img_array = [];
-        $options = [];
-        $indx = 1;
+        $img_array = [
+            'order_code' => $order_code
+        ];
+        $options = [
+            'order_code' => 'exists:orders,code'
+        ];
+
+        $order_details = $this->order()->getOrder($order_code);
+        $order = $this->order()->getOrderModel($order_details->id);
+
+        $indx = 0;
         foreach ($imgs as $img) {
-            $img_array['image'.strVal($indx)] = $img;
-            $options['image'.strVal($indx)] = 'image|mimes:jpeg,png,jpg|max:5120';
+            $img_array['image_'.strVal($indx)] = $img;
+            $options['image_'.strVal($indx)] = 'image|mimes:jpeg,png,jpg|max:5120';
             $indx++;
         }
 
@@ -119,15 +127,25 @@ class OrderController extends Controller
             ]);
         }
         
-        $order = $this->order()->getOrderModel($order_code);
-        $order_details = $order->get()->first();
-
+        $order_details = $this->order()->getOrder($order_code);
+        $order = $this->order()->find($order_details->id);
+        $screenshots = $this->screenshot()->getOrderScreenshots($order);
+        
         $indx = 0;
-        foreach ($img_array as $img) {
+        if($screenshots->count() != 0) {
+            $latest_file_name = $screenshots->max('file_name');
+
+            $file_name_length = strlen($latest_file_name);
+            $under_score_position = strpos($latest_file_name, '_');
+
+            $indx = intval(substr($latest_file_name, $under_score_position+1, $file_name_length-$under_score_position))+1;
+        }
+
+        foreach ($imgs as $img) {
             $file_name = $order_code.'_'.$indx;
             $this->saveImageFile($img, $file_name);
-
-            $screenshot = $this->screenshot()->storeScreenshot($file_name);
+            
+            $screenshot = $this->screenshot()->storeScreenshot(['file_name' => $file_name]);
             $order->screenshot()->save($screenshot);
 
             $indx++;

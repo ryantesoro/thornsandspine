@@ -24,6 +24,14 @@ class Screenshot extends Model
         return $store_screenshot;
     }
 
+    //Get Order Screenshots
+    public function getOrderScreenshots($order_model)
+    {
+        $screenshots = $order_model->screenshot()->get();
+        
+        return $screenshots;
+    }
+
     public function order()
     {
         return $this->belongsToMany('App\Order', 'order_screenshot');

@@ -30,11 +30,11 @@ class Order extends Model
     }
 
     //Get Order Model
-    public function getOrderModel($order_code)
+    public function getOrderModel($order_id)
     {
-        $order_model = Order::where('code', $order_code);
+        $order_model = Order::find($order_id);
 
-        return $order_code;
+        return $order_model;
     }
 
     //Get Orders by status
