@@ -64,6 +64,14 @@ class Order extends Model
         return $update_order;
     }
 
+    //Check if order exists
+    public function orderExists($order_code)
+    {
+        $order = Order::where('code', $order_code)->get()->count();
+
+        return $order != 0;
+    }
+
     public function customer()
     {
         return $this->belongsToMany('App\Customer', 'customer_order');
