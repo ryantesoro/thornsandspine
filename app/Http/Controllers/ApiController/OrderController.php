@@ -98,14 +98,17 @@ class OrderController extends Controller
 
     public function update(Request $request, $order_code)
     {
+        if (!$this->order()->orderExists($order_code)) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Order does not exist!'
+            ]);
+        }
+        
         $imgs = $request->file('img');
 
-        $img_array = [
-            'order_code' => $order_code
-        ];
-        $options = [
-            'order_code' => 'exists:orders,code'
-        ];
+        $img_array = [];
+        $options = [];
 
         $order_details = $this->order()->getOrder($order_code);
         $order = $this->order()->getOrderModel($order_details->id);
@@ -156,6 +159,32 @@ class OrderController extends Controller
         return response()->json([
             'success' => true,
             'msg' => 'Successfully uploaded screenshot(s)'
+        ]);
+    }
+
+    public function cancel(Request $request, $order_code)
+    {
+        if (!$this->order()->orderExists($order_code)) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Order does not exist!'
+            ]);
+        }
+
+        $order = $this->order()->getOrder($order_code);
+
+        if ($order->status != 0) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Your order is already being processed. You cannot cancel it.'
+            ]);
+        }
+
+        $cancel_order = $this->order()->updateOrder(['status' => 3], $order->id);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Your order has been cancelled'
         ]);
     }
 
