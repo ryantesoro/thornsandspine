@@ -159,6 +159,32 @@ class OrderController extends Controller
         ]);
     }
 
+    public function cancel(Request $request, $order_code)
+    {
+        if (!$this->order()->orderExists($order_code)) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Order does not exist!'
+            ]);
+        }
+
+        $order = $this->order()->getOrder($order_code);
+
+        if ($order->status != 0) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Your order is already being processed. You cannot cancel it.'
+            ]);
+        }
+
+        $cancel_order = $this->order()->updateOrder(['status' => 3], $order->id);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Your order has been cancelled'
+        ]);
+    }
+
     private function setUserId($user_id)
     {
         $this->user_id = $user_id;
