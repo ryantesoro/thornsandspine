@@ -36,6 +36,15 @@ Route::group(['prefix' => 'shipping'], function () {
 Route::group(['prefix' => 'configuration'], function () {
     //Configuration Index
     Route::get('/', ['as' => 'configuration.index', 'uses' => 'ConfigurationController@index']);
+
+    //Configuration Bank Information
+    Route::get('bank', ['as' => 'configuration.bank', 'uses' => 'ConfigurationController@bank']);
+
+    //Configuration GCash
+    Route::get('gcash', ['as' => 'configuration.gcash', 'uses' => 'ConfigurationController@gcash']);
+
+    //Configuration Contact
+    Route::get('contact', ['as' => 'configuration.contact', 'uses' => 'ConfigurationController@contact']);
 });
 
 //WHEN LOGGED IN

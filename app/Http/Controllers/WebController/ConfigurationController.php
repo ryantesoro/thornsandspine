@@ -13,7 +13,7 @@ class ConfigurationController extends Controller
     public function index()
     {
         $configurations = $this->configuration()->getConfigurations();
-        
+
         return view('configuration')->with('configuration', $configurations);
     }
 

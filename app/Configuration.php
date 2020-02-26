@@ -36,6 +36,16 @@ class Configuration extends Model
         return $config;
     }
 
+    //Get Configuration
+    public function getConfiguration($name)
+    {
+        $configuration = Configuration::where('name', $name)
+            ->get()
+            ->first();
+        
+        return $configuration;
+    }
+
     //Update Configuration
     public function updateConfiguration($name, $value)
     {

@@ -16,4 +16,47 @@ class ConfigurationController extends Controller
             'data' => $configurations
         ]);
     }
+
+    public function bank()
+    {
+        $bank_name =  $this->configuration()->getConfiguration('bank_name');
+        $card_number = $this->configuration()->getConfiguration('card_number');
+        $bank_configuration = [
+            $bank_name->name => $bank_name->value,
+            $card_number->name => $card_number->value
+        ];
+
+        return response()->json([
+            'success' => true,
+            'data' => $bank_configuration
+        ]);
+    }
+
+    public function gcash()
+    {
+        $gcash_mobile_number =  $this->configuration()->getConfiguration('gcash_number');
+        $gcash_configuration = [
+            $gcash_mobile_number->name => $gcash_mobile_number->value
+        ];
+
+        return response()->json([
+            'success' => true,
+            'data' => $gcash_configuration
+        ]);
+    }
+
+    public function contact()
+    {
+        $contact_number =  $this->configuration()->getConfiguration('contact_number');
+        $email =  $this->configuration()->getConfiguration('email');
+        $contact_configuration = [
+            $contact_number->name => $contact_number->value,
+            $email->name => $email->value
+        ];
+
+        return response()->json([
+            'success' => true,
+            'data' => $contact_configuration
+        ]);
+    }
 }
