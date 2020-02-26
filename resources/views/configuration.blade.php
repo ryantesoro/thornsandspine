@@ -36,11 +36,11 @@ function isNumber(evt)
     @endif
     <div class="row">
       <div class="col text-left">
-        <h4>Contact Details</h4>
+        <h4>Business Contact Details</h4>
       </div>
     </div>
     <hr>
-    {!! Form::open(['route' => 'admin.pot.store']) !!}
+    {!! Form::open(['route' => 'admin.config.update']) !!}
     <div class="row pl-3">
       <div class="col-5">
         <div class="form-group">

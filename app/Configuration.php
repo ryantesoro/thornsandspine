@@ -22,4 +22,13 @@ class Configuration extends Model
 
         return $configurations;
     }
+
+    //Update Configuration
+    public function updateConfiguration($name, $value)
+    {
+        $update_configuration = Configuration::where('name', $name)
+            ->update(['value' => $value]);
+
+        return $update_configuration;
+    }
 }
