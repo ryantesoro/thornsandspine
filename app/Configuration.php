@@ -13,4 +13,13 @@ class Configuration extends Model
     ];
 
     public $timestamps = false;
+
+    //Get All Configurations
+    public function getConfigurations()
+    {
+        $configurations = Configuration::select('*')
+            ->get();
+
+        return $configurations;
+    }
 }

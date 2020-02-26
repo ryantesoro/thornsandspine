@@ -15,6 +15,7 @@ use App\EmailVerification;
 use App\ResetPassword;
 use App\Order;
 use App\Cart;
+use App\Configuration;
 use App\Faq;
 use App\OrderProduct;
 use App\Pot;
@@ -114,5 +115,11 @@ class Controller extends BaseController
     {
         $order_product = new OrderProduct();
         return $order_product;
+    }
+
+    public function configuration()
+    {
+        $configuration = new Configuration();
+        return $configuration;
     }
 }
