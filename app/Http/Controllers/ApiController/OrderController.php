@@ -98,14 +98,17 @@ class OrderController extends Controller
 
     public function update(Request $request, $order_code)
     {
+        if (!$this->order()->orderExists($order_code)) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Order does not exist!'
+            ]);
+        }
+        
         $imgs = $request->file('img');
 
-        $img_array = [
-            'order_code' => $order_code
-        ];
-        $options = [
-            'order_code' => 'exists:orders,code'
-        ];
+        $img_array = [];
+        $options = [];
 
         $order_details = $this->order()->getOrder($order_code);
         $order = $this->order()->getOrderModel($order_details->id);
