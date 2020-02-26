@@ -18,5 +18,28 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('test'),
             'access_level' => 2
         ]);
+
+        DB::table('configurations')->insert([
+            [
+                'name' => 'contact_number',
+                'value' => '123456789'
+            ],
+            [
+                'name' => 'email',
+                'value' => 'thornsandspines@blacklistgraphics.com'
+            ],
+            [
+                'name' => 'bank_name',
+                'value' => 'BPI'
+            ],
+            [
+                'name' => 'card_number',
+                'value' => '1234567890123456'
+            ],
+            [
+                'name' => 'gcash_number',
+                'value' => '9161234567'
+            ]
+        ]);
     }
 }
