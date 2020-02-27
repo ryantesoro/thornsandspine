@@ -24,7 +24,7 @@ class ShippingFeeController extends Controller
             0 => 'All Provinces'
         ];
 
-        $fetched_provinces = $this->shipping_province()->getProvinces()
+        $fetched_provinces = $this->province()->getProvinces()
             ->pluck('name', 'id')
             ->toArray();
         
@@ -145,7 +145,7 @@ class ShippingFeeController extends Controller
 
     private function getPluckedProvinces()
     {
-        $provinces = $this->shipping_province()
+        $provinces = $this->province()
             ->getProvinces()
             ->pluck('name', 'id');
 
@@ -154,7 +154,7 @@ class ShippingFeeController extends Controller
 
     private function getProvinceName($province_id)
     {
-        $province = $this->shipping_province()->getProvince($province_id);
+        $province = $this->province()->getProvince($province_id);
         $province_name = $province->name;
 
         return $province_name;

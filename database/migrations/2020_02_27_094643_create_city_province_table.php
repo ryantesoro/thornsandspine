@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateShippingProvincesTable extends Migration
+class CreateCityProvinceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateShippingProvincesTable extends Migration
      */
     public function up()
     {
-        Schema::create('shipping_provinces', function (Blueprint $table) {
+        Schema::create('city_province', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('city');
+            $table->unsignedInteger('province_id');
         });
     }
 
@@ -26,6 +27,6 @@ class CreateShippingProvincesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shipping_provinces');
+        Schema::dropIfExists('city_province');
     }
 }

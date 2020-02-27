@@ -9,7 +9,7 @@ class ShippingFeeController extends Controller
 {
     public function province(Request $request)
     {
-        $provinces = $this->shipping_province()->getProvinces();
+        $provinces = $this->province()->getProvinces();
         $plucked_provinces = $provinces->pluck('name', 'id');
 
         return response()->json([

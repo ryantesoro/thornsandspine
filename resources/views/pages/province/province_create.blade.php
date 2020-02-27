@@ -17,10 +17,10 @@
         @include('layouts.header')
         <div class="row">
             <div class="col text-left">
-                <h4>Edit Shipping Province</h4>
+                <h4>Create Shipping Province</h4>
             </div>
             <div>
-                <a class="btn btn-secondary font-weight-bold" href="{{ route('admin.shipping_province.index') }}">Go Back</a>
+                <a class="btn btn-secondary font-weight-bold" href="{{ route('admin.province.index') }}">Go Back</a>
             </div>
         </div>
         <hr>
@@ -34,12 +34,12 @@
             </button>
         </div>
         @endif
-        {!! Form::open(['route' => ['admin.shipping_province.update', $province_details['id']]]) !!}
+        {!! Form::open(['route' => 'admin.province.store']) !!}
         <div class="row pl-3">
             <div class="col-5">
                 <div class="form-group">
                     <label class="font-weight-bold">Shipping Province</label>
-                    {!! Form::text('shipping_province', $province_details['name'] ?? '',
+                    {!! Form::text('province', old('province') ?? '',
                     [
                     'class' => 'form-control',
                     'placeholder' => 'Name',

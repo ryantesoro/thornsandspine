@@ -90,26 +90,23 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('restore/{pot_id}', ['as' => 'admin.pot.restore', 'uses' => 'PotController@restore']);
         });
 
-        //SHIPPING PROVINCES
-        Route::group(['prefix' => 'shipping_province'], function () {
+        //PROVINCES
+        Route::group(['prefix' => 'provinces'], function () {
 
-            //Shipping Province Index
-            Route::get('/', ['as' => 'admin.shipping_province.index', 'uses' => 'ShippingProvinceController@index']);
+            //Province Index
+            Route::get('/', ['as' => 'admin.province.index', 'uses' => 'ProvinceController@index']);
 
-            //Shipping Province Create
-            Route::get('show/{province_id}', ['as' => 'admin.shipping_province.show', 'uses' => 'ShippingProvinceController@show']);
+            //Province Create
+            Route::get('create', ['as' => 'admin.province.create', 'uses' => 'ProvinceController@create']);
 
-            //Shipping Province Create
-            Route::get('create', ['as' => 'admin.shipping_province.create', 'uses' => 'ShippingProvinceController@create']);
+            //Province Store
+            Route::post('/', ['as' => 'admin.province.store', 'uses' => 'ProvinceController@store']);
 
-            //Shipping Province Store
-            Route::post('/', ['as' => 'admin.shipping_province.store', 'uses' => 'ShippingProvinceController@store']);
+            //Province Edit
+            Route::get('edit/{province_id}', ['as' => 'admin.province.edit', 'uses' => 'ProvinceController@edit']);
 
-            //Shipping Province Edit
-            Route::get('edit/{province_id}', ['as' => 'admin.shipping_province.edit', 'uses' => 'ShippingProvinceController@edit']);
-
-            //Shipping Province Update
-            Route::post('update/{province_id}', ['as' => 'admin.shipping_province.update', 'uses' => 'ShippingProvinceController@update']);
+            //Province Update
+            Route::post('update/{province_id}', ['as' => 'admin.province.update', 'uses' => 'ProvinceController@update']);
         });
 
         //SHIPPING FEES

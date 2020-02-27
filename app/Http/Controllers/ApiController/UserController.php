@@ -98,7 +98,7 @@ class UserController extends Controller
         
         unset($customer_details['shipping_fees_id']);
         $province_id = $shipping_fee->province_id;
-        $customer_details['province'] = $this->shipping_province()->getProvince($province_id)->name;
+        $customer_details['province'] = $this->province()->getProvince($province_id)->name;
         $customer_details['city'] = $shipping_fee->city;
 
         $customer = $this->customer()->registerCustomer($customer_details);
