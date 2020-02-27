@@ -156,7 +156,7 @@
                     </div>
                 </h5>
             </div>
-            <div id="screenshots" class="collapse" role="tabpanel">
+            <div id="screenshots" class="collapse show" role="tabpanel">
                 <div class="card-body">
                     @foreach($screenshots as $date => $screenshot)
                     <p class="font-weight-bold pl-3">{{ $date }}</p>

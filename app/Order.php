@@ -39,7 +39,8 @@ class Order extends Model
                 $search
             ]);
         }
-        return $orders->get();
+    
+        return $orders->orderBy('code', 'DESC')->get();
     }
 
     //Get Order (1 row)
