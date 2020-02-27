@@ -61,23 +61,24 @@ class OrderController extends Controller
             $update_customer = $this->customer()->updateCustomer(['loyalty_points' => $temp], $customer_id);
         }
 
+        $recipient_details = [
+            'first_name' => strtolower($request->post('recipient_first')),
+            'last_name' => strtolower($request->post('recipient_last')),
+            'address' => strtolower($request->post('recipient_address')),
+            'email' => $request->post('recipient_email'),
+            'contact_number' =>$request->post('recipient_contact_number')
+        ];
+
+        $store_recipient = $this->recipient()->storeRecipient($recipient_details);
+        
         $order_details = [
-            'recipient_first' => $recipient_first,
-            'recipient_last' => $recipient_last,
-            'recipient_address' => $recipient_address,
             'remarks' => $request->post('remarks'),
+            'recipient_id' => $store_recipient->id,
             'shipping_fees_id' => $shipping_fees_id,
             'payment_method' => $request->post('payment_method'),
             'total' => $cart_total,
             'loyalty_points' => $loyalty_points ?? 0
         ];
-
-        if ((empty($recipient_first) || $recipient_first == null) &&
-            (empty($recipient_last) || $recipient_last == null)) {
-            $order_details['recipient_first'] = ucwords($customer->first_name);
-            $order_details['recipient_last'] = ucwords($customer->last_name);
-            $order_details['recipient_address'] = ucwords($customer->address);
-        }
 
         if (empty($shipping_fees_id) && $shipping_fees_id == null) {
             $province = $this->shipping_province()->getProvinceByName($customer->province);
@@ -91,8 +92,6 @@ class OrderController extends Controller
         if ($is_free) {
             $order_details['status'] = 1;
         }
-
-        dd($order_details);
         
         // $order = $this->order()->storeOrder($order_details);
         // $customer->order()->save($order);

@@ -19,6 +19,7 @@ use App\Configuration;
 use App\Faq;
 use App\OrderProduct;
 use App\Pot;
+use App\Recipient;
 use App\Screenshot;
 use App\ShippingFee;
 use App\ShippingProvince;
@@ -121,5 +122,11 @@ class Controller extends BaseController
     {
         $configuration = new Configuration();
         return $configuration;
+    }
+
+    public function recipient()
+    {
+        $recipient = new Recipient();
+        return $recipient;
     }
 }
