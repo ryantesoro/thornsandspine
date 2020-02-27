@@ -8,16 +8,16 @@ use Illuminate\Support\Facades\Storage;
 
 class PhotoController extends Controller
 {
-    public function show(Request $request, $image_name)
+    public function show(Request $request, $directory, $image_name)
     {
-        $file_path = "product/";
+        $file_path = $directory."/";
         if ($request->has('size')) {
             $size = $request->get('size');
             
             if ($size == "medium") {
-                $file_path = "product/medium/";
+                $file_path = $file_path."medium/";
             } else if ($size == "thumbnail") {
-                $file_path = "product/thumbnail/";
+                $file_path = $file_path."thumbnail/";
             }
         }
 

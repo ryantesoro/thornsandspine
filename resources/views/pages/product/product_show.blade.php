@@ -35,7 +35,7 @@
                             Image
                         </td>
                         <td>
-                            <img src="{{ route('image', ['image_name' => $product['img'].'?size=medium']) }}">
+                            <img src="{{ route('image', ['product', 'image_name' => $product['img'].'?size=medium']) }}">
                         </td>
                     </tr>
                     <tr>

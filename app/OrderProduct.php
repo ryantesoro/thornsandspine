@@ -15,6 +15,15 @@ class OrderProduct extends Model
 
     public $timestamps = false;
 
+    //Get Order Products
+    public function getOrderProducts($order_id)
+    {
+        $order_products = OrderProduct::where('order_id', $order_id)
+            ->get();
+        
+        return $order_products;
+    }
+
     //Store Order Product
     public function storeOrderProduct($order_product_details)
     {

@@ -162,8 +162,20 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('update/{shipping_fee_id}', ['as' => 'admin.shipping_fee.update', 'uses' => 'ShippingFeeController@update']);
     });
 
-    //Orders Page
-    Route::get('orders', ['as' => 'admin.order.index', 'uses' => 'OrderController@index']);
+    //ORDERS
+    Route::group(['prefix' => 'orders'], function () {
+        //Orders Index
+        Route::get('/', ['as' => 'admin.order.index', 'uses' => 'OrderController@index']);
+
+        //Orders Show
+        Route::get('view/{order_code}', ['as' => 'admin.order.show', 'uses' => 'OrderController@show']);
+
+        //Orders Deliver
+        Route::post('deliver/{order_code}', ['as' => 'admin.order.deliver', 'uses' => 'OrderController@deliver']);
+
+        //Orders Return
+        Route::post('return/{order_code}', ['as' => 'admin.order.return', 'uses' => 'OrderController@return']);
+    });
 
     //Customers Page
     Route::get('customers', ['as' => 'admin.customer.index', 'uses' => 'CustomerController@index']);
@@ -179,4 +191,4 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 //Product Photo
-Route::get('image/{image_name}', ['as' => 'image', 'uses' => 'PhotoController@show']);
+Route::get('image/{directory}/{image_name}', ['as' => 'image', 'uses' => 'PhotoController@show']);
