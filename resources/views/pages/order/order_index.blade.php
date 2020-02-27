@@ -49,7 +49,7 @@
             <td>{{ !empty($order->recipient_first) ? ucwords($order->recipient_first) : ucwords($order->first_name) }}</td>
             <td class="pt-3">
               @if(\Carbon\Carbon::parse($order->expires_at)->isPast())
-              <span class="badge badge-pill badge-danger">cancelled</span>
+              <span class="badge badge-pill badge-danger">expired</span>
               @elseif ($order->status == 0)
               <span class="badge badge-pill badge-secondary">pending</span>
               @elseif ($order->status == 1)
