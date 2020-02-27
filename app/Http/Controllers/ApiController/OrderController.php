@@ -37,6 +37,7 @@ class OrderController extends Controller
 
         $recipient_first = $request->post('recipient_first');
         $recipient_last = $request->post('recipient_last');
+        $recipient_address = $request->post('recipient_address');
         $shipping_fees_id = $request->post('shipping_fees_id');
 
         $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
@@ -47,6 +48,7 @@ class OrderController extends Controller
         $order_details = [
             'recipient_first' => $recipient_first,
             'recipient_last' => $recipient_last,
+            'recipient_address' => $recipient_address,
             'remarks' => $request->post('remarks'),
             'shipping_fees_id' => $shipping_fees_id,
             'payment_method' => $request->post('payment_method'),
@@ -55,8 +57,9 @@ class OrderController extends Controller
 
         if ((empty($recipient_first) || $recipient_first == null) &&
             (empty($recipient_last) || $recipient_last == null)) {
-            $order_details['recipient_first'] = ucfirst($customer->first_name);
-            $order_details['recipient_last'] = ucfirst($customer->last_name);
+            $order_details['recipient_first'] = ucwords($customer->first_name);
+            $order_details['recipient_last'] = ucwords($customer->last_name);
+            $order_details['recipient_address'] = ucwords($customer->address);
         }
 
         if (empty($shipping_fees_id) && $shipping_fees_id == null) {
