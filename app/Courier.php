@@ -24,6 +24,16 @@ class Courier extends Model
             
         return $couriers;
     }
+    
+    //Get Courier
+    public function getCourier($courier_id)
+    {
+        $courier_details = Courier::find($courier_id)
+            ->get()
+            ->first();
+
+        return $courier_details;
+    }
 
     //Store Courier
     public function storeCourier($courier_details)
@@ -31,6 +41,15 @@ class Courier extends Model
         $store_courier = Courier::create($courier_details);
 
         return $store_courier;
+    }
+
+    //Update Courier
+    public function updateCourier($courier_details, $courier_id)
+    {
+        $update_courier = Courier::find($courier_id)
+            ->update($courier_details);
+
+        return $update_courier;
     }
     
     public function shipping_fee()

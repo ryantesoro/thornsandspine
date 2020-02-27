@@ -142,8 +142,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('restore/{faq_id}', ['as' => 'admin.faq.restore', 'uses' => 'FaqController@restore']);
         });
 
-         //COURIERS
-         Route::group(['prefix' => 'courier'], function () {
+        //COURIERS
+        Route::group(['prefix' => 'courier'], function () {
             //Courier Index
             Route::get('/', ['as' => 'admin.courier.index', 'uses' => 'CourierController@index']);
 
@@ -155,7 +155,10 @@ Route::group(['middleware' => 'auth'], function () {
 
             //Courier Edit
             Route::get('edit/{courier_id}', ['as' => 'admin.courier.edit', 'uses' => 'CourierController@edit']);
-         });
+
+            //Courier Update
+            Route::post('update/{courier_id}', ['as' => 'admin.courier.update', 'uses' => 'CourierController@update']);
+        });
     });
 
     //SHIPPING FEES
