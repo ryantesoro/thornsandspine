@@ -17,9 +17,28 @@ class CartController extends Controller
         $customer_model = $this->customer()->getCustomerDetailsByUser($this->user_id);
         $customer_cart = $this->customer()->getCustomerCart($customer_model)->get();
 
+        $cart_details = [];
+        $total = 0;
+        foreach ($customer_cart as $cart) {
+            $temp_array = [];
+            $product = $this->product()->getProduct($cart->product_id);
+            $pot = $this->pot()->getPot($cart->pot_id);
+            $temp_array['img'] = route('image.api', [$product->img, 'size' => 'thumbnail']);
+            $temp_array['code'] = $product->code;
+            $temp_array['name'] = ucwords($product->name);
+            $temp_array['price'] = $product->price;
+            $temp_array['quantity'] = $cart->quantity;
+            $temp_array['pot_type'] = ucwords($pot->name);
+            $temp_array['sub_total'] = $cart->quantity * $product->price;
+            $total += $temp_array['sub_total'];
+            $cart_details[] = $temp_array;
+        }
+
+        $cart_details['total'] = $total;
+
         return response()->json([
             'success' => true,
-            'data' => $customer_cart
+            'data' => $cart_details
         ]);
     }
 
@@ -81,12 +100,10 @@ class CartController extends Controller
         $cart_details = [
             'cart_id' => $cart_id,
             'quantity' => $request->post('quantity'),
-            'pot_id' => $request->post('pot_id')
         ];
 
         $validator = Validator::make($cart_details, [
             'cart_id' => 'required|exists:carts,id',
-            'pot_id' => 'required|exists:pots,id',
             'quantity' => 'required'
         ]);
 
