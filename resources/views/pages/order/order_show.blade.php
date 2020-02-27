@@ -218,7 +218,7 @@
                         <td></td>
                         <td></td>
                         <td class="text-right font-weight-bold">Total:</td>
-                        <td class="text-left font-weight-bold border">₱ {{ number_format($order->total, 2, '.', ',') }}
+                        <td class="text-left font-weight-bold border">₱ {{ number_format(($order->total+$shipping_price)-$order->loyalty_points, 2, '.', ',') }}
                         </td>
                     </tr>
                 </tbody>

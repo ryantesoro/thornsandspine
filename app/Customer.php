@@ -79,6 +79,15 @@ class Customer extends Model
         return $orders;
     }
 
+    //Update Customer
+    public function updateCustomer($customer_details, $customer_id)
+    {
+        $update_customer = Customer::find($customer_id)
+            ->update($customer_details);
+        
+        return $update_customer;
+    }
+
     public function user()
     {
         return $this->belongsToMany('App\User', 'user_customer');

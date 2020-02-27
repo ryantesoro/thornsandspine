@@ -45,7 +45,19 @@ class OrderController extends Controller
         $cart_total = $this->cart()->getCartTotal($customer_cart);
         $shipping_fee = $this->shipping_fee()->getShippingFee($shipping_fees_id);
 
-        $loyalty_points = $customer->get()->first()->loyalty_points;
+        $customer_details = $customer->get()->first();
+        $loyalty_points = $customer_details->loyalty_points;
+        $customer_id = $customer_details->id;
+
+        $total = $cart_total + $shipping_fee->price;
+
+        if ($loyalty_points != 0) {
+            $temp = 0;
+            if ($loyalty_points > $total) {
+                $temp = $loyalty_points-$cart_total;
+            }
+            $update_customer = $this->customer()->updateCustomer(['loyalty_points' => $temp], $customer_id);
+        }
 
         $order_details = [
             'recipient_first' => $recipient_first,
@@ -54,7 +66,7 @@ class OrderController extends Controller
             'remarks' => $request->post('remarks'),
             'shipping_fees_id' => $shipping_fees_id,
             'payment_method' => $request->post('payment_method'),
-            'total' => $cart_total+$shipping_fee->price,
+            'total' => $cart_total,
             'loyalty_points' => $loyalty_points ?? 0
         ];
 
@@ -72,6 +84,10 @@ class OrderController extends Controller
             
             $shipping_fee = $this->shipping_fee()->getShippingFeeByCityProvince($city_name, $province_id);
             $order_details['shipping_fees_id'] = $shipping_fee->id;
+        }
+
+        if ($total == 0) {
+            $order_details['status'] = 1;
         }
         
         $order = $this->order()->storeOrder($order_details);
