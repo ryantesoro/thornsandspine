@@ -34,6 +34,8 @@ class CartController extends Controller
             $cart_details[] = $temp_array;
         }
 
+        $cart_details['total'] = $total;
+
         return response()->json([
             'success' => true,
             'data' => $cart_details
