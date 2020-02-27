@@ -12,7 +12,7 @@
                 <h4>List Of FAQs</h4>
             </div>
             <div>
-                <a class="btn btn-success font-weight-bold" href="{{ route('admin.faq.create') }}">Create Pot</a>
+                <a class="btn btn-success font-weight-bold" href="{{ route('admin.faq.create') }}">Create FAQ</a>
             </div>
         </div>
         <hr>
