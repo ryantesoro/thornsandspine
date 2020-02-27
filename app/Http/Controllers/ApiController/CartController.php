@@ -24,6 +24,7 @@ class CartController extends Controller
             $temp_array = [];
             $product = $this->product()->getProduct($cart->product_id);
             $pot = $this->pot()->getPot($cart->pot_id);
+            $temp_array['cart_id'] = $cart->id;
             $temp_array['img'] = route('image.api', [$product->img, 'size' => 'thumbnail']);
             $temp_array['code'] = $product->code;
             $temp_array['name'] = ucwords($product->name);
