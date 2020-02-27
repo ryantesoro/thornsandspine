@@ -16,6 +16,8 @@ class Courier extends Model
 
     public $timestamps = false;
 
+<<<<<<< HEAD
+=======
     //Get Couriers
     public function getCouriers()
     {
@@ -52,6 +54,7 @@ class Courier extends Model
         return $update_courier;
     }
     
+>>>>>>> develop
     public function shipping_fee()
     {
         return $this->belongsToMany('App\ShippingFee', 'courier_shipping_fee');
