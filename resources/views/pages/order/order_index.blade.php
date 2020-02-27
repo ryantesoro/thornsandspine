@@ -48,14 +48,16 @@
             <td>{{ !empty($order->recipient_last) ? ucwords($order->recipient_last) : ucwords($order->last_name) }}</td>
             <td>{{ !empty($order->recipient_first) ? ucwords($order->recipient_first) : ucwords($order->first_name) }}</td>
             <td class="pt-3">
-              @if ($order->status == 0)
+              @if(\Carbon\Carbon::parse($order->expires_at)->isPast())
+              <span class="badge badge-pill badge-danger">cancelled</span>
+              @elseif ($order->status == 0)
               <span class="badge badge-pill badge-secondary">pending</span>
               @elseif ($order->status == 1)
-              <span class="badge badge-pill badge-secondary">processing</span>
+              <span class="badge badge-pill badge-info">processing</span>
               @elseif ($order->status == 2)
-              <span class="badge badge-pill badge-secondary">delivered</span>
+              <span class="badge badge-pill badge-primary">delivered</span>
               @elseif ($order->status == 3)
-              <span class="badge badge-pill badge-secondary">cancelled</span>
+              <span class="badge badge-pill badge-danger">cancelled</span>
               @endif
             </td>
             <td>
