@@ -25,7 +25,7 @@ class Order extends Model
     public function getOrders($code)
     {
         $orders = DB::table('orders')
-            ->selectRaw('orders.code, orders.recipient_first, orders.recipient_last, customers.first_name, customers.last_name, orders.status')
+            ->selectRaw('orders.code, orders.recipient_first, orders.recipient_last, customers.first_name, customers.last_name, orders.status, orders.expires_at')
             ->leftJoin('customer_order', function ($query) {
                 $query->on('customer_order.order_id', 'orders.id');
             })
