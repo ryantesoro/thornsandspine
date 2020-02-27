@@ -22,7 +22,7 @@ class Order extends Model
     protected $hidden = ['pivot'];
 
     //Get All Orders
-    public function getOrders()
+    public function getOrders($code)
     {
         $orders = DB::table('orders')
             ->selectRaw('orders.code, orders.recipient_first, orders.recipient_last, customers.first_name, customers.last_name, orders.status')
@@ -31,10 +31,15 @@ class Order extends Model
             })
             ->leftJoin('customers', function ($query) {
                 $query->on('customers.id', 'customer_order.customer_id');
-            })
-            ->get();
+            });
 
-        return $orders;
+        if ($code != null && !empty($code)) {
+            $search = '%'.$code.'%';
+            $orders->whereRaw('orders.code LIKE ?', [
+                $search
+            ]);
+        }
+        return $orders->get();
     }
 
     //Get Order (1 row)

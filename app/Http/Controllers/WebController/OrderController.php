@@ -9,7 +9,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $orders = $this->order()->getOrders();
+        $orders = $this->order()->getOrders($request->get('code'));
 
         return view('pages.order.order_index')->with('orders', $orders);
     }

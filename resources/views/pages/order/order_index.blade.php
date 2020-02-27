@@ -13,7 +13,7 @@
       </div>
     </div>
     <hr>
-    {!! Form::open(['route' => 'admin.product.index', 'method' => 'get', 'style' => 'margin-block-end: 0;']) !!}
+    {!! Form::open(['route' => 'admin.order.index', 'method' => 'get', 'style' => 'margin-block-end: 0;']) !!}
     <div class="row">
       <div class="col-3 offset-9">
         <div class="input-group mb-3">
