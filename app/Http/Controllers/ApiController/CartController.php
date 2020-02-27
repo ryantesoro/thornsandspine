@@ -18,6 +18,7 @@ class CartController extends Controller
         $customer_cart = $this->customer()->getCustomerCart($customer_model)->get();
 
         $cart_details = [];
+        $total = 0;
         foreach ($customer_cart as $cart) {
             $temp_array = [];
             $product = $this->product()->getProduct($cart->product_id);
@@ -29,9 +30,9 @@ class CartController extends Controller
             $temp_array['quantity'] = $cart->quantity;
             $temp_array['pot_type'] = ucwords($pot->name);
             $temp_array['sub_total'] = $cart->quantity * $product->price;
+            $total += $temp_array['sub_total'];
             $cart_details[] = $temp_array;
         }
-        $cart_details['total'] = $this->cart()->getCartTotal($customer_model);
 
         return response()->json([
             'success' => true,
