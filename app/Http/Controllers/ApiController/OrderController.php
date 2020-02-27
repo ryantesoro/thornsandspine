@@ -45,6 +45,8 @@ class OrderController extends Controller
         $cart_total = $this->cart()->getCartTotal($customer_cart);
         $shipping_fee = $this->shipping_fee()->getShippingFee($shipping_fees_id);
 
+        $loyalty_points = $customer->get()->first()->loyalty_points;
+
         $order_details = [
             'recipient_first' => $recipient_first,
             'recipient_last' => $recipient_last,
@@ -52,7 +54,8 @@ class OrderController extends Controller
             'remarks' => $request->post('remarks'),
             'shipping_fees_id' => $shipping_fees_id,
             'payment_method' => $request->post('payment_method'),
-            'total' => $cart_total+$shipping_fee->price
+            'total' => $cart_total+$shipping_fee->price,
+            'loyalty_points' => $loyalty_points ?? 0
         ];
 
         if ((empty($recipient_first) || $recipient_first == null) &&
