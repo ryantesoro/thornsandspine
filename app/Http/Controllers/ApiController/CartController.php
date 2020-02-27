@@ -31,6 +31,7 @@ class CartController extends Controller
             $temp_array['sub_total'] = $cart->quantity * $product->price;
             $cart_details[] = $temp_array;
         }
+        $cart_details['total'] = $this->cart()->getCartTotal($customer_model);
 
         return response()->json([
             'success' => true,
