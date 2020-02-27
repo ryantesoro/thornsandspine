@@ -21,6 +21,7 @@ class CreateOrdersTable extends Migration
             $table->string('recipient_address')->nullable();
             $table->text('remarks')->nullable();
             $table->integer('total');
+            $table->integer('loyalty_points')->default(0);
             $table->integer('status')->default(0);
             $table->unsignedInteger('shipping_fees_id');
             $table->string('payment_method');
