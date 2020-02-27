@@ -59,14 +59,14 @@
               @endif
             </td>
             <td>
-              <a href="{{ route('admin.product.show', $order->code) }}"
+              <a href="{{ route('admin.order.show', $order->code) }}"
                 class="btn btn-sm btn-primary font-weight-bold">View</a>
             </td>
           </tr>
           @endforeach
         </tbody>
       </table>
+    </div>
   </main>
-</div>
 </div>
 @endsection
