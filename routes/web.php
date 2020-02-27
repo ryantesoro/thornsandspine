@@ -162,8 +162,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('update/{shipping_fee_id}', ['as' => 'admin.shipping_fee.update', 'uses' => 'ShippingFeeController@update']);
     });
 
-    //Orders Page
-    Route::get('orders', ['as' => 'admin.order.index', 'uses' => 'OrderController@index']);
+    //ORDERS
+    Route::group(['prefix' => 'orders'], function () {
+        //Orders Index
+        Route::get('/', ['as' => 'admin.order.index', 'uses' => 'OrderController@index']);
+
+        //Orders Show
+        Route::get('view/{order_code}', ['as' => 'admin.order.show', 'uses' => 'OrderController@show']);
+    });
 
     //Customers Page
     Route::get('customers', ['as' => 'admin.customer.index', 'uses' => 'CustomerController@index']);
