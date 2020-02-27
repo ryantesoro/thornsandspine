@@ -16,6 +16,7 @@ use App\ResetPassword;
 use App\Order;
 use App\Cart;
 use App\Configuration;
+use App\Courier;
 use App\Faq;
 use App\OrderProduct;
 use App\Pot;
@@ -121,5 +122,11 @@ class Controller extends BaseController
     {
         $configuration = new Configuration();
         return $configuration;
+    }
+
+    public function courier()
+    {
+        $courier = new Courier();
+        return $courier;
     }
 }
