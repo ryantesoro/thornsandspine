@@ -100,7 +100,7 @@
                                         </td>
                                         <td>
                                             @if ($order->recipient_address != null)
-                                            {{ ucwords($customer->recipient_address).', '.$shipping_city_province }}
+                                            {{ ucwords($order->recipient_address).', '.$shipping_city_province }}
                                             @else
                                             {{ ucwords($customer->address).', '.$shipping_city_province }}
                                             @endif
