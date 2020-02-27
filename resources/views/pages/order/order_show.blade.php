@@ -88,7 +88,7 @@
                                         </td>
                                         <td>
                                             @if ($order->recipient_first != null)
-                                            {{ ucwords($customer->recipient_first.' '.$customer->recipient_last) }}
+                                            {{ ucwords($order->recipient_first.' '.$order->recipient_last) }}
                                             @else
                                             {{ ucwords($customer->first_name.' '.$customer->last_name) }}
                                             @endif
