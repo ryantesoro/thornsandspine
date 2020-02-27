@@ -18,6 +18,7 @@ class CreateOrdersTable extends Migration
             $table->string('code')->nullable();
             $table->string('recipient_first')->nullable();
             $table->string('recipient_last')->nullable();
+            $table->string('recipient_address')->nullable();
             $table->text('remarks')->nullable();
             $table->integer('total');
             $table->integer('status')->default(0);
