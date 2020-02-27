@@ -89,28 +89,30 @@ class OrderController extends Controller
         if ($total == 0) {
             $order_details['status'] = 1;
         }
+
+        dd($order_details);
         
-        $order = $this->order()->storeOrder($order_details);
-        $customer->order()->save($order);
+        // $order = $this->order()->storeOrder($order_details);
+        // $customer->order()->save($order);
 
-        $order_code = $this->generateCode($order->id);
-        $update_order = $this->order()->updateOrder(['code' => $order_code], $order->id);
+        // $order_code = $this->generateCode($order->id);
+        // $update_order = $this->order()->updateOrder(['code' => $order_code], $order->id);
 
-        $carts = $customer_cart->get();
-        foreach ($carts as $cart) {
-            $product_details = $this->product()->getProduct($cart->product_id);
-            $order_product_details = [
-                'order_id' => $order->id,
-                'quantity' => $cart->quantity,
-                'product_id' => $cart->product_id,
-                'pot_id' => $cart->pot_id,
-                'sub_total' => $cart->quantity * $product_details->price
-            ];
+        // $carts = $customer_cart->get();
+        // foreach ($carts as $cart) {
+        //     $product_details = $this->product()->getProduct($cart->product_id);
+        //     $order_product_details = [
+        //         'order_id' => $order->id,
+        //         'quantity' => $cart->quantity,
+        //         'product_id' => $cart->product_id,
+        //         'pot_id' => $cart->pot_id,
+        //         'sub_total' => $cart->quantity * $product_details->price
+        //     ];
 
-            $store_order_product = $this->order_product()->storeOrderProduct($order_product_details);
-        }
+        //     $store_order_product = $this->order_product()->storeOrderProduct($order_product_details);
+        // }
 
-        $this->cart()->clearCart($customer_cart);
+        // $this->cart()->clearCart($customer_cart);
 
         return response()->json([
             'success' => true,
