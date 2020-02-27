@@ -121,7 +121,7 @@ Route::group(['middleware' => 'auth'], function () {
         //FAQs
         Route::group(['prefix' => 'faq'], function () {
             //Faq Index
-            Route::get('index', ['as' => 'admin.faq.index', 'uses' => 'FaqController@index']);
+            Route::get('/', ['as' => 'admin.faq.index', 'uses' => 'FaqController@index']);
 
             //Faq Create
             Route::get('create', ['as' => 'admin.faq.create', 'uses' => 'FaqController@create']);
@@ -141,6 +141,21 @@ Route::group(['middleware' => 'auth'], function () {
             //Faq Update
             Route::post('restore/{faq_id}', ['as' => 'admin.faq.restore', 'uses' => 'FaqController@restore']);
         });
+
+         //COURIERS
+         Route::group(['prefix' => 'courier'], function () {
+            //Courier Index
+            Route::get('/', ['as' => 'admin.courier.index', 'uses' => 'CourierController@index']);
+
+            //Courier Create
+            Route::get('create', ['as' => 'admin.courier.create', 'uses' => 'CourierController@create']);
+
+            //Courier Store
+            Route::post('/', ['as' => 'admin.courier.store', 'uses' => 'CourierController@store']);
+
+            //Courier Edit
+            Route::get('edit/{courier_id}', ['as' => 'admin.courier.edit', 'uses' => 'CourierController@edit']);
+         });
     });
 
     //SHIPPING FEES
