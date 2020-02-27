@@ -81,12 +81,10 @@ class CartController extends Controller
         $cart_details = [
             'cart_id' => $cart_id,
             'quantity' => $request->post('quantity'),
-            'pot_id' => $request->post('pot_id')
         ];
 
         $validator = Validator::make($cart_details, [
             'cart_id' => 'required|exists:carts,id',
-            'pot_id' => 'required|exists:pots,id',
             'quantity' => 'required'
         ]);
 
