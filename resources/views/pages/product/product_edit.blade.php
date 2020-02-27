@@ -46,7 +46,7 @@
         {!! Form::open(['route' => ['admin.product.update', $product['id']], 'files' => true]) !!}
         <div class="row pl-3">
             <div class="col-5">
-                <img class="border" src="{{ route('image', ['image_name' => $product['img'].'?size=medium']) }}">
+                <img class="border" src="{{ route('image', ['product', 'image_name' => $product['img'].'?size=medium']) }}">
             </div>
         </div>
         <div class="row pl-3">
