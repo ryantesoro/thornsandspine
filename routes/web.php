@@ -169,6 +169,12 @@ Route::group(['middleware' => 'auth'], function () {
 
         //Orders Show
         Route::get('view/{order_code}', ['as' => 'admin.order.show', 'uses' => 'OrderController@show']);
+
+        //Orders Deliver
+        Route::post('deliver/{order_code}', ['as' => 'admin.order.deliver', 'uses' => 'OrderController@deliver']);
+
+        //Orders Return
+        Route::post('return/{order_code}', ['as' => 'admin.order.return', 'uses' => 'OrderController@return']);
     });
 
     //Customers Page
@@ -185,4 +191,4 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 //Product Photo
-Route::get('image/{image_name}', ['as' => 'image', 'uses' => 'PhotoController@show']);
+Route::get('image/{directory}/{image_name}', ['as' => 'image', 'uses' => 'PhotoController@show']);
