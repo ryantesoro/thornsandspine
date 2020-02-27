@@ -50,11 +50,13 @@ class OrderController extends Controller
         $customer_id = $customer_details->id;
 
         $total = $cart_total + $shipping_fee->price;
+        $is_free = false;
 
         if ($loyalty_points != 0) {
             $temp = 0;
             if ($loyalty_points > $total) {
                 $temp = $loyalty_points-$cart_total;
+                $is_free = true;
             }
             $update_customer = $this->customer()->updateCustomer(['loyalty_points' => $temp], $customer_id);
         }
@@ -86,7 +88,7 @@ class OrderController extends Controller
             $order_details['shipping_fees_id'] = $shipping_fee->id;
         }
 
-        if ($total == 0) {
+        if ($is_free) {
             $order_details['status'] = 1;
         }
 
