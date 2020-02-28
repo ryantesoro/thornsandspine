@@ -140,5 +140,4 @@ $("#province").change(function() {
     </main>
 </div>
 </div>
-@include('pages.shipping_fee.shipping_fee_modal')
 @endsection
