@@ -30,7 +30,7 @@ class City extends Model
 
     public function getCityByNameAndProvince($city_name, $province_id)
     {
-        $city_details = City::where(['name', $city_name, 'province_id' => $province_id])
+        $city_details = City::where(['city' => $city_name, 'province_id' => $province_id])
             ->get()
             ->first();
         

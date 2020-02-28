@@ -41,6 +41,7 @@ class OrderController extends Controller
         $courier_id = $request->post('courier_id');
         $use_loyalty_points = $request->post('use_loyalty_points');
 
+        //Getting Customer's Cart
         $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
         $customer_cart = $this->customer()->getCustomerCart($customer);
 
@@ -52,11 +53,6 @@ class OrderController extends Controller
         }
 
         $cart_total = $this->cart()->getCartTotal($customer_cart);
-
-        $customer_details = $this->customer()->getCustomer($customer->id);
-
-        $loyalty_points = $customer_details->loyalty_points;
-        $customer_id = $customer_details->id;
 
         $order_details = [
             'remarks' => $request->post('remarks'),
@@ -75,8 +71,6 @@ class OrderController extends Controller
                 'email' => $request->post('recipient_email'),
                 'contact_number' =>$request->post('recipient_contact_number')
             ];
-    
-
             $store_recipient = $this->recipient()->storeRecipient($recipient_details);
             $order_details['recipient_id'] = $store_recipient->id;
 
@@ -86,11 +80,12 @@ class OrderController extends Controller
         }
 
         //Check if recipient is not inserted
+        $customer_details = $this->customer()->getCustomer($customer->id);
         if (!$insertedRecipient) {
             //Inserting Customer Shipping address instead
-            $province = $this->province()->getProvinceByName($customer->province);
-            $province_id = $province->id;
-            $city_name = $customer->city;
+            $province = $this->province()->getProvinceByName($customer_details->province);
+            $province_id = strtolower($province->id);
+            $city_name = strtolower($customer_details->city);
 
             $city = $this->city()->getCityByNameAndProvince($city_name, $province_id);
             $city_province_id = $city->id;
@@ -102,6 +97,8 @@ class OrderController extends Controller
 
         //If loyalty points is checked
         if ($use_loyalty_points) {
+            $loyalty_points = $customer_details->loyalty_points;
+            $customer_id = $customer_details->id;
             $total = $cart_total + $shipping_fee->price;
             $is_free = false;
 
