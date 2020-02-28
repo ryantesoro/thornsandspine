@@ -42,7 +42,7 @@ class OrderController extends Controller
 
         $shipping_fee = $this->shipping_fee()->getShippingFee($order->shipping_fees_id);
         $city = $shipping_fee->city;
-        $province = $this->shipping_province()->getProvince($shipping_fee->province_id)->name;
+        $province = $this->province()->getProvince($shipping_fee->province_id)->name;
         $shipping_price = $shipping_fee->price;
         $shipping_city_province = ucwords($city.', '.$province);
         $ss = $order->screenshot()->get();

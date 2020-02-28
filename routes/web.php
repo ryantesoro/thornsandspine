@@ -90,26 +90,42 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('restore/{pot_id}', ['as' => 'admin.pot.restore', 'uses' => 'PotController@restore']);
         });
 
-        //SHIPPING PROVINCES
-        Route::group(['prefix' => 'shipping_province'], function () {
+        //CITIES
+        Route::group(['prefix' => 'cities'], function () {
 
-            //Shipping Province Index
-            Route::get('/', ['as' => 'admin.shipping_province.index', 'uses' => 'ShippingProvinceController@index']);
+            //City Index
+            Route::get('/', ['as' => 'admin.city.index', 'uses' => 'CityController@index']);
 
-            //Shipping Province Create
-            Route::get('show/{province_id}', ['as' => 'admin.shipping_province.show', 'uses' => 'ShippingProvinceController@show']);
+            //City Create
+            Route::get('create', ['as' => 'admin.city.create', 'uses' => 'CityController@create']);
 
-            //Shipping Province Create
-            Route::get('create', ['as' => 'admin.shipping_province.create', 'uses' => 'ShippingProvinceController@create']);
+            //City Store
+            Route::post('/', ['as' => 'admin.city.store', 'uses' => 'CityController@store']);
 
-            //Shipping Province Store
-            Route::post('/', ['as' => 'admin.shipping_province.store', 'uses' => 'ShippingProvinceController@store']);
+            //City Edit
+            Route::get('edit/{city_id}', ['as' => 'admin.city.edit', 'uses' => 'CityController@edit']);
 
-            //Shipping Province Edit
-            Route::get('edit/{province_id}', ['as' => 'admin.shipping_province.edit', 'uses' => 'ShippingProvinceController@edit']);
+            //City Update
+            Route::post('update/{city_id}', ['as' => 'admin.city.update', 'uses' => 'CityController@update']);
+        });
 
-            //Shipping Province Update
-            Route::post('update/{province_id}', ['as' => 'admin.shipping_province.update', 'uses' => 'ShippingProvinceController@update']);
+        //PROVINCES
+        Route::group(['prefix' => 'provinces'], function () {
+
+            //Province Index
+            Route::get('/', ['as' => 'admin.province.index', 'uses' => 'ProvinceController@index']);
+
+            //Province Create
+            Route::get('create', ['as' => 'admin.province.create', 'uses' => 'ProvinceController@create']);
+
+            //Province Store
+            Route::post('/', ['as' => 'admin.province.store', 'uses' => 'ProvinceController@store']);
+
+            //Province Edit
+            Route::get('edit/{province_id}', ['as' => 'admin.province.edit', 'uses' => 'ProvinceController@edit']);
+
+            //Province Update
+            Route::post('update/{province_id}', ['as' => 'admin.province.update', 'uses' => 'ProvinceController@update']);
         });
 
         //SHIPPING FEES

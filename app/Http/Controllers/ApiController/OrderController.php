@@ -63,7 +63,7 @@ class OrderController extends Controller
         }
 
         if (empty($shipping_fees_id) && $shipping_fees_id == null) {
-            $province = $this->shipping_province()->getProvinceByName($customer->province);
+            $province = $this->province()->getProvinceByName($customer->province);
             $province_id = $province->id;
             $city_name = $customer->city;
             

@@ -8,6 +8,24 @@
     $(function () {
   $('[data-toggle="popover"]').popover()
 })
+
+var checker = {!! json_encode($checker) !!}
+
+changeCitySelect();
+function changeCitySelect()
+{
+    $.each(checker[$("#province").val()], function (city_id, city_name) {
+        $(city).append($('<option>').val(city_id).text(city_name));
+    });
+}
+
+$("#province").change(function() {
+    $("#city option").each(function() {
+        $(this).remove();
+    });
+    changeCitySelect();
+});
+
 </script>
 @endsection
 
@@ -39,14 +57,33 @@
             <div class="col-5">
                 <div class="form-group">
                     <label class="font-weight-bold">Shipping Province</label>
-                    {!! Form::select('shipping_province', $provinces, old('shipping_province') ?? '',
+                    {!! Form::select('shipping_agent', $couriers, old('shipping_agent') ?? '',
                     [
                     'class' => 'form-control',
                     'tab_index' => '1',
                     'required' => true
                     ]) !!}
                     <div class="d-flex justify-content-end pt-2">
-                        <a href="{{ route('admin.shipping_province.create') }}" class="btn btn-sm btn-info">
+                        <a href="{{ route('admin.courier.create') }}" class="btn btn-sm btn-info">
+                            <b>Add Shipping Agent</b>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row pl-3">
+            <div class="col-5">
+                <div class="form-group">
+                    <label class="font-weight-bold">Shipping Province</label>
+                    {!! Form::select('shipping_province', $provinces, old('shipping_province') ?? '',
+                    [
+                    'id' => 'province',
+                    'class' => 'form-control',
+                    'tab_index' => '1',
+                    'required' => true
+                    ]) !!}
+                    <div class="d-flex justify-content-end pt-2">
+                        <a href="{{ route('admin.province.create') }}" class="btn btn-sm btn-info">
                             <b>Add Province</b>
                         </a>
                     </div>
@@ -57,17 +94,18 @@
             <div class="col-5">
                 <div class="form-group">
                     <label class="font-weight-bold">Shipping City</label>
-                    {!! Form::text('shipping_city', old('shipping_city') ?? '',
+                    {!! Form::select('shipping_city', [], old('shipping_city') ?? '',
                     [
+                    'id' => 'city',
                     'class' => 'form-control',
-                    'placeholder' => 'Name',
                     'tab_index' => '2',
-                    'data-toggle' => 'popover',
-                    'data-trigger' => 'focus',
-                    'title' => 'Shipping City',
-                    'data-content' => 'The city must be in the philippines',
                     'required' => true
                     ]) !!}
+                    <div class="d-flex justify-content-end pt-2">
+                        <a href="{{ route('admin.city.create') }}" class="btn btn-sm btn-info">
+                            <b>Add City</b>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

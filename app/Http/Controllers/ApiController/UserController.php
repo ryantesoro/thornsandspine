@@ -67,16 +67,9 @@ class UserController extends Controller
             'first_name' => strtolower($request->post('first_name')),
             'last_name' => strtolower($request->post('last_name')),
             'address' => strtolower($request->post('address')),
-            'shipping_fees_id' => $request->post('shipping_fees_id'),
+            'city_province_id' => $request->post('city_province_id'),
             'contact_number' => $request->post('contact_number')
         ];
-
-        // $shipping_details = [
-        //     'shipping_address' => $request->post('shipping_address'),
-        //     'shipping_city' => $request->post('shipping_city'),
-        //     'shipping_region' => $request->post('shipping_region'),
-        //     'shipping_location_type' => $request->post('shipping_location_type')
-        // ];
 
         $registration_details = array_merge($credentials, $customer_details);
 
@@ -93,19 +86,17 @@ class UserController extends Controller
         $verification = $this->verification()->insertVerification($user->id);
         $user->notify(new EmailVerification($verification->token));
 
-        $shipping_fees_id = $customer_details['shipping_fees_id'];
-        $shipping_fee = $this->shipping_fee()->getShippingFee($shipping_fees_id);
+        $city_id = $customer_details['city_province_id'];
+        $city = $this->city()->getCity($city_id);
+        $province = $this->province()->getProvince($city->province_id);
         
-        unset($customer_details['shipping_fees_id']);
-        $province_id = $shipping_fee->province_id;
-        $customer_details['province'] = $this->shipping_province()->getProvince($province_id)->name;
-        $customer_details['city'] = $shipping_fee->city;
+        unset($customer_details['city_province_id']);
+
+        $customer_details['province'] = $province->name;
+        $customer_details['city'] = $city->city;
 
         $customer = $this->customer()->registerCustomer($customer_details);
         $user->customer()->save($customer);
-        
-        // $shipping = $this->shipping()->addShipping($shipping_details);
-        // $customer->shipping()->save($shipping);
 
         return response()->json([
             'success' => true,
@@ -122,12 +113,8 @@ class UserController extends Controller
             'first_name' => 'required|min:3|max:30',
             'last_name' => 'required|min:3|max:30',
             'address' => 'required',
-            'shipping_fees_id' => 'required|exists:shipping_fees,id',
+            'city_province_id' => 'required|exists:city_province,id',
             'contact_number' => 'required|min:7|max:11'
-            // 'shipping_address' => 'required',
-            // 'shipping_city' => 'required',
-            // 'shipping_region' => 'required',
-            // 'shipping_location_type' => 'required'
         );
 
         $validator = Validator::make($registration_details, $options);

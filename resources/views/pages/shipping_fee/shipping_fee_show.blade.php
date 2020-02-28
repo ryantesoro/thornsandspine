@@ -22,10 +22,18 @@
                 <tbody>
                     <tr>
                         <td class="font-weight-bold">
+                            Courier Name
+                        </td>
+                        <td>
+                            {{ $courier_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-weight-bold">
                             Province
                         </td>
                         <td>
-                            {{ ucwords($shipping_fee_details['province']) }}
+                            {{ $province_name }}
                         </td>
                     </tr>
                     <tr>
@@ -33,7 +41,7 @@
                             City
                         </td>
                         <td>
-                            {{ ucwords($shipping_fee_details['city']) }}
+                            {{ ucwords($city_name) }}
                         </td>
                     </tr>
                     <tr>
@@ -41,7 +49,7 @@
                             Price
                         </td>
                         <td>
-                            ₱ {{ $shipping_fee_details['price'] }}.00
+                            ₱ {{ $shipping_fee_details->price }}.00
                         </td>
                     </tr>
                 </tbody>

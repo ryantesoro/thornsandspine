@@ -26,10 +26,10 @@ Route::post('password/reset', ['as' => 'password.reset', 'uses' => 'ResetPasswor
 //SHIPPING FEES
 Route::group(['prefix' => 'shipping'], function () {
     //Shipping province
-    Route::get('province', ['as' => 'shipping_fee.province', 'uses' => 'ShippingFeeController@province']);
+    Route::get('province', ['as' => 'shipping_fee.province', 'uses' => 'ShippingFeeController@provinces']);
 
     //Shipping province
-    Route::get('province/{province_id}/city', ['as' => 'shipping_fee.province', 'uses' => 'ShippingFeeController@city']);
+    Route::get('province/{province_id}/city', ['as' => 'shipping_fee.province', 'uses' => 'ShippingFeeController@cities']);
 });
 
 //CONFIGURATION
