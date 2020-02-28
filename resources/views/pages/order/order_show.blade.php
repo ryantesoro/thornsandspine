@@ -30,7 +30,7 @@
         </div>
         <hr>
         <div class="row">
-            <div class="col-5">
+            <div class="col-6">
                 <div class="d-flex">
                     <div class="table-responsive">
                         <table class="table table-responsive table-bordered">
@@ -69,6 +69,7 @@
                                         {{ $order->date }}
                                     </td>
                                 </tr>
+                                @if ($order->recipient_id != null)
                                 <tr>
                                     <td class="font-weight-bold">
                                         Contact Number
@@ -77,6 +78,7 @@
                                         {{ $customer->contact_number }}
                                     </td>
                                 </tr>
+                                @endif
                             </tbody>
                         </table>
                         <div class="table-responsive">
@@ -87,8 +89,8 @@
                                             Recipient Name
                                         </td>
                                         <td>
-                                            @if ($order->recipient_first != null)
-                                            {{ ucwords($order->recipient_first.' '.$order->recipient_last) }}
+                                            @if ($order->recipient_id != null)
+                                            {{ ucwords($recipient->first_name.' '.$recipient->last_name) }}
                                             @else
                                             {{ ucwords($customer->first_name.' '.$customer->last_name) }}
                                             @endif
@@ -99,10 +101,32 @@
                                             Recipient Address
                                         </td>
                                         <td>
-                                            @if ($order->recipient_address != null)
-                                            {{ ucwords($order->recipient_address).', '.$shipping_city_province }}
+                                            @if ($order->recipient_id != null)
+                                            {{ ucwords($recipient->address).', '.$shipping_city_province }}
                                             @else
                                             {{ ucwords($customer->address).', '.$shipping_city_province }}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @if ($order->recipient_id != null)
+                                    <tr>
+                                        <td class="font-weight-bold">
+                                            Recipient Email Address
+                                        </td>
+                                        <td>
+                                            {{ $recipient->email }}
+                                        </td>
+                                    </tr>
+                                    @endif
+                                    <tr>
+                                        <td class="font-weight-bold">
+                                            Recipient Contact Number
+                                        </td>
+                                        <td>
+                                            @if ($order->recipient_id != null)
+                                            {{ $recipient->contact_number }}
+                                            @else
+                                            {{ $customer->contact_number }}
                                             @endif
                                         </td>
                                     </tr>
@@ -122,6 +146,14 @@
                         <div class="table-responsive">
                             <table class="table table-responsive table-bordered">
                                 <tbody>
+                                    <tr>
+                                        <td class="font-weight-bold">
+                                            Shipping Agent
+                                        </td>
+                                        <td>
+                                            {{ strtoupper($shipping_agent) }}
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td class="font-weight-bold">
                                             Payment Method

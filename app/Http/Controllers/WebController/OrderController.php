@@ -24,11 +24,13 @@ class OrderController extends Controller
             return redirect()->route('admin.order.index');
         }
 
+        //Gets orders
         $order = $this->order()->getOrder($order_code);
         $customer = $order->customer()->get()->first();
         $order['date'] = Carbon::parse($order['created_at'])->format('m-d-Y g:i A');
         $order['expiry'] = Carbon::parse($order['expires_at'])->format('m-d-Y g:i A');
 
+        //Gets order products
         $order_products = $this->order_product()->getOrderProducts($order->id);
         $products = [];
         foreach ($order_products as $product) {
@@ -40,11 +42,20 @@ class OrderController extends Controller
             $products[] = $temp_array;
         }
 
+        //Gets shipping fee
         $shipping_fee = $this->shipping_fee()->getShippingFee($order->shipping_fees_id);
-        $city = $shipping_fee->city;
-        $province = $this->province()->getProvince($shipping_fee->province_id)->name;
+        $courier = $shipping_fee->courier()->get()->first();
+        $shipping_agent = $courier->name;
         $shipping_price = $shipping_fee->price;
+
+        //Gets city province
+        $city_province_id = $shipping_fee->city_province_id;
+        $city_province = $this->city()->getCity($city_province_id);
+        $city = $city_province->city;
+        $province = $this->province()->getProvince($city_province->province_id)->name;
         $shipping_city_province = ucwords($city.', '.$province);
+
+        //Gets screenshots
         $ss = $order->screenshot()->get();
         $screenshots = [];
         foreach ($ss as $screenshot) {
@@ -56,11 +67,16 @@ class OrderController extends Controller
             $screenshots[$date_uploaded][] = $temp_array;
         }
 
+        //Gets recipient
+        $recipient = $recipient = $this->recipient()->getRecipient($order->recipient_id);
+
         return view('pages.order.order_show')
             ->with('order', $order)
+            ->with('recipient', $recipient)
             ->with('customer', $customer)
             ->with('products', $products)
             ->with('shipping_price', $shipping_price)
+            ->with('shipping_agent', $shipping_agent)
             ->with('shipping_city_province', $shipping_city_province)
             ->with('screenshots', $screenshots);
     }
