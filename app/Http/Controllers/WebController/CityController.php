@@ -16,13 +16,10 @@ class CityController extends Controller
         $city_name = $request->get('city');
         $province_id = $request->get('province_id');
 
-        $provinces = $this->province()->getProvinces()
-            ->pluck('name', 'id');
-
+        $fetched_provinces = $this->province()->getProvinces()->pluck('name', 'id')->toArray();
+        $provinces = [0 => 'All Provinces'] + $fetched_provinces;
+        
         $cities = $this->city()->getCities($city_name, $province_id);
-        foreach ($cities as $city) {
-            $city['province'] = $this->province()->getProvince($city->province_id)->name;
-        }
 
         return view('pages.city.city_index')
             ->with('cities', $cities)

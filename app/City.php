@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
+
 
 class City extends Model
 {
@@ -19,7 +21,7 @@ class City extends Model
     //Get City
     public function getCity($city_id)
     {
-        $city_details = City::find($city_id)
+        $city_details = City::where('id', $city_id)
             ->get()
             ->first();
         
@@ -29,23 +31,24 @@ class City extends Model
     //Get Cities
     public function getCities($city_name, $province_id)
     {
-        $city_provinces = City::select('id', 'city', 'province_id');
+        $city_provinces = DB::table('city_province')
+            ->selectRaw('city_province.id, city_province.city, city_province.province_id, provinces.name')
+            ->leftJoin('provinces', function ($query) {
+                $query->on('provinces.id', 'city_province.province_id');
+            });
         
         if ($city_name != '' || !empty($city_name)) {
             $search_query = '%'.$city_name.'%';
-            $city_provinces->whereRaw('city LIKE ?', [
+            $city_provinces->whereRaw('city_province.city LIKE ?', [
                 $search_query
             ]);
         }
         
         if ($province_id != 0 && ($province_id != '' || !empty($province_id))) {
-            $city_provinces->where('province_id', $province_id);
+            $city_provinces->where('provinces.id', $province_id);
         }
 
-        return $city_provinces->get()
-            ->sortBy('created_at');
-
-        return $city_provinces;
+        return $city_provinces->get()->sortBy('city_province.city');
     }
 
     //Store City

@@ -56,10 +56,10 @@
                 <tbody>
                     @foreach($cities as $city)
                     <tr>
-                        <td>{{ ucwords($city['city']) }}</td>
-                        <td>{{ ucwords($city['province']) }}</td>
+                        <td>{{ ucwords($city->city) }}</td>
+                        <td>{{ ucwords($city->name) }}</td>
                         <td>
-                            <a href="{{ route('admin.city.edit', $city['id']) }}"
+                            <a href="{{ route('admin.city.edit', $city->id) }}"
                                 class="btn btn-sm btn-warning font-weight-bold">Edit</a>
                         </td>
                     </tr>

@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class Province extends Model
 {
     protected $table = "provinces";
@@ -73,5 +74,10 @@ class Province extends Model
     public function city()
     {
         return $this->hasMany('App\City', 'province_id', 'id');
+    }
+
+    public function getNameAttribute($value)
+    {
+        return ucwords($value);
     }
 }

@@ -11,27 +11,20 @@ class ShippingFeeController extends Controller
 {
     public function index(Request $request)
     {
-        $city_name = $request->get('city');
+        $courier_id = $request->get('courier_id');
         $province_id = $request->get('province_id');
 
-        $shipping_fees = $this->shipping_fee()->getShippingFees($city_name, $province_id);
-
-        foreach ($shipping_fees as $shipping_fee) {
-            $shipping_fee['province'] = $this->getProvinceName($shipping_fee['province_id']);
-        }
-
-        $provinces = [
-            0 => 'All Provinces'
-        ];
-
-        $fetched_provinces = $this->province()->getProvinces()
-            ->pluck('name', 'id')
-            ->toArray();
+        $shipping_fees = $this->shipping_fee()->getShippingFees($courier_id, $province_id);
         
-        $provinces = array_merge($provinces, $fetched_provinces);
+        $fetched_couriers = $this->courier()->getCouriers()->pluck('name', 'id')->toArray();
+        $couriers = [0 => 'All Couriers'] + $fetched_couriers;
+
+        $fetched_provinces = $this->province()->getProvinces()->pluck('name', 'id')->toArray();
+        $provinces = [0 => 'All Provinces'] + $fetched_provinces;
 
         return view('pages.shipping_fee.shipping_fee_index')
             ->with('shipping_fees', $shipping_fees)
+            ->with('couriers', $couriers)
             ->with('provinces', $provinces);
     }
 
@@ -43,34 +36,58 @@ class ShippingFeeController extends Controller
         }
 
         $shipping_fee_details = $this->shipping_fee()->getShippingFee($shipping_fee_id);
-        $shipping_fee_details['province'] = $this->getProvinceName($shipping_fee_details['province_id']);
-
-        $provinces = $this->getPluckedProvinces();
+        $courier_name = $shipping_fee_details->courier()->get()->first()->name;
+        $city_province = $this->city()->getCity($shipping_fee_details->city_province_id);
+        $city_name = $city_province->city;
+        $province_name = $this->province()->getProvince($city_province->province_id)->name;
 
         return view('pages.shipping_fee.shipping_fee_show')
-            ->with('shipping_fee_details', $shipping_fee_details)
-            ->with('provinces', $provinces);
+            ->with('courier_name', $courier_name)
+            ->with('province_name', $province_name)
+            ->with('city_name', $city_name)
+            ->with('shipping_fee_details', $shipping_fee_details);
     }
 
     public function create()
     {
-        $provinces = $this->getPluckedProvinces();
+        $provinces = $this->province()->getProvinces()->pluck('name', 'id')->toArray();
+        $fetched_cities = $this->city()->getCities(null, null);
+
+        $checker = [];
+        foreach($fetched_cities as $city) {
+            $province_id = strVal($city->province_id);
+            $checker[$province_id][$city->id] = ucwords($city->city);
+        }
+
+        foreach($provinces as $id => $name) {
+            if (!array_key_exists($id, $checker)) {
+                unset($provinces[$id]);
+            }
+        }
+
+        $couriers = $this->courier()->getCouriers()->pluck('name', 'id')->toArray();
 
         return view('pages.shipping_fee.shipping_fee_create')
-            ->with('provinces', $provinces);
+            ->with('checker', $checker)
+            ->with('provinces', $provinces)
+            ->with('couriers', $couriers);
     }
 
     public function store(Request $request)
     {
+        $courier_id = $request->post('shipping_agent');
+        $city_province_id = $request->post('shipping_city');
+        $shipping_price = $request->post('shipping_price');
+
         $shipping_fee_details = [
-            'shipping_province' => $request->post('shipping_province'),
-            'shipping_city' => strtolower($request->post('shipping_city')),
-            'shipping_price' => $request->post('shipping_price')
+            'shipping_agent' => $courier_id,
+            'shipping_city' => $city_province_id,
+            'shipping_price' => $shipping_price
         ];
 
         $validator = Validator::make($shipping_fee_details, [
-            'shipping_province' => 'required|exists:shipping_provinces,id',
-            'shipping_city' => 'required',
+            'shipping_agent' => 'required|exists:couriers,id',
+            'shipping_city' => 'required|exists:city_province,id',
             'shipping_price' => 'required|numeric|digits_between:1,4|min:0|not_in:0'
         ]);
 
@@ -81,7 +98,18 @@ class ShippingFeeController extends Controller
                 ->withErrors($validator->errors());
         }
 
-        $store_shipping_fee = $this->shipping_fee()->storeShippingFee($shipping_fee_details);
+        if ($this->shipping_fee()->duplicateExists($courier_id, $city_province_id, null)) {
+            Alert::warning('Add Shipping Fee Failed', 'Invalid Input');
+            return redirect()->back()
+                ->withInput($request->all())
+                ->withErrors([['This shipping fee already exists!']]);
+        }
+
+        $store_shipping_fee = $this->shipping_fee()->storeShippingFee([
+            'city_province_id' => $city_province_id,
+            'price' => $shipping_price
+        ]);
+        $this->courier()->getCourier($courier_id)->shipping_fee()->save($store_shipping_fee);
 
         Alert::success('Add Shipping Fee Successful', 'Success!');
         return redirect()->route('admin.shipping_fee.index');
@@ -89,17 +117,31 @@ class ShippingFeeController extends Controller
 
     public function edit($shipping_fee_id)
     {
-        if (!$this->shipping_fee()->shippingFeeExists($shipping_fee_id)) {
-            Alert::error('Edit Shipping Fee Failed', 'Shipping Fee does not exist!');
-            return redirect()->route('admin.shipping_fee.index');
+        $provinces = $this->province()->getProvinces()->pluck('name', 'id')->toArray();
+        $fetched_cities = $this->city()->getCities(null, null);
+
+        $checker = [];
+        foreach($fetched_cities as $city) {
+            $province_id = strVal($city->province_id);
+            $checker[$province_id][$city->id] = ucwords($city->city);
         }
 
-        $shipping_fee_details = $this->shipping_fee()->getShippingFee($shipping_fee_id);
+        foreach($provinces as $id => $name) {
+            if (!array_key_exists($id, $checker)) {
+                unset($provinces[$id]);
+            }
+        }
 
-        $provinces = $this->getPluckedProvinces();
+        $couriers = $this->courier()->getCouriers()->pluck('name', 'id')->toArray();
+
+        $shipping_fee_details = $this->shipping_fee()->getShippingFee($shipping_fee_id);
+        $province_id = $this->city()->getCity($shipping_fee_details->city_province_id)->province_id;
 
         return view('pages.shipping_fee.shipping_fee_edit')
             ->with('shipping_fee_details', $shipping_fee_details)
+            ->with('couriers', $couriers)
+            ->with('province_id', $province_id)
+            ->with('checker', $checker)
             ->with('provinces', $provinces);
     }
 
@@ -118,14 +160,20 @@ class ShippingFeeController extends Controller
         ];
 
         if (auth()->user()->access_level == 2) {
-            $shipping_fee_details['shipping_province'] = $request->post('shipping_province');
-            $shipping_fee_details['shipping_city'] =  strtolower($request->post('shipping_city'));
+            $courier_id = $request->post('shipping_agent');
+            $city_province_id = $request->post('shipping_city');
 
-            $validator_options['shipping_province'] = 'required|exists:shipping_provinces,id';
-            $validator_options['shipping_city'] = 'required';
+            if ($this->shipping_fee()->duplicateExists($courier_id, $city_province_id, $shipping_fee_id)) {
+                Alert::warning('Update Shipping Fee Failed', 'Invalid Input');
+                return redirect()->back()
+                    ->withInput($request->all())
+                    ->withErrors([['This shipping fee already exists!']]);
+            }
 
-            $new_shipping_fee_details['province_id'] = $shipping_fee_details['shipping_province'];
-            $new_shipping_fee_details['city'] = $shipping_fee_details['shipping_city']; 
+            $validator_options['shipping_location'] = 'required|exists:city_province,id';
+            $shipping_fee_details['shipping_location'] = $city_province_id;
+            
+            $new_shipping_fee_details['city_province_id'] = $shipping_fee_details['shipping_location'];
         }
 
         $validator = Validator::make($shipping_fee_details, $validator_options);
@@ -141,22 +189,5 @@ class ShippingFeeController extends Controller
 
         Alert::success('Update Shipping Fee Successful', 'Success!');
         return redirect()->route('admin.shipping_fee.index');
-    }
-
-    private function getPluckedProvinces()
-    {
-        $provinces = $this->province()
-            ->getProvinces()
-            ->pluck('name', 'id');
-
-        return $provinces;
-    }
-
-    private function getProvinceName($province_id)
-    {
-        $province = $this->province()->getProvince($province_id);
-        $province_name = $province->name;
-
-        return $province_name;
     }
 }
