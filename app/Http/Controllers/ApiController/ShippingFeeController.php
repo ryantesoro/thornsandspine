@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 
 class ShippingFeeController extends Controller
 {
-    public function province(Request $request)
+    public function provinces(Request $request)
     {
         $provinces = $this->province()->getProvinces();
         $plucked_provinces = $provinces->pluck('name', 'id');
@@ -18,16 +18,9 @@ class ShippingFeeController extends Controller
         ]);
     }
 
-    public function city(Request $request, $province_id)
+    public function cities(Request $request, $province_id)
     {
-        $shipping_fees = $this->shipping_fee()->getCitiesByProvince($province_id);
-        
-        $cities = array();
-        foreach($shipping_fees as $shipping_fee) {
-            $city = $shipping_fee->city;
-            $shipping_id = $shipping_fee->id;
-            $cities[$shipping_id] = $city;
-        }
+        $cities = $this->city()->getCities(null, $province_id)->pluck('city', 'id');
 
         return response()->json([
             'success' => true,
