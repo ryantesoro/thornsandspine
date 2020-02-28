@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Recipient extends Model
 {
-    protected $table = "products";
+    protected $table = "recipients";
 
     protected $hidden = ['pivot'];
 

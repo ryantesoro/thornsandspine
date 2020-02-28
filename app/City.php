@@ -28,6 +28,15 @@ class City extends Model
         return $city_details;
     }
 
+    public function getCityByNameAndProvince($city_name, $province_id)
+    {
+        $city_details = City::where(['name', $city_name, 'province_id' => $province_id])
+            ->get()
+            ->first();
+        
+        return $city_details;
+    }
+
     //Get Cities
     public function getCities($city_name, $province_id)
     {

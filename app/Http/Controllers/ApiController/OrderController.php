@@ -38,82 +38,113 @@ class OrderController extends Controller
         $recipient_first = $request->post('recipient_first');
         $recipient_last = $request->post('recipient_last');
         $recipient_address = $request->post('recipient_address');
-        $shipping_fees_id = $request->post('shipping_fees_id');
+        $courier_id = $request->post('courier_id');
+        $use_loyalty_points = $request->post('use_loyalty_points');
 
         $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
         $customer_cart = $this->customer()->getCustomerCart($customer);
-        $cart_total = $this->cart()->getCartTotal($customer_cart);
-        $shipping_fee = $this->shipping_fee()->getShippingFee($shipping_fees_id);
 
-        $customer_details = $customer->get()->first();
+        if ($customer_cart->count() == 0) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Your cart is empty!'
+            ]);
+        }
+
+        $cart_total = $this->cart()->getCartTotal($customer_cart);
+
+        $customer_details = $this->customer()->getCustomer($customer->id);
+
         $loyalty_points = $customer_details->loyalty_points;
         $customer_id = $customer_details->id;
 
-        $total = $cart_total + $shipping_fee->price;
-        $is_free = false;
-
-        if ($loyalty_points != 0) {
-            $temp = 0;
-            if ($loyalty_points > $total) {
-                $temp = $loyalty_points-$cart_total;
-                $is_free = true;
-            }
-            $update_customer = $this->customer()->updateCustomer(['loyalty_points' => $temp], $customer_id);
-        }
-
-        $recipient_details = [
-            'first_name' => strtolower($request->post('recipient_first')),
-            'last_name' => strtolower($request->post('recipient_last')),
-            'address' => strtolower($request->post('recipient_address')),
-            'email' => $request->post('recipient_email'),
-            'contact_number' =>$request->post('recipient_contact_number')
-        ];
-
-        $store_recipient = $this->recipient()->storeRecipient($recipient_details);
-        
         $order_details = [
             'remarks' => $request->post('remarks'),
-            'recipient_id' => $store_recipient->id,
-            'shipping_fees_id' => $shipping_fees_id,
             'payment_method' => $request->post('payment_method'),
-            'total' => $cart_total,
-            'loyalty_points' => $loyalty_points ?? 0
+            'total' => $cart_total
         ];
 
-        if (empty($shipping_fees_id) && $shipping_fees_id == null) {
+        //Inserts recipient
+        $insertedRecipient = false;
+        if (!empty($recipient_first) && $recipient_first != null) {
+            $city_province_id = $request->post('city_province_id');
+            $recipient_details = [
+                'first_name' => strtolower($request->post('recipient_first')),
+                'last_name' => strtolower($request->post('recipient_last')),
+                'address' => strtolower($request->post('recipient_address')),
+                'email' => $request->post('recipient_email'),
+                'contact_number' =>$request->post('recipient_contact_number')
+            ];
+    
+
+            $store_recipient = $this->recipient()->storeRecipient($recipient_details);
+            $order_details['recipient_id'] = $store_recipient->id;
+
+            $shipping_fee = $this->shipping_fee()->getShippingFeeByCityProvinceAndCourier($courier_id, $city_province_id);
+            $order_details['shipping_fees_id'] = $shipping_fee->id;
+            $insertedRecipient = true;
+        }
+
+        //Check if recipient is not inserted
+        if (!$insertedRecipient) {
+            //Inserting Customer Shipping address instead
             $province = $this->province()->getProvinceByName($customer->province);
             $province_id = $province->id;
             $city_name = $customer->city;
-            
-            $shipping_fee = $this->shipping_fee()->getShippingFeeByCityProvince($city_name, $province_id);
+
+            $city = $this->city()->getCityByNameAndProvince($city_name, $province_id);
+            $city_province_id = $city->id;
+
+            $shipping_fee = $this->shipping_fee()->getShippingFeeByCityProvinceAndCourier($courier_id, $city_province_id);
+
             $order_details['shipping_fees_id'] = $shipping_fee->id;
         }
 
-        if ($is_free) {
-            $order_details['status'] = 1;
+        //If loyalty points is checked
+        if ($use_loyalty_points) {
+            $total = $cart_total + $shipping_fee->price;
+            $is_free = false;
+
+            $deducted_loyalty_points = 0;
+            if ($loyalty_points != 0) {
+                if ($loyalty_points > $total) {
+                    $deducted_loyalty_points = $loyalty_points-$total;
+                    $is_free = true;
+                    $order_details['loyalty_points'] = $total;
+                } else {
+                    $deducted_loyalty_points = 0;
+                    $order_details['loyalty_points'] = $loyalty_points;
+                }
+                
+                $update_customer = $this->customer()->updateCustomer(['loyalty_points' => $deducted_loyalty_points], $customer_id);
+            }
+
+            if ($is_free) {
+                $order_details['status'] = 1;
+            }
         }
         
-        // $order = $this->order()->storeOrder($order_details);
-        // $customer->order()->save($order);
+        $order = $this->order()->storeOrder($order_details);
+        $customer->order()->save($order);
 
-        // $order_code = $this->generateCode($order->id);
-        // $update_order = $this->order()->updateOrder(['code' => $order_code], $order->id);
+        $order_code = $this->generateCode($order->id);
+        $update_order = $this->order()->updateOrder(['code' => $order_code], $order->id);
 
-        // $carts = $customer_cart->get();
-        // foreach ($carts as $cart) {
-        //     $product_details = $this->product()->getProduct($cart->product_id);
-        //     $order_product_details = [
-        //         'order_id' => $order->id,
-        //         'quantity' => $cart->quantity,
-        //         'product_id' => $cart->product_id,
-        //         'pot_id' => $cart->pot_id,
-        //         'sub_total' => $cart->quantity * $product_details->price
-        //     ];
+        $carts = $customer_cart->get();
+        foreach ($carts as $cart) {
+            $product_details = $this->product()->getProduct($cart->product_id);
+            $order_product_details = [
+                'order_id' => $order->id,
+                'quantity' => $cart->quantity,
+                'product_id' => $cart->product_id,
+                'pot_id' => $cart->pot_id,
+                'sub_total' => $cart->quantity * $product_details->price
+            ];
 
-        //     $store_order_product = $this->order_product()->storeOrderProduct($order_product_details);
-        // }
+            $store_order_product = $this->order_product()->storeOrderProduct($order_product_details);
+        }
 
-        // $this->cart()->clearCart($customer_cart);
+        $this->cart()->clearCart($customer_cart);
 
         return response()->json([
             'success' => true,

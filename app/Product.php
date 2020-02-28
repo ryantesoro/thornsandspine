@@ -7,8 +7,6 @@ use Carbon\Carbon;
 
 class Product extends Model
 {
-    protected $dates = ['deleted_at'];
-
     protected $table = "products";
 
     protected $hidden = ['pivot'];
