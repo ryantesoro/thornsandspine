@@ -20,6 +20,7 @@ use App\Courier;
 use App\Faq;
 use App\OrderProduct;
 use App\Pot;
+use App\Recipient;
 use App\Screenshot;
 use App\ShippingFee;
 use App\Province;
@@ -131,6 +132,12 @@ class Controller extends BaseController
         return $configuration;
     }
 
+    public function recipient()
+    {
+        $recipient = new Recipient();
+        return $recipient;
+    }
+    
     public function courier()
     {
         $courier = new Courier();

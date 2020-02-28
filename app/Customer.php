@@ -46,6 +46,16 @@ class Customer extends Model
         return $customers->get()->sortBy('customers.last_name');;
     }
 
+    //Get Customer
+    public function getCustomer($customer_id)
+    {
+        $customer_details = Customer::where('id', $customer_id)
+            ->get()
+            ->first();
+
+        return $customer_details;
+    }
+
     //Register New Customer
     public function registerCustomer($customer_details)
     {
@@ -59,7 +69,6 @@ class Customer extends Model
         $user = User::find($user_id);
         $customer_id = $user->customer()->value('id');
         $customer = Customer::find($customer_id);
-
         return $customer;
     }
 
@@ -77,6 +86,15 @@ class Customer extends Model
         $orders = $customer_model->order();
 
         return $orders;
+    }
+
+    //Update Customer
+    public function updateCustomer($customer_details, $customer_id)
+    {
+        $update_customer = Customer::where('id', $customer_id)
+            ->update($customer_details);
+        
+        return $update_customer;
     }
 
     public function user()
