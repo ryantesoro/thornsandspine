@@ -132,16 +132,15 @@ class Controller extends BaseController
         return $configuration;
     }
 
-<<<<<<< HEAD
     public function recipient()
     {
         $recipient = new Recipient();
         return $recipient;
-=======
+    }
+    
     public function courier()
     {
         $courier = new Courier();
         return $courier;
->>>>>>> develop
     }
 }
