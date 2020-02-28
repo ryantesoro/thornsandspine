@@ -8,6 +8,30 @@
     $(function () {
   $('[data-toggle="popover"]').popover()
 })
+
+var checker = {!! json_encode($checker) !!}
+
+changeCitySelect();
+function changeCitySelect(city_id)
+{
+    $.each(checker[$("#province").val()], function (city_id, city_name) {
+        $('#city').append($('<option>').val(city_id).text(city_name));
+    });
+    if (city_id != null) {
+        $('#city option[value="'+city_id+'"]').attr("selected",true);
+    }
+}
+
+$("#province").change(function() {
+    $("#city option").each(function() {
+        $(this).remove();
+    });
+    changeCitySelect(null);
+});
+
+$('#province option[value="{{ $province_id }}"]').attr("selected",true);
+changeCitySelect({{$shipping_fee_details->city_province_id}});
+
 </script>
 @endsection
 
@@ -38,21 +62,28 @@
         <div class="row pl-3">
             <div class="col-5">
                 <div class="form-group">
-                    <label class="font-weight-bold">Shipping Province</label>
-                    {!! Form::select('shipping_province', $provinces, $shipping_fee_details['province_id'] ?? '',
+                    <label class="font-weight-bold">Shipping Agent</label>
+                    {!! Form::select('shipping_agent', $couriers, old('shipping_agent') ?? '',
                     [
                     'class' => 'form-control',
                     'tab_index' => '1',
+                    'required' => auth()->user()->access_level != 2
+                    ]) !!}
+                </div>
+            </div>
+        </div>
+        <div class="row pl-3">
+            <div class="col-5">
+                <div class="form-group">
+                    <label class="font-weight-bold">Shipping Province</label>
+                    {!! Form::select('shipping_province', $provinces, '' ?? '',
+                    [
+                    'id' => 'province',
+                    'class' => 'form-control',
+                    'tab_index' => '2',
                     'required' => true,
                     'disabled' => auth()->user()->access_level != 2
                     ]) !!}
-                    @if (auth()->user()->access_level == 2)
-                    <div class="d-flex justify-content-end pt-2">
-                        <a href="{{ route('admin.shipping_province.create') }}" class="btn btn-sm btn-info">
-                            <b>Add Province</b>
-                        </a>
-                    </div>
-                    @endif
                 </div>
             </div>
         </div>
@@ -60,17 +91,12 @@
             <div class="col-5">
                 <div class="form-group">
                     <label class="font-weight-bold">Shipping City</label>
-                    {!! Form::text('shipping_city', $shipping_fee_details['city'] ?? '',
+                    {!! Form::select('shipping_city', [], '' ?? '',
                     [
+                    'id' => 'city',
                     'class' => 'form-control',
-                    'placeholder' => 'Name',
-                    'tab_index' => '2',
-                    'data-toggle' => 'popover',
-                    'data-trigger' => 'focus',
-                    'title' => 'Shipping City',
-                    'data-content' => 'The city must be in the philippines',
-                    'required' => true,
-                    'disabled' => auth()->user()->access_level != 2
+                    'tab_index' => '3',
+                    'required' => auth()->user()->access_level != 2
                     ]) !!}
                 </div>
             </div>
@@ -106,5 +132,4 @@
     </main>
 </div>
 </div>
-@include('pages.shipping_fee.shipping_fee_modal')
 @endsection

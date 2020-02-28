@@ -4,9 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ShippingProvince extends Model
+
+class Province extends Model
 {
-    protected $table = "shipping_provinces";
+    protected $table = "provinces";
 
     protected $hidden = ['pivot'];
 
@@ -19,7 +20,7 @@ class ShippingProvince extends Model
     //Get province
     public function getProvince($province_id)
     {
-        $province = ShippingProvince::where('id', $province_id)
+        $province = Province::where('id', $province_id)
             ->get()
             ->first();
 
@@ -29,7 +30,7 @@ class ShippingProvince extends Model
     //Get Province by name
     public function getProvinceByName($province_name)
     {
-        $province = ShippingProvince::where('name', $province_name)
+        $province = Province::where('name', $province_name)
             ->get()
             ->first();
 
@@ -39,7 +40,7 @@ class ShippingProvince extends Model
     //Get all provinces
     public function getProvinces()
     {
-        $provinces = ShippingProvince::all()
+        $provinces = Province::all()
             ->sortBy('name');
 
         return $provinces;
@@ -48,7 +49,7 @@ class ShippingProvince extends Model
     //Store province
     public function storeProvince($province_name)
     {
-        $store_province = ShippingProvince::create(['name' => $province_name]);
+        $store_province = Province::create(['name' => $province_name]);
 
         return $store_province;
     }
@@ -56,7 +57,7 @@ class ShippingProvince extends Model
     //Check if province exist
     public function provinceExists($province_id)
     {
-        $province = ShippingProvince::where('id', $province_id)->count();
+        $province = Province::where('id', $province_id)->count();
 
         return $province != 0;
     }
@@ -64,14 +65,19 @@ class ShippingProvince extends Model
     //Update Province
     public function updateProvince($province_id, $province_name)
     {
-        $update_province = ShippingProvince::where('id', $province_id)
+        $update_province = Province::where('id', $province_id)
             ->update(['name' => $province_name]);
         
         return $update_province;
     }
 
-    public function shipping_fee()
+    public function city()
     {
-        return $this->hasMany('App\ShippingFee', 'province_id', 'id');
+        return $this->hasMany('App\City', 'province_id', 'id');
+    }
+
+    public function getNameAttribute($value)
+    {
+        return ucwords($value);
     }
 }

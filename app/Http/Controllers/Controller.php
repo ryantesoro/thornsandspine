@@ -16,13 +16,15 @@ use App\ResetPassword;
 use App\Order;
 use App\Cart;
 use App\Configuration;
+use App\Courier;
 use App\Faq;
 use App\OrderProduct;
 use App\Pot;
 use App\Recipient;
 use App\Screenshot;
 use App\ShippingFee;
-use App\ShippingProvince;
+use App\Province;
+use App\City;
 
 class Controller extends BaseController
 {
@@ -31,7 +33,7 @@ class Controller extends BaseController
     public function __construct()
     {
         //Remove image size restriction
-        ini_set('memory_limit','256M');
+        ini_set('memory_limit', '256M');
     }
 
     public function user()
@@ -75,7 +77,7 @@ class Controller extends BaseController
         $order = new Order();
         return $order;
     }
-    
+
     public function cart()
     {
         $cart = new Cart();
@@ -94,10 +96,16 @@ class Controller extends BaseController
         return $shipping_fee;
     }
 
-    public function shipping_province()
+    public function city()
     {
-        $shipping_province = new ShippingProvince();
-        return $shipping_province;
+        $city = new City();
+        return $city;
+    }
+
+    public function province()
+    {
+        $province = new Province();
+        return $province;
     }
 
     public function faq()
@@ -124,9 +132,16 @@ class Controller extends BaseController
         return $configuration;
     }
 
+<<<<<<< HEAD
     public function recipient()
     {
         $recipient = new Recipient();
         return $recipient;
+=======
+    public function courier()
+    {
+        $courier = new Courier();
+        return $courier;
+>>>>>>> develop
     }
 }
