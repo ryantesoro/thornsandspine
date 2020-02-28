@@ -45,8 +45,8 @@
           @foreach($orders as $order)
           <tr>
             <td>{{ $order->code }}</td>
-            <td>{{ !empty($order->recipient_last) ? ucwords($order->recipient_last) : ucwords($order->last_name) }}</td>
-            <td>{{ !empty($order->recipient_first) ? ucwords($order->recipient_first) : ucwords($order->first_name) }}</td>
+            <td>{{ !empty($order->r_lname) ? ucwords($order->r_lname) : ucwords($order->c_lname) }}</td>
+            <td>{{ !empty($order->r_fname) ? ucwords($order->r_fname) : ucwords($order->c_fname) }}</td>
             <td class="pt-3">
               @if(\Carbon\Carbon::parse($order->expires_at)->isPast())
               <span class="badge badge-pill badge-danger">expired</span>

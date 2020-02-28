@@ -18,9 +18,9 @@ class Recipient extends Model
     public $timestamps = false;
 
     //Get Recipient
-    public function getRecipient($order_id)
+    public function getRecipient($recipient_id)
     {
-        $recipient = Recipient::where('order_id', $order_id)
+        $recipient = Recipient::where('id', $recipient_id)
             ->get()
             ->first();
 

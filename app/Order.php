@@ -12,7 +12,7 @@ class Order extends Model
     protected $table = "orders";
 
     protected $fillable = [
-        'code', 'recipient_first', 'recipient_last',
+        'code', 'recipient_id', 'loyalty_points', 'status',
         'total', 'shipping_fees_id', 'remarks',
         'comment', 'payment_method', 'expires_at'
     ];
@@ -25,12 +25,15 @@ class Order extends Model
     public function getOrders($code)
     {
         $orders = DB::table('orders')
-            ->selectRaw('orders.code, orders.recipient_first, orders.recipient_last, customers.first_name, customers.last_name, orders.status, orders.expires_at')
+            ->selectRaw('orders.code, recipients.first_name r_fname, recipients.last_name r_lname, customers.first_name c_fname, customers.last_name c_lname, orders.status, orders.expires_at')
             ->leftJoin('customer_order', function ($query) {
                 $query->on('customer_order.order_id', 'orders.id');
             })
             ->leftJoin('customers', function ($query) {
                 $query->on('customers.id', 'customer_order.customer_id');
+            })
+            ->leftJoin('recipients', function ($query) {
+                $query->on('recipients.id', 'orders.recipient_id');
             });
 
         if ($code != null && !empty($code)) {
