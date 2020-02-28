@@ -39,6 +39,7 @@ class OrderController extends Controller
         $recipient_last = $request->post('recipient_last');
         $recipient_address = $request->post('recipient_address');
         $courier_id = $request->post('courier_id');
+        $delivery_date = $request->post('delivery_date');
         $use_loyalty_points = $request->post('use_loyalty_points');
 
         //Getting Customer's Cart
@@ -57,6 +58,7 @@ class OrderController extends Controller
         $order_details = [
             'remarks' => $request->post('remarks'),
             'payment_method' => $request->post('payment_method'),
+            'delivery_date' => Carbon::now(),
             'total' => $cart_total
         ];
 
