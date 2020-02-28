@@ -109,6 +109,7 @@ class ShippingFeeController extends Controller
             'city_province_id' => $city_province_id,
             'price' => $shipping_price
         ]);
+        
         $this->courier()->getCourier($courier_id)->shipping_fee()->save($store_shipping_fee);
 
         Alert::success('Add Shipping Fee Successful', 'Success!');

@@ -28,7 +28,7 @@ class Courier extends Model
     //Get Courier
     public function getCourier($courier_id)
     {
-        $courier_details = Courier::find($courier_id)
+        $courier_details = Courier::where('id', $courier_id)
             ->get()
             ->first();
 
