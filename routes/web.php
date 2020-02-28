@@ -90,6 +90,25 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('restore/{pot_id}', ['as' => 'admin.pot.restore', 'uses' => 'PotController@restore']);
         });
 
+        //CITIES
+        Route::group(['prefix' => 'cities'], function () {
+
+            //City Index
+            Route::get('/', ['as' => 'admin.city.index', 'uses' => 'CityController@index']);
+
+            //City Create
+            Route::get('create', ['as' => 'admin.city.create', 'uses' => 'CityController@create']);
+
+            //City Store
+            Route::post('/', ['as' => 'admin.city.store', 'uses' => 'CityController@store']);
+
+            //City Edit
+            Route::get('edit/{city_id}', ['as' => 'admin.city.edit', 'uses' => 'CityController@edit']);
+
+            //City Update
+            Route::post('update/{city_id}', ['as' => 'admin.city.update', 'uses' => 'CityController@update']);
+        });
+
         //PROVINCES
         Route::group(['prefix' => 'provinces'], function () {
 

@@ -23,6 +23,7 @@ use App\Pot;
 use App\Screenshot;
 use App\ShippingFee;
 use App\Province;
+use App\City;
 
 class Controller extends BaseController
 {
