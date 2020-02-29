@@ -165,6 +165,7 @@ class OrderController extends Controller
         $plucked_provinces = $provinces->pluck('name', 'id');
 
         $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
+        dd($customer);
         $customer_details = $this->customer()->getCustomer($customer->id);
 
         $loyalty_points = $customer_details->loyalty_points;
