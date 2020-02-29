@@ -37,7 +37,7 @@ class OrderController extends Controller
 
         $recipient_first = $request->post('recipient_first');
         $courier_id = $request->post('courier_id');
-        $delivery_date = Carbon::createFromFormat('m/d/Y', $request->post('delivery_date'));
+        $delivery_date = Carbon::createFromFormat('m-d-Y', $request->post('delivery_date'));
         $use_loyalty_points = $request->post('use_loyalty_points');
 
         //Getting Customer's Cart
@@ -163,7 +163,7 @@ class OrderController extends Controller
 
         $provinces = $this->province()->getProvinces();
         $plucked_provinces = $provinces->pluck('name', 'id');
-        
+
         $this->setUserId(auth()->user()->id);
         $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
         $customer_details = $this->customer()->getCustomer($customer->id);
