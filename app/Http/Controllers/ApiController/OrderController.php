@@ -36,10 +36,8 @@ class OrderController extends Controller
         $this->setUserId(auth()->user()->id);
 
         $recipient_first = $request->post('recipient_first');
-        $recipient_last = $request->post('recipient_last');
-        $recipient_address = $request->post('recipient_address');
         $courier_id = $request->post('courier_id');
-        $delivery_date = $request->post('delivery_date');
+        $delivery_date = Carbon::createFromFormat('m/d/Y', $request->post('delivery_date'));
         $use_loyalty_points = $request->post('use_loyalty_points');
 
         //Getting Customer's Cart
@@ -53,12 +51,19 @@ class OrderController extends Controller
             ]);
         }
 
+        if ($delivery_date->isPast()) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Delivery date must not be from the past!'
+            ]);
+        }
+
         $cart_total = $this->cart()->getCartTotal($customer_cart);
 
         $order_details = [
             'remarks' => $request->post('remarks'),
             'payment_method' => $request->post('payment_method'),
-            'delivery_date' => Carbon::now(),
+            'delivery_date' => $delivery_date->format('Y-m-d'),
             'total' => $cart_total
         ];
 
