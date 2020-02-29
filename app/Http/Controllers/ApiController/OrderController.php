@@ -269,8 +269,7 @@ class OrderController extends Controller
             $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
             $customer_details = $this->customer()->getCustomer($customer->id);
             $customer_id = $customer_details->id;
-            $total_loyalty_points = $customer_details->loyalty_points + $order->loyaty_points;
-            dd($total_loyalty_points);
+            $total_loyalty_points = $customer_details->loyalty_points + $order->loyalty_points;
             $update_customer = $this->customer()->updateCustomer(['loyalty_points' => $total_loyalty_points], $customer_id);
         }
 
