@@ -12,8 +12,11 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $orders = $this->order()->getOrders($request->get('code'));
+        $code = $request->get('code');
+        $start_date = $request->get('start_date');
+        $end_date = $request->get('end_date');
 
+        $orders = $this->order()->getOrders($code, $start_date, $end_date);
         return view('pages.order.order_index')->with('orders', $orders);
     }
 

@@ -216,6 +216,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Sales Page
     Route::get('sales', ['as' => 'admin.sales.index', 'uses' => 'SalesController@index']);
+    Route::get('sales/print', ['as' => 'admin.sales.print', 'uses' => 'SalesController@print']);
 
     //Reports Page
     Route::get('reports', ['as' => 'admin.report.index', 'uses' => 'ReportController@index']);

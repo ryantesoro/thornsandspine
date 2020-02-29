@@ -22,7 +22,7 @@ class Order extends Model
     protected $hidden = ['pivot'];
 
     //Get All Orders
-    public function getOrders($code)
+    public function getOrders($code, $start_date, $end_date)
     {
         $orders = DB::table('orders')
             ->selectRaw('orders.code, recipients.first_name r_fname, recipients.last_name r_lname, customers.first_name c_fname, customers.last_name c_lname, orders.status, orders.expires_at')
@@ -42,7 +42,13 @@ class Order extends Model
                 $search
             ]);
         }
-    
+
+        if ($start_date != null && $end_date != null) {
+            $start_range = Carbon::createFromFormat('m/d/Y', $start_date)->startOfDay()->format('Y-m-d H:i:s');
+            $end_range = Carbon::createFromFormat('m/d/Y', $end_date)->endOfDay()->format('Y-m-d H:i:s');
+            $orders->whereBetween('orders.created_at', [$start_range, $end_range]);
+        }
+
         return $orders->orderBy('code', 'DESC')->get();
     }
 
@@ -96,6 +102,34 @@ class Order extends Model
         $order = Order::where('code', $order_code)->get()->count();
 
         return $order != 0;
+    }
+
+    //Get Order Sales
+    public function getOrderSales($order_by, $start_date, $end_date)
+    {
+        $start_range = Carbon::createFromFormat('m/d/Y', $start_date)->startOfDay()->format('Y-m-d H:i:s');
+        $end_range = Carbon::createFromFormat('m/d/Y', $end_date)->endOfDay()->format('Y-m-d H:i:s');
+        
+        $orders = DB::table('orders');
+
+        $select_query = ", COUNT(orders.id) total_orders, SUM(total) total_sales";
+        if ($order_by == "week") {
+            $orders->selectRaw('WEEK(orders.created_at) date'.$select_query);
+        } else if ($order_by == "month") {
+            $orders->selectRaw('DATE_FORMAT(orders.created_at, "%M, %Y") date'.$select_query);
+        } else if ($order_by == "year") {
+            $orders->selectRaw('YEAR(orders.created_at) date'.$select_query);
+        } else {
+            $orders->selectRaw('DATE(orders.created_at) date'.$select_query);
+        }
+
+        $orders->whereBetween('orders.created_at', [$start_range, $end_range]);
+
+        $orders->where('status', 2)
+            ->whereBetween('orders.created_at', [$start_range, $end_range])
+            ->groupBy('date');
+
+        return $orders->get();
     }
 
     public function customer()
