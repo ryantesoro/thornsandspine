@@ -265,6 +265,7 @@ class OrderController extends Controller
         }
 
         if ($order->loyalty_points != 0) {
+            $this->setUserId(auth()->user()->id);
             $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
             $customer_details = $this->customer()->getCustomer($customer->id);
             $customer_id = $customer_details->id;
