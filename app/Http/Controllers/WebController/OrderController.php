@@ -101,7 +101,7 @@ class OrderController extends Controller
     public function return(Request $request, $order_code)
     {
         $order = $this->order()->getOrder($order_code);
-        $update_order = $this->order()->updateOrder(['status' => 0, 'comment' => $request->post('comment')], $order->id);
+        $update_order = $this->order()->updateOrder(['status' => 0, 'comment' => $request->post('comment'), 'expires_at' => Carbon::now()->addDays(2)], $order->id);
         
         Alert::success('Ask Customer Successful', 'Success!');
         return redirect()->route('admin.order.index');
