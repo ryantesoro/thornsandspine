@@ -69,6 +69,14 @@
                                         {{ $order->date }}
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td class="font-weight-bold">
+                                        Delivery Date
+                                    </td>
+                                    <td>
+                                        {{ $order->delivery_date }}
+                                    </td>
+                                </tr>
                                 @if ($order->recipient_id != null)
                                 <tr>
                                     <td class="font-weight-bold">

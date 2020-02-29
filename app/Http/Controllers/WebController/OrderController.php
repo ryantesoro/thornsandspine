@@ -32,6 +32,7 @@ class OrderController extends Controller
         $customer = $order->customer()->get()->first();
         $order['date'] = Carbon::parse($order['created_at'])->format('m-d-Y g:i A');
         $order['expiry'] = Carbon::parse($order['expires_at'])->format('m-d-Y g:i A');
+        $order['delivery_date'] = Carbon::parse($order['delivery_date'])->format('m-d-Y');
 
         //Gets order products
         $order_products = $this->order_product()->getOrderProducts($order->id);
