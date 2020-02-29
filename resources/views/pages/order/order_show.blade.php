@@ -40,7 +40,7 @@
                                         Order Status
                                     </td>
                                     <td>
-                                        @if(\Carbon\Carbon::parse($order->expires_at)->isPast())
+                                        @if($order->status == 0 && \Carbon\Carbon::parse($order->expires_at)->isPast())
                                         Order is expired
                                         @elseif($order->status == 0)
                                         Waiting for the customer's proof of payment
