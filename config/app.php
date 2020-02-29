@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Kuala_Lumpur',
 
     /*
     |--------------------------------------------------------------------------
@@ -183,6 +183,9 @@ return [
 
         //Image Intervention
         Intervention\Image\ImageServiceProvider::class,
+
+        //Barryvdh
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -241,6 +244,9 @@ return [
 
         //Image Intervention
         'Image' => Intervention\Image\Facades\Image::class,
+
+        //Barryvdh
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];
