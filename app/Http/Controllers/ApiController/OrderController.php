@@ -156,6 +156,29 @@ class OrderController extends Controller
         ]);
     }
 
+    public function create(Request $request)
+    {
+        //city province courier loyalty points
+        $couriers = $this->courier()->getCouriers()->pluck('name', 'id');
+
+        $provinces = $this->province()->getProvinces();
+        $plucked_provinces = $provinces->pluck('name', 'id');
+
+        $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
+        $customer_details = $this->customer()->getCustomer($customer->id);
+
+        $loyalty_points = $customer_details->loyalty_points;
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'shipping_agents' => $couriers,
+                'provinces' => $plucked_provinces,
+                'loyalty_points' => $loyalty_points
+            ]
+        ]);
+    }
+
     public function update(Request $request, $order_code)
     {
         if (!$this->order()->orderExists($order_code)) {
