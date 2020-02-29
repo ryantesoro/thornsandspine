@@ -85,8 +85,9 @@ class OrderController extends Controller
             $province_name = $this->province()->getProvince($province_id)->name;
             $new_address = $recipient_address.', '.ucwords($city_name).', '.ucwords($province_name);
             $recipient_details['address'] = $new_address;
-            
+
             $order['recipient'] = $recipient_details;
+            $order['grand_total'] += ($shipping_fee->price - $order->loyalty_points);
         }
 
         return response()->json([
