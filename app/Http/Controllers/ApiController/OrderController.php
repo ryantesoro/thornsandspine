@@ -235,7 +235,7 @@ class OrderController extends Controller
             ]);
         }
 
-        $cancel_order = $this->order()->updateOrder(['status' => 3], $order->id);
+        $cancel_order = $this->order()->updateOrder(['status' => 3, 'expires_at' => null], $order->id);
 
         return response()->json([
             'success' => true,
