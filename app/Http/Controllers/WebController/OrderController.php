@@ -92,7 +92,7 @@ class OrderController extends Controller
         }
 
         $order = $this->order()->getOrder($order_code);
-        $update_order = $this->order()->updateOrder(['status' => 2], $order->id);
+        $update_order = $this->order()->updateOrder(['status' => 2, 'expires_at' => null], $order->id);
         
         Alert::success('Complete Order Successful', 'Success!');
         return redirect()->route('admin.order.index');
