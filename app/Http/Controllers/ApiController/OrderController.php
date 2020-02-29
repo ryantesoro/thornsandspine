@@ -235,6 +235,14 @@ class OrderController extends Controller
             ]);
         }
 
+        if ($order->loyalty_points != 0) {
+            $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
+            $customer_details = $this->customer()->getCustomer($customer->id);
+            $customer_id = $customer_details->id;
+            $total_loyalty_points = $customer_details->loyalty_points + $order->loyaty_points;
+            $update_customer = $this->customer()->updateCustomer(['loyalty_points' => $total_loyalty_points], $customer_id);
+        }
+
         $cancel_order = $this->order()->updateOrder(['status' => 3, 'expires_at' => null], $order->id);
 
         return response()->json([
