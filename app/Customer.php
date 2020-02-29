@@ -67,7 +67,6 @@ class Customer extends Model
     public function getCustomerDetailsByUser($user_id)
     {
         $user = User::find($user_id);
-        dd($user);
         $customer_id = $user->customer()->value('id');
         $customer = Customer::find($customer_id);
         return $customer;

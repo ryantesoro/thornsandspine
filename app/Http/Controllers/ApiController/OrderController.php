@@ -163,7 +163,8 @@ class OrderController extends Controller
 
         $provinces = $this->province()->getProvinces();
         $plucked_provinces = $provinces->pluck('name', 'id');
-
+        
+        $this->setUserId(auth()->user()->id);
         $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
         $customer_details = $this->customer()->getCustomer($customer->id);
 
