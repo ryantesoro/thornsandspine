@@ -80,8 +80,6 @@ class SalesController extends Controller
         $pdf = \App::make('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->loadView('pages.sales.report', compact('data'));
-
-        return $pdf->stream('report.pdf');
         
         $path = "/app/reports";
         $now = Carbon::now()->format('m-d-Y_h-i-sA');
