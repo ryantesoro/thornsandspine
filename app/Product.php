@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use DB;
+
 
 class Product extends Model
 {
@@ -99,6 +101,30 @@ class Product extends Model
             ->update(['active' => $active]);
 
         return $update_product;
+    }
+
+    //Get product sales
+    public function getProductSales($start_date, $end_date)
+    {
+        $products = DB::table('products')
+            ->selectRaw('products.code, products.name, COUNT(orders.id) total_orders, SUM(orders.total) total_sales')
+            ->leftJoin('order_product', function ($query) {
+                $query->on('order_product.product_id', 'products.id');
+            })
+            ->leftJoin('orders', function ($query) {
+                $query->on('orders.id', 'order_product.order_id');
+            });
+
+        if ($start_date != null && $end_date != null) {
+            $start_range = Carbon::createFromFormat('m/d/Y', $start_date)->startOfDay()->format('Y-m-d H:i:s');
+            $end_range = Carbon::createFromFormat('m/d/Y', $end_date)->endOfDay()->format('Y-m-d H:i:s');
+            $products->whereBetween('orders.created_at', [$start_range, $end_range]);
+        }
+
+        $products->groupBy('products.code', 'products.name')
+            ->where('orders.status', 2);
+        
+        return $products->get();
     }
 
     public function order()

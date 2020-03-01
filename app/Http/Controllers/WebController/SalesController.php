@@ -13,9 +13,9 @@ class SalesController extends Controller
     public function index(Request $request)
     {
         $now = Carbon::now()->format('m/d/Y');
-
+        $week_ago = Carbon::now()->subDays(7)->format('m/d/Y');
         $group_by = $request->get('group_by');
-        $start_date = $request->get('start_date') ?? $now;
+        $start_date = $request->get('start_date') ?? $week_ago;
         $end_date = $request->get('end_date') ?? $now;
         $order_by = $request->get('order_by');
         $sort = $request->get('sort');
@@ -58,9 +58,9 @@ class SalesController extends Controller
     public function print(Request $request)
     {
         $now = Carbon::now()->format('m/d/Y');
-
+        $week_ago = Carbon::now()->subDays(7)->format('m/d/Y');
         $group_by = $request->get('group_by');
-        $start_date = $request->get('start_date') ?? $now;
+        $start_date = $request->get('start_date') ?? $week_ago;
         $end_date = $request->get('end_date') ?? $now;
         $order_by = $request->get('order_by');
         $sort = $request->get('sort');
