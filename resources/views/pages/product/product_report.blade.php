@@ -9,14 +9,14 @@
 <body>
     <div class="container-fluid">
         <h1>Thorns and Spines</h1>
-        <h2>{{ $data['report_type'] }} Sales Report</h2>
+        <h2>Product Sales Report</h2>
         <br>
         <h4>{!! $data['date_range'] !!}<h4>
         <br>
         <table class="table table-bordered pt-4">
             <thead>
                 <tr>
-                    <th scope="col">Date</th>
+                    <th scope="col">Name</th>
                     <th scope="col">Total Orders</th>
                     <th scope="col">Total Sales</th>
                 </tr>
@@ -24,7 +24,7 @@
             <tbody>
                 @foreach ($data['sales'] as $row)
                 <tr>
-                    <th scope="row">{{ $row['date'] }}</th>
+                    <th scope="row">{{ $row['name'] }}</th>
                     <td>{{ $row['total_orders'] }}</td>
                     <td>{{ number_format($row['total_sales'], 2, '.', ',') }} PHP</td>
                 </tr>

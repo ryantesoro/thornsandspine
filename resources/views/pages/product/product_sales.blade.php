@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('header_name', 'Sales')
+@section('header_name', 'Product Sales')
 @section('content')
 @include('layouts.nav')
 
@@ -58,23 +58,11 @@
   @include('layouts.sidebar')
   <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
     @include('layouts.header')
-    {!! Form::open(['route' => 'admin.sales.index', 'method' => 'get', 'style' => 'margin-block-end: 0;']) !!}
+    {!! Form::open(['route' => 'admin.sales.product', 'method' => 'get', 'style' => 'margin-block-end: 0;']) !!}
     <input type="hidden" name="start_date" value="{{ Request::input('start_date') }}">
     <input type="hidden" name="end_date" value="{{ Request::input('end_date') }}">
     <div class="row">
-      <div class="offset-7 col-2">
-        <div class="form-group">
-          <label class="font-weight-bold">Group By</label>
-          {!! Form::select('group_by', ['day' => 'Day', 'month' => 'Month', 'year' => 'Year'],
-          Request::input('group_by') ?? '',
-          [
-          'class' => 'form-control form-control-sm',
-          'tab_index' => '1',
-          'required' => true
-          ]) !!}
-        </div>
-      </div>
-      <div class="col-3">
+      <div class="offset-9 col-3">
         <div class="form-group">
           <label class="font-weight-bold">Date Range</label>
           <input type="text" class="form-control form-control-sm" id="date_time_picker" required="true" value="{{ Request::input('start_date') == null 
@@ -85,10 +73,9 @@
     </div>
     <div class="d-flex">
       <div class="ml-auto pb-2">
-        <a href="{{ route('admin.sales.print', [
+        <a href="{{ route('admin.sales.product.print', [
           "start_date" => Request::input('start_date'),
           "end_date" => Request::input('end_date'),
-          "group_by" => Request::input('group_by'),
           "order_by" => Request::input('order_by'),
           "sort" => Request::input('sort') 
          ]) }}" class="btn btn-warning btn-sm" tab_index="1">Print</a>
@@ -100,55 +87,40 @@
       <table class="table table-fixed border">
         <thead>
           <tr>
-            <th scope="col" class="col-3"><a href="{{ route('admin.sales.index', [
+            <th scope="col" class="col-4"><a href="{{ route('admin.sales.product', [
               "start_date" => Request::input('start_date'),
               "end_date" => Request::input('end_date'),
-              "group_by" => Request::input('group_by'),
-              "order_by" => "date",
-              "sort" => Request::input('order_by') == 'date' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
-             ]) }}">Date</a></th>
-            <th scope="col" class="col-3"><a href="{{ route('admin.sales.index', [
+              "order_by" => "name",
+              "sort" => Request::input('order_by') == 'name' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
+             ]) }}">Name</a></th>
+            <th scope="col" class="col-4"><a href="{{ route('admin.sales.product', [
               "start_date" => Request::input('start_date'),
               "end_date" => Request::input('end_date'),
-              "group_by" => Request::input('group_by'),
-              "order_by" => "orders",
-              "sort" => Request::input('order_by') == 'orders' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
+              "order_by" => "total_orders",
+              "sort" => Request::input('order_by') == 'total_orders' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
              ]) }}">Total Orders</a></th>
-            <th scope="col" class="col-3"><a href="{{ route('admin.sales.index', [
+            <th scope="col" class="col-4"><a href="{{ route('admin.sales.product', [
               "start_date" => Request::input('start_date'),
               "end_date" => Request::input('end_date'),
-              "group_by" => Request::input('group_by'),
-              "order_by" => "sales",
-              "sort" => Request::input('order_by') == 'sales' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
+              "order_by" => "total_sales",
+              "sort" => Request::input('order_by') == 'total_sales' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
              ]) }}">Total Sales</a></th>
-            <th scope="col" class="col-3">Options</th>
           </tr>
         </thead>
         <tbody>
           @foreach($sales as $sale)
           <tr>
-            <th scope="row" class="col-3">{{ $sale['date'] }}</th>
-            <td class="col-3">{{ $sale['total_orders'] }}</td>
-            <td class="col-3">₱ {{ number_format($sale['total_sales'], 2, '.', ',') }}</td>
-            <td class="col-3">
-              @if ($sale['total_orders'] == 0)
-              <a href="#" class="btn btn-sm btn-outline-secondary font-weight-bold disabled">View Orders</a>
-              @else
-              <a href="{{ route('admin.order.index', [
-                  'start_date' => Request::input('start_date'),
-                  'end_date' => Request::input('end_date')
-                ]) }}" class="btn btn-sm btn-primary font-weight-bold">View Orders</a>
-              @endif
-            </td>
+            <th scope="row" class="col-4"><a class="text-dark" href="{{ route('admin.product.show', $sale['code']) }}">{{ $sale['name'] }}</a></th>
+            <td class="col-4">{{ $sale['total_orders'] }}</td>
+            <td class="col-4">₱ {{ number_format($sale['total_sales'], 2, '.', ',') }}</td>
           </tr>
           @endforeach
         </tbody>
         <thead>
           <tr>
-            <th scope="col" class="col-3">TOTALS</th>
-            <th scope="col" class="col-3">{{ $total['orders'] }}</th>
-            <th scope="col" class="col-3">₱ {{ number_format($total['sales'], 2, '.', ',') }}</th>
-            <th scope="col" class="col-3"></th>
+            <th scope="col" class="col-4">TOTALS</th>
+            <th scope="col" class="col-4">{{ $total['orders'] }}</th>
+            <th scope="col" class="col-4">₱ {{ number_format($total['sales'], 2, '.', ',') }}</th>
           </tr>
         </thead>
       </table>

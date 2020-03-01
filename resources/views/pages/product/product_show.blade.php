@@ -12,7 +12,7 @@
                 <h4>Products Details</h4>
             </div>
             <div>
-                <a class="btn btn-secondary font-weight-bold" href="{{ route('admin.product.index') }}">Go Back</a>
+                <a class="btn btn-secondary font-weight-bold" href="{{ url()->previous() }}">Go Back</a>
                 <a class="btn btn-warning font-weight-bold"
                     href="{{ route('admin.product.edit', ['code' => $product['code']]) }}">Edit</a>
                 @if ($product['active'] == 1)

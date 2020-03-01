@@ -62,7 +62,10 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('restore/{product_id}', ['as' => 'admin.product.restore', 'uses' => 'ProductController@restore']);
 
             //Product Sales
-            Route::post('sales', ['as' => 'admin.product.sales', 'uses' => 'ProductSalesController@index']);
+            Route::get('sales', ['as' => 'admin.sales.product', 'uses' => 'ProductSalesController@index']);
+
+            //Product Sales
+            Route::get('sales/print', ['as' => 'admin.sales.product.print', 'uses' => 'ProductSalesController@print']);
         });
 
         //POTS
