@@ -60,6 +60,9 @@ Route::group(['middleware' => 'auth'], function () {
 
             //Product Restore
             Route::post('restore/{product_id}', ['as' => 'admin.product.restore', 'uses' => 'ProductController@restore']);
+
+            //Product Sales
+            Route::post('sales', ['as' => 'admin.product.sales', 'uses' => 'ProductSalesController@index']);
         });
 
         //POTS
@@ -211,12 +214,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('return/{order_code}', ['as' => 'admin.order.return', 'uses' => 'OrderController@return']);
     });
 
+    //SALES
+    Route::group(['prefix' => 'sales'], function () {
+        //Sales Index
+        Route::get('/', ['as' => 'admin.sales.index', 'uses' => 'SalesController@index']);
+
+        //Printing
+        Route::get('print', ['as' => 'admin.sales.print', 'uses' => 'SalesController@print']);
+    });
+
     //Customers Page
     Route::get('customers', ['as' => 'admin.customer.index', 'uses' => 'CustomerController@index']);
-
-    //Sales Page
-    Route::get('sales', ['as' => 'admin.sales.index', 'uses' => 'SalesController@index']);
-    Route::get('sales/print', ['as' => 'admin.sales.print', 'uses' => 'SalesController@print']);
 
     //Reports Page
     Route::get('reports', ['as' => 'admin.report.index', 'uses' => 'ReportController@index']);
