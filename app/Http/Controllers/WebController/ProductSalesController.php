@@ -75,7 +75,7 @@ class ProductSalesController extends Controller
             unset($this->array_of_products[$product->code]);
             $sales_array[] = [
                 'code' => $product->code,
-                'name' => $product->name,
+                'name' => ucwords($product->name),
                 'total_orders' => $product->total_orders,
                 'total_sales' => $product->total_sales
             ];
@@ -84,7 +84,7 @@ class ProductSalesController extends Controller
         foreach ($this->array_of_products as $code => $name) {
             $sales_array[] = [
                 'code' => $code,
-                'name' => $name,
+                'name' => ucwords($name),
                 'total_orders' => 0,
                 'total_sales' => 0
             ];
