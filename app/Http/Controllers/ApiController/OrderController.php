@@ -25,6 +25,71 @@ class OrderController extends Controller
         
         $orders = $this->order()->getOrdersByStatus($order_model, $status ?? 0);
 
+        foreach ($orders as $order) {
+            //Fetching all products of the order
+            $order_id = $order->id;
+            $order_product = $this->order_product()->getOrderProducts($order_id);
+            $products = [];
+            foreach ($order_product as $product) {
+                $pot_name = $this->pot()->getPot($product->pot_id)->name;
+                $product_name = $this->product()->getProduct($product->product_id)->name;
+                $quantity = $product->quantity;
+                $sub_total = $product->sub_total;
+                $price = $sub_total/$quantity;
+                $products[] = [
+                    'name' => $product_name,
+                    'pot_name' => $pot_name,
+                    'price' => $price,
+                    'quantity' => $quantity
+                ];
+            }
+            $order['products'] = $products;
+
+            //Fetch the recipient of the order
+            $recipient_details = [];
+            $recipient_address = "";
+            if ($order->recipient_id !== null) {
+                $recipient = $this->recipient()->getRecipient($order->recipient_id);
+                $recipient_address = ucwords($recipient->address);
+                $recipient_details = [
+                    'first_name' => ucwords($recipient->first_name),
+                    'last_name' => ucwords($recipient->last_name),
+                    'contact_number' => $recipient->contact_number,
+                    'email' => $recipient->email
+                ];
+            } else {
+                $customer_details = $this->customer()->getCustomer($customer->id);
+                $user_email = auth()->user()->email;
+                $recipient_address = ucwords($customer_details->address);
+                $recipient_details = [
+                    'first_name' => ucwords($customer_details->first_name),
+                    'last_name' => ucwords($customer_details->last_name),
+                    'contact_number' => $customer_details->contact_number,
+                    'email' => $user_email
+                ];
+            }
+            unset($order['recipient_id']); 
+
+            //Fetch Shipping Agent
+            $shipping_fee = $this->shipping_fee()->getShippingFee($order->shipping_fees_id);
+            $courier_name = $shipping_fee->courier()->get()->first()->name;
+            $order['shipping_agent'] = $courier_name;
+            $order['shipping_fee'] = $shipping_fee->price;
+            unset($order['shipping_fees_id']); 
+
+            //Fetch City and Province
+            $city_province = $this->city()->getCity($shipping_fee->city_province_id);
+            $city_name = $city_province->city;
+            $province_id = $city_province->province_id;
+            
+            $province_name = $this->province()->getProvince($province_id)->name;
+            $new_address = $recipient_address.', '.ucwords($city_name).', '.ucwords($province_name);
+            $recipient_details['address'] = $new_address;
+
+            $order['recipient'] = $recipient_details;
+            $order['grand_total'] = ($order->total + $shipping_fee->price) - $order->loyalty_points;
+        }
+
         return response()->json([
             'success' => true,
             'data' => $orders
@@ -36,10 +101,8 @@ class OrderController extends Controller
         $this->setUserId(auth()->user()->id);
 
         $recipient_first = $request->post('recipient_first');
-        $recipient_last = $request->post('recipient_last');
-        $recipient_address = $request->post('recipient_address');
         $courier_id = $request->post('courier_id');
-        $delivery_date = $request->post('delivery_date');
+        $delivery_date = Carbon::createFromFormat('m-d-Y', $request->post('delivery_date'));
         $use_loyalty_points = $request->post('use_loyalty_points');
 
         //Getting Customer's Cart
@@ -53,12 +116,19 @@ class OrderController extends Controller
             ]);
         }
 
+        if ($delivery_date->isPast()) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Delivery date must not be from the past!'
+            ]);
+        }
+
         $cart_total = $this->cart()->getCartTotal($customer_cart);
 
         $order_details = [
             'remarks' => $request->post('remarks'),
             'payment_method' => $request->post('payment_method'),
-            'delivery_date' => Carbon::now(),
+            'delivery_date' => $delivery_date->format('Y-m-d'),
             'total' => $cart_total
         ];
 
@@ -151,6 +221,30 @@ class OrderController extends Controller
         ]);
     }
 
+    public function create(Request $request)
+    {
+        //city province courier loyalty points
+        $couriers = $this->courier()->getCouriers()->pluck('name', 'id');
+
+        $provinces = $this->province()->getProvinces();
+        $plucked_provinces = $provinces->pluck('name', 'id');
+
+        $this->setUserId(auth()->user()->id);
+        $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
+        $customer_details = $this->customer()->getCustomer($customer->id);
+
+        $loyalty_points = $customer_details->loyalty_points;
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'shipping_agents' => $couriers,
+                'provinces' => $plucked_provinces,
+                'loyalty_points' => $loyalty_points
+            ]
+        ]);
+    }
+
     public function update(Request $request, $order_code)
     {
         if (!$this->order()->orderExists($order_code)) {
@@ -209,7 +303,7 @@ class OrderController extends Controller
             $indx++;
         }
 
-        $update_order = $this->order()->updateOrder(['status' => 1], $order_details->id);
+        $update_order = $this->order()->updateOrder(['status' => 1, 'expires_at' => null], $order_details->id);
 
         return response()->json([
             'success' => true,
@@ -235,7 +329,16 @@ class OrderController extends Controller
             ]);
         }
 
-        $cancel_order = $this->order()->updateOrder(['status' => 3], $order->id);
+        if ($order->loyalty_points != 0) {
+            $this->setUserId(auth()->user()->id);
+            $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
+            $customer_details = $this->customer()->getCustomer($customer->id);
+            $customer_id = $customer_details->id;
+            $total_loyalty_points = $customer_details->loyalty_points + $order->loyalty_points;
+            $update_customer = $this->customer()->updateCustomer(['loyalty_points' => $total_loyalty_points], $customer_id);
+        }
+
+        $cancel_order = $this->order()->updateOrder(['status' => 3, 'expires_at' => null], $order->id);
 
         return response()->json([
             'success' => true,

@@ -85,6 +85,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         //Browse Orders
         Route::get('/', ['as' => 'order.index', 'uses' => 'OrderController@index']);
 
+        //Cancel Order
+        Route::get('create', ['as' => 'order.create', 'uses' => 'OrderController@create']);
+
         //Store Order
         Route::post('/', ['as' => 'order.store', 'uses' => 'OrderController@store']);
 

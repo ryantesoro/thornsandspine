@@ -25,7 +25,7 @@ class CreateOrdersTable extends Migration
             $table->string('payment_method');
             $table->date('delivery_date');
             $table->text('comment')->nullable();
-            $table->datetime('expires_at');
+            $table->datetime('expires_at')->nullable();
             $table->timestamps();
         });
     }

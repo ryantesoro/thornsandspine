@@ -32,6 +32,7 @@ class OrderController extends Controller
         $customer = $order->customer()->get()->first();
         $order['date'] = Carbon::parse($order['created_at'])->format('m-d-Y g:i A');
         $order['expiry'] = Carbon::parse($order['expires_at'])->format('m-d-Y g:i A');
+        $order['delivery_date'] = Carbon::parse($order['delivery_date'])->format('m-d-Y');
 
         //Gets order products
         $order_products = $this->order_product()->getOrderProducts($order->id);
@@ -92,7 +93,7 @@ class OrderController extends Controller
         }
 
         $order = $this->order()->getOrder($order_code);
-        $update_order = $this->order()->updateOrder(['status' => 2], $order->id);
+        $update_order = $this->order()->updateOrder(['status' => 2, 'expires_at' => null], $order->id);
         
         Alert::success('Complete Order Successful', 'Success!');
         return redirect()->route('admin.order.index');
@@ -101,7 +102,7 @@ class OrderController extends Controller
     public function return(Request $request, $order_code)
     {
         $order = $this->order()->getOrder($order_code);
-        $update_order = $this->order()->updateOrder(['status' => 0, 'comment' => $request->post('comment')], $order->id);
+        $update_order = $this->order()->updateOrder(['status' => 0, 'comment' => $request->post('comment'), 'expires_at' => Carbon::now()->addDays(2)], $order->id);
         
         Alert::success('Ask Customer Successful', 'Success!');
         return redirect()->route('admin.order.index');

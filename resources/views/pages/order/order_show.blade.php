@@ -21,7 +21,7 @@
             </div>
             <div>
                 <a class="btn btn-secondary font-weight-bold" href="{{ route('admin.order.index') }}">Go Back</a>
-                @if ($order->status == 1)
+                @if ($order->status == 1 && !\Carbon\Carbon::parse($order->expires_at)->isPast())
                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#deliver_confirmation">
                     <b>Complete Order</b>
                 </button>
@@ -40,7 +40,7 @@
                                         Order Status
                                     </td>
                                     <td>
-                                        @if(\Carbon\Carbon::parse($order->expires_at)->isPast())
+                                        @if($order->status == 0 && \Carbon\Carbon::parse($order->expires_at)->isPast())
                                         Order is expired
                                         @elseif($order->status == 0)
                                         Waiting for the customer's proof of payment
@@ -67,6 +67,14 @@
                                     </td>
                                     <td>
                                         {{ $order->date }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold">
+                                        Delivery Date
+                                    </td>
+                                    <td>
+                                        {{ $order->delivery_date }}
                                     </td>
                                 </tr>
                                 @if ($order->recipient_id != null)
