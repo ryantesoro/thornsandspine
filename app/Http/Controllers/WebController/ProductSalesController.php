@@ -46,13 +46,15 @@ class ProductSalesController extends Controller
         $sales_collection = $this->sortProducts($sales_array);
         $total = $this->getTotals($sales_collection);
 
-        $start_range = Carbon::createFromFormat('m/d/Y', $this->start_date)->format('F d, Y');
-        $end_range = Carbon::createFromFormat('m/d/Y', $this->end_date)->format('F d, Y');
+        $configurations = $this->configuration()->getConfigurations();
 
         $data = [
             'sales' => $sales_collection,
             'total' => $total,
-            'date_range' => $start_range.' - '.$end_range
+            'from' => $this->start_date,
+            'to' => $this->end_date,
+            'logo_url' => route('image', ['logo', 'logo.jpg']),
+            'configurations' => $configurations
         ];
         
         $pdf = \App::make('dompdf.wrapper');
@@ -76,15 +78,18 @@ class ProductSalesController extends Controller
             $sales_array[] = [
                 'code' => $product->code,
                 'name' => ucwords($product->name),
+                'price' => $product->price,
                 'total_orders' => $product->total_orders,
                 'total_sales' => $product->total_sales
             ];
         }
 
         foreach ($this->array_of_products as $code => $name) {
+            $product = $this->product()->showProduct($code);
             $sales_array[] = [
                 'code' => $code,
                 'name' => ucwords($name),
+                'price' => $product['price'],
                 'total_orders' => 0,
                 'total_sales' => 0
             ];

@@ -4,16 +4,59 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="{{ URL::asset('vendor/bootstrap/css/bootstrap.min.css') }}">
+    <style>
+        .text-left, .text-right {
+            margin-bottom: 0;
+        }
+
+        p {
+            font-size: 14px;
+        }
+
+        table > thead > tr > th {
+            font-size: 13px;
+        }
+
+        table > tbody > tr > td,
+        table > tbody > tr > th {
+            font-size: 12px;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container-fluid">
-        <h1>Thorns and Spines</h1>
-        <h2>{{ $data['report_type'] }} Sales Report</h2>
-        <br>
-        <h4>{!! $data['date_range'] !!}<h4>
-        <br>
-        <table class="table table-bordered pt-4">
+        <div class="d-flex flex-row">
+            <h1 class="text-center pt-4">{{ $data['report_type'] }} Sales Report</h1>
+            <img style="float:right" src="{{ $data['logo_url'] }}">
+        </div>
+        <br><br>
+        <h4 class="pb-3">Thorns and Spines</h4>
+        <div class="row">
+            <div class="col-md-6">
+                <p class="text-left">
+                    {{ $data['configurations']['address'] }}
+                </p>
+                <p class="text-left">
+                    {{ $data['configurations']['contact_number'] }}
+                </p>
+                <p class="text-left">
+                    {{ $data['configurations']['email'] }}
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p style="margin-right: 120px;" class="text-right">
+                    Date:
+                </p>
+                <p class="text-right">
+                    From: {{ $data['from'] }}
+                </p>
+                <p class="text-right">
+                    To: {{ $data['to'] }}
+                </p>
+            </div>
+        </div>
+        <table class="table table-bordered table-sm">
             <thead>
                 <tr>
                     <th scope="col">Date</th>

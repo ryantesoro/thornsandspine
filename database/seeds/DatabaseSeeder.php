@@ -21,6 +21,10 @@ class DatabaseSeeder extends Seeder
 
         DB::table('configurations')->insert([
             [
+                'name' => 'address',
+                'value' => '#123 Example St., Taytay, Rizal'
+            ],
+            [
                 'name' => 'contact_number',
                 'value' => '123456789'
             ],

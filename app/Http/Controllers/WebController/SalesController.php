@@ -10,109 +10,78 @@ use Storage;
 
 class SalesController extends Controller
 {
-    public function index(Request $request)
+    private $start_date;
+    private $end_date;
+    private $order_by;
+    private $sort;
+    private $group_by;
+    private $sales;
+    private $format = "m/d/Y";
+    private $from_format = "Y-m-d";
+    private $sales_array;
+    private $date_array;
+    private $sales_collection;
+    private $total;
+
+    public function __construct(Request $request)
     {
         $now = Carbon::now()->format('m/d/Y');
         $week_ago = Carbon::now()->subDays(7)->format('m/d/Y');
-        $group_by = $request->get('group_by');
-        $start_date = $request->get('start_date') ?? $week_ago;
-        $end_date = $request->get('end_date') ?? $now;
-        $order_by = $request->get('order_by');
-        $sort = $request->get('sort');
-        $sales = $this->order()->getOrderSales($group_by, $start_date, $end_date);
+        $this->group_by = $request->get('group_by');
+        $this->start_date = $request->get('start_date') ?? $week_ago;
+        $this->end_date = $request->get('end_date') ?? $now;
+        $this->order_by = $request->get('order_by');
+        $this->sort = $request->get('sort');
 
-        $format = "m/d/Y";
-
-        $date_array = $this->arrayOfDates($group_by, $start_date, $end_date);
-        foreach ($date_array as $date) {
-            $sales_array[] = [
+        $this->sales = $this->order()->getOrderSales($this->group_by, $this->start_date, $this->end_date);
+        $this->setFormat();
+        $this->date_array = $this->arrayOfDates();
+        foreach ($this->date_array as $date) {
+            $this->sales_array[] = [
                 'date' => $date,
                 'total_orders' => 0,
                 'total_sales' => 0
             ];
         }
 
-        $from_format = "Y-m-d";
-        if ($group_by == 'month') {
-            $from_format = "F, Y";
-            $format = "F, Y";
-        } else if ($group_by == "year") {
-            $from_format = "Y";
-            $format = "Y";
-        }
+        $this->formatSalesCollection();
+        $this->filterSalesCollection();
+        $this->findTotal();
+    }
 
-        $sales_array = $this->formatSalesCollection($sales_array, $sales, $date_array, $format, $from_format, $group_by);
-
-        $sales_collection =  collect($this->filterSalesCollection($sales_array, $format, $order_by, $sort));
-
-        $total = [
-            'orders' => $sales_collection != null ? $sales_collection->sum('total_orders') : 0,
-            'sales' => $sales_collection != null ? $sales_collection->sum('total_sales') : 0
-        ];
-        
+    public function index(Request $request)
+    {   
         return view('pages.sales.sales_index')
-            ->with('total', $total)
-            ->with('sales', $sales_collection);
+            ->with('total', $this->total)
+            ->with('sales', $this->sales_collection);
     }
 
     public function print(Request $request)
     {
-        $now = Carbon::now()->format('m/d/Y');
-        $week_ago = Carbon::now()->subDays(7)->format('m/d/Y');
-        $group_by = $request->get('group_by');
-        $start_date = $request->get('start_date') ?? $week_ago;
-        $end_date = $request->get('end_date') ?? $now;
-        $order_by = $request->get('order_by');
-        $sort = $request->get('sort');
-        $sales = $this->order()->getOrderSales($group_by, $start_date, $end_date);
-
-        $format = "m/d/Y";
-
-        $date_array = $this->arrayOfDates($group_by, $start_date, $end_date);
-        foreach ($date_array as $date) {
-            $sales_array[] = [
-                'date' => $date,
-                'total_orders' => 0,
-                'total_sales' => 0
-            ];
-        }
-
-        $from_format = "Y-m-d";
-        if ($group_by == 'month') {
-            $from_format = "F, Y";
-            $format = "F, Y";
-        } else if ($group_by == "year") {
-            $from_format = "Y";
-            $format = "Y";
-        }
-
-        $sales_array = $this->formatSalesCollection($sales_array, $sales, $date_array, $format, $from_format, $group_by);
-        $sales_collection =  collect($this->filterSalesCollection($sales_array, $format, $order_by, $sort));
-        $total = [
-            'orders' => $sales_collection != null ? $sales_collection->sum('total_orders') : 0,
-            'sales' => $sales_collection != null ? $sales_collection->sum('total_sales') : 0
-        ];
-
         $report_type = "Daily";
-        if ($group_by == 'month') {
+        if ($this->group_by == 'month') {
             $report_type = "Monthly";
-        } else if ($group_by == 'year') {
+        } else if ($this->group_by == 'year') {
             $report_type = "Yearly";
         }
 
-        $start_range = Carbon::createFromFormat('m/d/Y', $start_date)->format('F d, Y');
-        $end_range = Carbon::createFromFormat('m/d/Y', $end_date)->format('F d, Y');
+        $configurations = $this->configuration()->getConfigurations();
 
         $data = [
-            'sales' => $sales_collection,
-            'total' => $total,
+            'sales' => $this->sales_collection,
+            'total' => $this->total,
             'report_type' => $report_type,
-            'date_range' => $start_range.' - '.$end_range
+            'logo_url' => route('image', ['logo', 'logo.jpg']),
+            'configurations' => $configurations,
+            'from' => $this->start_date,
+            'to' => $this->end_date
         ];
 
         $pdf = \App::make('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->loadView('pages.sales.report', compact('data'));
+
+        return $pdf->stream('report.pdf');
         
         $path = "/app/reports";
         $now = Carbon::now()->format('m-d-Y_h-i-sA');
@@ -123,74 +92,83 @@ class SalesController extends Controller
         return Storage::disk('local')->download('reports/'.$filename);
     }
 
-    private function formatSalesCollection($sales_array, $sales, $date_array, $format, $from_format, $group_by)
+    private function findTotal()
     {
-        foreach ($sales as $sale) {
-            $sales_date = $sale->date;
-            $sale->date = Carbon::createFromFormat($from_format, $sales_date)->format($format);
+        $this->total = [
+            'orders' => $this->sales_collection != null ? $this->sales_collection->sum('total_orders') : 0,
+            'sales' => $this->sales_collection != null ? $this->sales_collection->sum('total_sales') : 0
+        ];
+    }
 
-            if (($key = array_search($sale->date, $date_array)) !== false) {
-                unset($sales_array[$key]);
+    private function setFormat()
+    {
+        if ($this->group_by == 'month') {
+            $this->from_format = "F, Y";
+            $this->format = "F, Y";
+        } else if ($this->group_by == "year") {
+            $this->from_format = "Y";
+            $this->format = "Y";
+        }
+    }
+
+    private function formatSalesCollection()
+    {
+        foreach ($this->sales as $sale) {
+            $sales_date = $sale->date;
+            $sale->date = Carbon::createFromFormat($this->from_format, $sales_date)->format($this->format);
+
+            if (($key = array_search($sale->date, $this->date_array)) !== false) {
+                unset($this->sales_array[$key]);
             }
 
-            $sales_array[] = [
+            $this->sales_array[] = [
                 'date' => $sale->date,
                 'total_orders' => $sale->total_orders,
                 'total_sales' => $sale->total_sales
             ];
         }
-
-        return $sales_array;
     }
 
-    private function filterSalesCollection($sales_array, $format, $order_by, $sort)
+    private function filterSalesCollection()
     {
-        $sales_collection = collect($sales_array);
-        if ($order_by == 'sales') {
-            if ($sort == 'asc') {
-                $sales_collection = $sales_collection->sortBy('total_sales');
+        $this->sales_collection = collect($this->sales_array);
+        $format = $this->format;
+        if ($this->order_by != 'date')
+            if ($this->sort == 'asc') {
+                $this->sales_collection = $this->sales_collection->sortBy($this->order_by);
             } else {
-                $sales_collection = $sales_collection->sortByDesc('total_sales');
-            }
-        } else if ($order_by == 'orders') {
-            if ($sort == 'asc') {
-                $sales_collection = $sales_collection->sortBy('total_orders');
-            } else {
-                $sales_collection = $sales_collection->sortByDesc('total_orders');
-            }
+                $this->sales_collection = $this->sales_collection->sortByDesc($this->order_by);
         } else {
-            if ($sort == 'asc') {
-                $sales_collection = $sales_collection->sortBy(function ($column) use ($format) {
+            if ($this->sort == 'asc') {
+                $this->sales_collection = $this->sales_collection->sortBy(function ($column) use ($format) {
                     return Carbon::createFromFormat($format, $column['date']);
-                })->all();
+                });
             } else {
-                $sales_collection = $sales_collection->sortByDesc(function ($column) use ($format) {
+                $this->sales_collection = $this->sales_collection->sortByDesc(function ($column) use ($format) {
                     return Carbon::createFromFormat($format, $column['date']);
-                })->all();
+                });
             }
         }
-
-        return $sales_collection;
     }
 
-    private function arrayOfDates($group_by, $start_date, $end_date)
+    private function arrayOfDates()
     {
-        $start = Carbon::createFromFormat('m/d/Y', $start_date);
-        $end = Carbon::createFromFormat('m/d/Y', $end_date);
+        $start = Carbon::createFromFormat('m/d/Y', $this->start_date);
+        $end = Carbon::createFromFormat('m/d/Y', $this->end_date);
 
         $num_of_dates = $start->diffInDays($end);
-        if ($group_by == "month") {
+        if ($this->group_by == "month") {
             $num_of_dates = $start->diffInMonths($end);
-        } else if ($group_by == "year") {
+        } else if ($this->group_by == "year") {
             $num_of_dates = $start->diffInYears($end);
         }
 
         $dates = [];
         for ($date = 0; $date <= $num_of_dates; $date++) {
-            if ($group_by == "month") {
+            if ($this->group_by == "month") {
                 $dates[] = $start->format('F, Y');
                 $start->addMonth(1);
-            } else if ($group_by == "year") {
+            } else if ($this->group_by == "year") {
                 $dates[] = $start->format('Y');
                 $start->addYear(1);
             } else {

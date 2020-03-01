@@ -107,7 +107,7 @@ class Product extends Model
     public function getProductSales($start_date, $end_date)
     {
         $products = DB::table('products')
-            ->selectRaw('products.code, products.name, COUNT(orders.id) total_orders, SUM(orders.total) total_sales')
+            ->selectRaw('products.code, products.name, products.price, SUM(order_product.quantity) total_orders, SUM(orders.total) total_sales')
             ->leftJoin('order_product', function ($query) {
                 $query->on('order_product.product_id', 'products.id');
             })
@@ -121,7 +121,7 @@ class Product extends Model
             $products->whereBetween('orders.created_at', [$start_range, $end_range]);
         }
 
-        $products->groupBy('products.code', 'products.name')
+        $products->groupBy('products.code', 'products.name', 'products.price')
             ->where('orders.status', 2);
         
         return $products->get();

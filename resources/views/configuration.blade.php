@@ -36,11 +36,29 @@ function isNumber(evt)
     @endif
     <div class="row">
       <div class="col text-left">
-        <h4>Business Contact Details</h4>
+        <h4>Business Details</h4>
       </div>
     </div>
     <hr>
     {!! Form::open(['route' => 'admin.config.update']) !!}
+    <div class="row pl-3">
+      <div class="col-5">
+        <div class="form-group">
+          <label class="font-weight-bold">Compelete Address</label>
+          {!! Form::textarea('address', $configuration['address'] ?? '',
+          [
+          'class' => 'form-control',
+          'tab_index' => '1',
+          'data-toggle' => 'popover',
+          'data-trigger' => 'focus',
+          'title' => 'Complete Address',
+          'rows' => 3,
+          'data-content' => 'This address will be displayed to the customers',
+          'required' => true
+          ]) !!}
+        </div>
+      </div>
+    </div>
     <div class="row pl-3">
       <div class="col-5">
         <div class="form-group">

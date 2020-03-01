@@ -111,15 +111,15 @@
               "start_date" => Request::input('start_date'),
               "end_date" => Request::input('end_date'),
               "group_by" => Request::input('group_by'),
-              "order_by" => "orders",
-              "sort" => Request::input('order_by') == 'orders' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
+              "order_by" => "total_orders",
+              "sort" => Request::input('order_by') == 'total_orders' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
              ]) }}">Total Orders</a></th>
             <th scope="col" class="col-3"><a href="{{ route('admin.sales.index', [
               "start_date" => Request::input('start_date'),
               "end_date" => Request::input('end_date'),
               "group_by" => Request::input('group_by'),
-              "order_by" => "sales",
-              "sort" => Request::input('order_by') == 'sales' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
+              "order_by" => "total_sales",
+              "sort" => Request::input('order_by') == 'total_sales' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
              ]) }}">Total Sales</a></th>
             <th scope="col" class="col-3">Options</th>
           </tr>

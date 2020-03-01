@@ -22,6 +22,7 @@ class ConfigurationController extends Controller
         $configuration_details = [
             'contact_number' => $request->post('contact_number'),
             'email' => $request->post('email'),
+            'address' => $request->post('address'),
             'bank_name' => $request->post('bank_name'),
             'card_number_1' => $request->post('card_number_1'),
             'card_number_2' => $request->post('card_number_2'),
@@ -31,6 +32,7 @@ class ConfigurationController extends Controller
         ];
 
         $validator = Validator::make($configuration_details, [
+            'address' => 'required',
             'contact_number' => 'required|min:8|max:10',
             'email' => 'required|email',
             'bank_name' => 'required',

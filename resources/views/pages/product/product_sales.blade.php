@@ -87,19 +87,31 @@
       <table class="table table-fixed border">
         <thead>
           <tr>
-            <th scope="col" class="col-4"><a href="{{ route('admin.sales.product', [
+            <th scope="col" class="col-3"><a href="{{ route('admin.sales.product', [
+              "start_date" => Request::input('start_date'),
+              "end_date" => Request::input('end_date'),
+              "order_by" => "code",
+              "sort" => Request::input('order_by') == 'code' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
+             ]) }}">Code</a></th>
+            <th scope="col" class="col-3"><a href="{{ route('admin.sales.product', [
               "start_date" => Request::input('start_date'),
               "end_date" => Request::input('end_date'),
               "order_by" => "name",
               "sort" => Request::input('order_by') == 'name' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
              ]) }}">Name</a></th>
-            <th scope="col" class="col-4"><a href="{{ route('admin.sales.product', [
+             <th scope="col" class="col-2"><a href="{{ route('admin.sales.product', [
+              "start_date" => Request::input('start_date'),
+              "end_date" => Request::input('end_date'),
+              "order_by" => "price",
+              "sort" => Request::input('order_by') == 'price' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
+             ]) }}">Price</a></th>
+            <th scope="col" class="col-2"><a href="{{ route('admin.sales.product', [
               "start_date" => Request::input('start_date'),
               "end_date" => Request::input('end_date'),
               "order_by" => "total_orders",
               "sort" => Request::input('order_by') == 'total_orders' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
-             ]) }}">Total Orders</a></th>
-            <th scope="col" class="col-4"><a href="{{ route('admin.sales.product', [
+             ]) }}">Quantity</a></th>
+            <th scope="col" class="col-2"><a href="{{ route('admin.sales.product', [
               "start_date" => Request::input('start_date'),
               "end_date" => Request::input('end_date'),
               "order_by" => "total_sales",
@@ -110,17 +122,21 @@
         <tbody>
           @foreach($sales as $sale)
           <tr>
-            <th scope="row" class="col-4"><a class="text-dark" href="{{ route('admin.product.show', $sale['code']) }}">{{ $sale['name'] }}</a></th>
-            <td class="col-4">{{ $sale['total_orders'] }}</td>
-            <td class="col-4">₱ {{ number_format($sale['total_sales'], 2, '.', ',') }}</td>
+            <th scope="row" class="col-3"><a class="text-dark" href="{{ route('admin.product.show', $sale['code']) }}">#{{ $sale['code'] }}</a></th>
+            <th class="col-3">{{ $sale['name'] }}</th>
+            <td class="col-2">₱ {{ number_format($sale['price'], 2, '.', ',') }}</td>
+            <td class="col-2">{{ $sale['total_orders'] }}</td>
+            <td class="col-2">₱ {{ number_format($sale['total_sales'], 2, '.', ',') }}</td>
           </tr>
           @endforeach
         </tbody>
         <thead>
           <tr>
-            <th scope="col" class="col-4">TOTALS</th>
-            <th scope="col" class="col-4">{{ $total['orders'] }}</th>
-            <th scope="col" class="col-4">₱ {{ number_format($total['sales'], 2, '.', ',') }}</th>
+            <th scope="col" class="col-3">TOTALS</th>
+            <th scope="col" class="col-3">{{ count($sales) }}</th>
+            <th scope="col" class="col-2">-</th>
+            <th scope="col" class="col-2">{{ $total['orders'] }}</th>
+            <th scope="col" class="col-2">₱ {{ number_format($total['sales'], 2, '.', ',') }}</th>
           </tr>
         </thead>
       </table>
