@@ -13,7 +13,9 @@ Before we deliver your order, make sure to pay us using **{{ strtoupper($data['o
 <br>
 <small>**{{ ucwords($data['recipient']['address'].', '.$data['city'].', '.$data['province']) }}**</small>
 <br>
-<small>**Delivery date:  {{ $data['order']['delivery_date'] }}**</small>
+<small>**Shipping Agent: {{ $data['shipping_agent'] }}**</small>
+<br>
+<small>**Delivery date: {{ $data['order']['delivery_date'] }}**</small>
 @endcomponent
 ___
 
