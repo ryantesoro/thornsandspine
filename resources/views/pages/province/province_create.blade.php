@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('header_name', 'Shipping Provinces')
+@section('header_name', 'Provinces')
 @section('content')
 @include('layouts.nav')
 
@@ -17,7 +17,7 @@
         @include('layouts.header')
         <div class="row">
             <div class="col text-left">
-                <h4>Create Shipping Province</h4>
+                <h4>Add Province</h4>
             </div>
             <div>
                 <a class="btn btn-secondary font-weight-bold" href="{{ route('admin.province.index') }}">Go Back</a>
@@ -38,7 +38,7 @@
         <div class="row pl-3">
             <div class="col-5">
                 <div class="form-group">
-                    <label class="font-weight-bold">Shipping Province</label>
+                    <label class="font-weight-bold">Province</label>
                     {!! Form::text('province', old('province') ?? '',
                     [
                     'class' => 'form-control',
@@ -46,7 +46,7 @@
                     'tab_index' => '1',
                     'data-toggle' => 'popover',
                     'data-trigger' => 'focus',
-                    'title' => 'Shipping Province',
+                    'title' => 'Province',
                     'data-content' => 'The province must be in the philippines',
                     'required' => true
                     ]) !!}

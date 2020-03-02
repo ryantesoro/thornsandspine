@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('header_name', 'Shipping Fees')
+@section('header_name', 'Cities')
 @section('content')
 @include('layouts.nav')
 
@@ -17,7 +17,7 @@
         @include('layouts.header')
         <div class="row">
             <div class="col text-left">
-                <h4>Edit Shipping Fee</h4>
+                <h4>Edit City</h4>
             </div>
             <div>
                 <a class="btn btn-secondary font-weight-bold" href="{{ route('admin.city.index') }}">Go Back</a>
@@ -38,7 +38,7 @@
         <div class="row pl-3">
             <div class="col-5">
                 <div class="form-group">
-                    <label class="font-weight-bold">Shipping Province</label>
+                    <label class="font-weight-bold">Province</label>
                     {!! Form::select('province', $provinces, $city_details['province_id'] ?? '',
                     [
                     'class' => 'form-control',
@@ -67,7 +67,7 @@
                     'tab_index' => '2',
                     'data-toggle' => 'popover',
                     'data-trigger' => 'focus',
-                    'title' => 'Shipping City',
+                    'title' => 'City',
                     'data-content' => 'The city must be in the philippines',
                     'required' => true,
                     'disabled' => auth()->user()->access_level != 2
