@@ -91,7 +91,7 @@
                     <th scope="col">Pot Type</th>
                     <th scope="col">Product Price</th>
                     <th scope="col">Quantity</th>
-                    <th scope="col">Sub Total</th>
+                    <th scope="col">Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -107,7 +107,7 @@
                 @endforeach
                 <tr>
                     <td colspan="4"></td>
-                    <th scope="row" class="text-right">Total</th>
+                    <th scope="row" class="text-right">Sub Total</th>
                     <td>{{ number_format($data['total']['total_product_price'], 2, '.', ',') }} PHP</td>
                 </tr>
                 <tr>
