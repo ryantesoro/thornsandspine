@@ -226,8 +226,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('print', ['as' => 'admin.sales.print', 'uses' => 'SalesController@print']);
     });
 
-    //Customers Page
-    Route::get('customers', ['as' => 'admin.customer.index', 'uses' => 'CustomerController@index']);
+    //CUSTOMERS
+    Route::group(['prefix' => 'customers'], function () {
+        //Customers Index
+        Route::get('/', ['as' => 'admin.customer.index', 'uses' => 'CustomerController@index']);
+
+        //Customers Show
+        Route::get('view/{customer_id}', ['as' => 'admin.customer.show', 'uses' => 'CustomerController@show']);
+
+        //Customers Print
+        Route::get('print', ['as' => 'admin.customer.print', 'uses' => 'CustomerController@print']);
+    });
 
     //Reports Page
     Route::get('reports', ['as' => 'admin.report.index', 'uses' => 'ReportController@index']);

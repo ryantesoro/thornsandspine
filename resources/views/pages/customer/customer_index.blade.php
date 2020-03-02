@@ -37,6 +37,14 @@
         </div>
       </div>
     </div>
+    <div class="d-flex">
+      <div class="ml-auto pb-2">
+        <a href="{{ route('admin.customer.print', [
+          "filter" => Request::input('filter'),
+          "search" => Request::input('search')
+         ]) }}" class="btn btn-warning btn-sm" tab_index="1">Print</a>
+      </div>
+    </div>
     {!! Form::close() !!}
     <div class="table-responsive">
       <table class="table table-hover border">
@@ -59,7 +67,7 @@
             <td>{{ucwords($customer->province)}}</td>
             <td>{{ucwords($customer->city)}}</td>
             <td>
-              <a href="{{ route('admin.product.show', $customer->id) }}"
+              <a href="{{ route('admin.customer.show', $customer->id) }}"
                 class="btn btn-sm btn-primary font-weight-bold">View</a>
             </td>
           </tr>

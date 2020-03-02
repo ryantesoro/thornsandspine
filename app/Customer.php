@@ -22,7 +22,7 @@ class Customer extends Model
     public function getCustomers($column, $value)
     {
         $customers = DB::table('customers')
-            ->selectRaw('customers.id, customers.first_name, customers.last_name, users.email, customers.province, customers.city')
+            ->selectRaw('customers.id, customers.first_name, customers.last_name, users.email, customers.province, customers.city, customers.address, customers.contact_number')
             ->leftJoin('user_customer', function ($query) {
                 $query->on('user_customer.customer_id', 'customers.id');
             })
