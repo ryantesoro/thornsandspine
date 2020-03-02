@@ -61,6 +61,11 @@ class ProductController extends Controller
 
         $update_product = $this->product()->updateProduct(['code' => $code, 'img' => $file_name], $product->id);
 
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Added New Product #'.$code
+        ]);
+
         Alert::success('Add Product Successful', 'Success!');
         return redirect()->route('admin.product.index');
     }
@@ -99,6 +104,11 @@ class ProductController extends Controller
         unset($product_details['img']);
         $this->product()->updateProduct($product_details, $product_id);
 
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Updated Product #'.$product->code
+        ]);
+
         Alert::success('Update Product Successful', 'Success!');
         return redirect()->route('admin.product.index');
     }
@@ -106,6 +116,12 @@ class ProductController extends Controller
     public function destroy($product_id)
     {
         $delete_product = $this->product()->changeProductStatus($product_id, 0);
+        $product = $this->product()->getProduct($product_id);
+
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Hide Product #'.$product->code
+        ]);
 
         Alert::success('Hide Product Successful', 'Success!');
         return redirect()->route('admin.product.index');
@@ -114,6 +130,12 @@ class ProductController extends Controller
     public function restore($product_id)
     {
         $restore_product = $this->product()->changeProductStatus($product_id, 1);
+        $product = $this->product()->getProduct($product_id);
+
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Restore Product #'.$product->code
+        ]);
 
         Alert::success('Restore Product Successful', 'Success!');
         return redirect()->route('admin.product.index');

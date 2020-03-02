@@ -63,7 +63,7 @@ changeCitySelect({{$shipping_fee_details->city_province_id}});
             <div class="col-5">
                 <div class="form-group">
                     <label class="font-weight-bold">Shipping Agent</label>
-                    {!! Form::select('shipping_agent', $couriers, old('shipping_agent') ?? '',
+                    {!! Form::select('shipping_agent', $couriers, $current_courier ?? '',
                     [
                     'class' => 'form-control',
                     'tab_index' => '1',

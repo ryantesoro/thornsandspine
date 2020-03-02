@@ -58,6 +58,12 @@ class CustomerController extends Controller
         $filename = "[".$now."]-"."_Customer_List.pdf";
         $full_path = storage_path().$path."/".$filename;
         $pdf->save($full_path);
+
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Printed Customer Report'
+        ]);
+
         return Storage::disk('local')->download('reports/'.$filename);
     }
 }

@@ -52,14 +52,14 @@
           <tbody>
             @foreach ($logs as $log)
             <tr>
-                <td class="col-3">{{ $log['email'] }}</td>
-                @if ($log['access_level'] == 1)
+                <td class="col-3">{{ $log->email }}</td>
+                @if ($log->email == 1)
                     <td class="col-3">Admin</td>
                 @else
                     <td class="col-3">Super Admin</td>
                 @endif
-                <td class="col-3">{{ $log['action'] }}</td>
-                <td class="col-3">{{ $log['created_at'] }}</td>
+                <td class="col-3">{{ $log->action }}</td>
+                <td class="col-3">{{ $log->created_at }}</td>
             </tr>
             @endforeach
           </tbody>

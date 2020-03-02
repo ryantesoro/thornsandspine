@@ -100,6 +100,11 @@ class OrderController extends Controller
 
         $order = $this->order()->getOrder($order_code);
         $update_order = $this->order()->updateOrder(['status' => 2, 'expires_at' => null], $order->id);
+
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Completed Order #'.$order_code
+        ]);
         
         Alert::success('Complete Order Successful', 'Success!');
         return redirect()->route('admin.order.index');
@@ -109,6 +114,11 @@ class OrderController extends Controller
     {
         $order = $this->order()->getOrder($order_code);
         $update_order = $this->order()->updateOrder(['status' => 0, 'comment' => $request->post('comment'), 'expires_at' => Carbon::now()->addDays(2)], $order->id);
+
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Asked to resend Proof Of Payment to Order #'.$order_code
+        ]);
         
         Alert::success('Ask Customer Successful', 'Success!');
         return redirect()->route('admin.order.index');
@@ -185,6 +195,11 @@ class OrderController extends Controller
         $filename = "[".$now."]-$order_code._Order.pdf";
         $full_path = storage_path().$path."/".$filename;
         $pdf->save($full_path);
+
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Printed Order #'.$order_code
+        ]);
 
         return Storage::disk('local')->download('order/'.$filename);
     }

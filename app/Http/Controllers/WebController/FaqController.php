@@ -42,6 +42,11 @@ class FaqController extends Controller
 
         $store_faq = $this->faq()->storeFaq($faq_details);
 
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Added New FAQ ID: '.$store_faq->id
+        ]);
+
         Alert::success('Add FAQ Successful', 'Success!');
         return redirect()->route('admin.faq.index');
     }
@@ -79,6 +84,12 @@ class FaqController extends Controller
         
         $update_faq = $this->faq()->updateFaq($faq_id, $faq_details);
 
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Updated FAQ ID: '.$faq_id
+        ]);
+
+
         Alert::success('Update FAQ Successful', 'Success!');
         return redirect()->route('admin.faq.index');
     }
@@ -92,6 +103,11 @@ class FaqController extends Controller
 
         $delete_faq = $this->faq()->updateFaq($faq_id, ['active' => 0]);
 
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Hide FAQ ID: '.$faq_id
+        ]);
+
         Alert::success('Hide FAQ Successful', 'Success!');
         return redirect()->route('admin.faq.index');
     }
@@ -104,6 +120,11 @@ class FaqController extends Controller
         }
 
         $update_faq = $this->faq()->updateFaq($faq_id, ['active' => 1]);
+
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Restore FAQ ID: '.$faq_id
+        ]);
 
         Alert::success('Restore FAQ Successful', 'Success!');
         return redirect()->route('admin.faq.index');

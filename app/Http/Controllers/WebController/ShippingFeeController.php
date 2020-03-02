@@ -112,6 +112,11 @@ class ShippingFeeController extends Controller
         
         $this->courier()->getCourier($courier_id)->shipping_fee()->save($store_shipping_fee);
 
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Added New Shipping Fee ID: '.$store_shipping_fee->id
+        ]);
+
         Alert::success('Add Shipping Fee Successful', 'Success!');
         return redirect()->route('admin.shipping_fee.index');
     }
@@ -137,9 +142,11 @@ class ShippingFeeController extends Controller
 
         $shipping_fee_details = $this->shipping_fee()->getShippingFee($shipping_fee_id);
         $province_id = $this->city()->getCity($shipping_fee_details->city_province_id)->province_id;
+        $current_courier = $shipping_fee_details->courier()->get()->first()->id;
 
         return view('pages.shipping_fee.shipping_fee_edit')
             ->with('shipping_fee_details', $shipping_fee_details)
+            ->with('current_courier', $current_courier)
             ->with('couriers', $couriers)
             ->with('province_id', $province_id)
             ->with('checker', $checker)
@@ -187,6 +194,11 @@ class ShippingFeeController extends Controller
         }
 
         $update_shipping_fee = $this->shipping_fee()->updateShippingFee($shipping_fee_id, $new_shipping_fee_details);
+
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Updated Shipping Fee ID: '.$shipping_fee_id
+        ]);
 
         Alert::success('Update Shipping Fee Successful', 'Success!');
         return redirect()->route('admin.shipping_fee.index');

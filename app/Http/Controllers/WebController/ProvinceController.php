@@ -45,6 +45,11 @@ class ProvinceController extends Controller
 
         $province = $this->province()->storeProvince($province_name);
 
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Added New Province ID: '.$province->id
+        ]);
+
         Alert::success('Add Province Successful', 'Success!');
         return redirect()->route('admin.province.index');
     }
@@ -77,6 +82,12 @@ class ProvinceController extends Controller
         }
 
         $update_province = $this->province()->updateProvince($province_id, $province_name);
+
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Updated Province ID: '.$province_id
+        ]);
+
         Alert::success('Update Province Successful', 'Success!');
         return redirect()->route('admin.province.index');
     }
