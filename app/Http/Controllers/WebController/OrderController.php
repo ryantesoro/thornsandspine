@@ -156,7 +156,7 @@ class OrderController extends Controller
         $province_details = $this->province()->getProvince($city_province_details->province_id);
 
         //Get Total
-        $total_product_price = collect($products)->sum('price');
+        $total_product_price = collect($products)->sum('sub_total');
         $grand_total = ($total_product_price + $shipping_fee_details->price) - $order_details->loyalty_points;
         $total = [
             'total_product_price' => $total_product_price,
