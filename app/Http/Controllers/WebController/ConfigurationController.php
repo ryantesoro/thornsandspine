@@ -64,6 +64,11 @@ class ConfigurationController extends Controller
             $update_config = $this->configuration()->updateConfiguration($name, $value);
         }
 
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Updated Configuration'
+        ]);
+
         Alert::success('Update Configuration Successful', 'Success!');
         return redirect()->route('admin.config.index');
     }

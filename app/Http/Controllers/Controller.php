@@ -25,6 +25,7 @@ use App\Screenshot;
 use App\ShippingFee;
 use App\Province;
 use App\City;
+use App\Log;
 
 class Controller extends BaseController
 {
@@ -142,5 +143,11 @@ class Controller extends BaseController
     {
         $courier = new Courier();
         return $courier;
+    }
+
+    public function logs()
+    {
+        $logs = new Log();
+        return $logs;
     }
 }

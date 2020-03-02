@@ -22,7 +22,7 @@
             <div>
                 <a class="btn btn-secondary font-weight-bold" href="{{ route('admin.order.index') }}">Go Back</a>
                 <a class="btn btn-warning font-weight-bold" href="{{ route('admin.order.print', $order->code) }}">Print</a>
-                @if ($order->status == 1 && !\Carbon\Carbon::parse($order->expires_at)->isPast())
+                @if ($order->status == 1)
                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#deliver_confirmation">
                     <b>Complete Order</b>
                 </button>

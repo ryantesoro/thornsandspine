@@ -43,6 +43,12 @@ class PotController extends Controller
         }
 
         $store_pot = $this->pot()->storePot($pot_details);
+
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Added New Pot ID: '.$store_pot->id
+        ]);
+
         Alert::success('Add Pot Successful', 'Successfully added pot');
         return redirect()->route('admin.pot.index');
     }
@@ -88,7 +94,12 @@ class PotController extends Controller
                 ->withErrors($validator->errors());
         }
 
-        $this->pot()->updatePot($pot_id, $pot_details);
+        $update_pot = $this->pot()->updatePot($pot_id, $pot_details);
+
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Updated Pot ID: '.$pot_id
+        ]);
 
         Alert::success('Update Pot Successful', 'Successfully updated pot');
         return redirect()->route('admin.pot.index');
@@ -98,6 +109,11 @@ class PotController extends Controller
     {
         $delete_pot = $this->pot()->changePotStatus($pot_id, 0);
 
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Hide Pot ID: '.$pot_id
+        ]);
+        
         Alert::success('Delete Pot Successful', 'Successfully deleted pot');
         return redirect()->route('admin.pot.index');
     }
@@ -105,6 +121,11 @@ class PotController extends Controller
     public function restore(Request $request, $pot_id)
     {
         $restore_pot = $this->pot()->changePotStatus($pot_id, 1);
+
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Restore Pot ID: '.$pot_id
+        ]);
 
         Alert::success('Restore Pot Successful', 'Successfully restored pot');
         return redirect()->route('admin.pot.index');

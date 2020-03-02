@@ -48,6 +48,11 @@ class CityController extends Controller
 
         $store_city = $this->city()->storeCity($city_name, $province_id);
 
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Added New City ID: '.$store_city->id
+        ]);
+
         Alert::success('Add City Successful', 'Success!');
         return redirect()->route('admin.city.index');
     }
@@ -82,6 +87,11 @@ class CityController extends Controller
         }
 
         $update_city = $this->city()->updateCity($city_name, $province_id, $city_id);
+
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Updated City ID: '.$city_id
+        ]);
 
         Alert::success('Update City Successful', 'Success!');
         return redirect()->route('admin.city.index'); 

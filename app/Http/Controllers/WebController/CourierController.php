@@ -43,6 +43,11 @@ class CourierController extends Controller
             'name' => $shipping_agent_details['shipping_agent_name']
         ]);
 
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Added New Shipping Agent ID: '.$store_courier->id
+        ]);
+
         Alert::success('Add Shipping Agent Successful', 'Success!');
         return redirect()->route('admin.courier.index');
     }
@@ -73,6 +78,11 @@ class CourierController extends Controller
         }
 
         $update_courier = $this->courier()->updateCourier(['name' => $shipping_agent_details['shipping_agent_name']], $courier_id);
+
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Updated Shipping Agent ID: '.$courier_id
+        ]);
         
         Alert::success('Update Shipping Agent Successful', 'Success!');
         return redirect()->route('admin.courier.index');

@@ -67,6 +67,11 @@ class ProductSalesController extends Controller
         $full_path = storage_path().$path."/".$filename;
         $pdf->save($full_path);
 
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Printed Product Sales Report'
+        ]);
+
         return Storage::disk('local')->download('reports/'.$filename);
     }
 
