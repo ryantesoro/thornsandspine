@@ -31,9 +31,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/', ['as' => 'admin.config.update', 'uses' => 'ConfigurationController@update']);
         });
 
-        //Dashboard Page
-        Route::get('dashboard', ['as' => 'admin.dashboard', 'uses' => 'HomeController@dashboard']);
-
         //PRODUCTS
         Route::group(['prefix' => 'products'], function () {
 
