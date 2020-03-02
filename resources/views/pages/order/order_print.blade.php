@@ -102,7 +102,7 @@
                     <td>{{ ucwords($product['pot_type']) }}</td>
                     <td>{{ number_format($product['price'], 2, '.', ',') }} PHP</td>
                     <td>x{{ $product['quantity'] }}</td>
-                    <td>{{ number_format($product['sub_total'], 2, '.', ',') }} PHP</td>
+                    <td class="text-right">{{ number_format($product['sub_total'], 2, '.', ',') }} PHP</td>
                 </tr>
                 @endforeach
                 <tr>
