@@ -212,6 +212,9 @@ Route::group(['middleware' => 'auth'], function () {
 
         //Orders Return
         Route::post('return/{order_code}', ['as' => 'admin.order.return', 'uses' => 'OrderController@return']);
+
+        //Orders Print
+        Route::get('print/{order_code}', ['as' => 'admin.order.print', 'uses' => 'OrderController@print']);
     });
 
     //SALES

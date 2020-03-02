@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
+use Storage;
 
 
 class OrderController extends Controller
@@ -111,5 +112,73 @@ class OrderController extends Controller
         
         Alert::success('Ask Customer Successful', 'Success!');
         return redirect()->route('admin.order.index');
+    }
+
+    public function print(Request $request, $order_code)
+    {
+        $order_details = $this->order()->getOrder($order_code);
+        $customer_details = $order_details->customer()->get()->first();
+        
+        //Get Recipient
+        $recipient = [];
+        if ($order_details->recipient_id != null) {
+            $recipient = $this->recipient()->getRecipient($order_details->recipient_id);
+        } else {
+            $recipient = $customer_details;
+        }
+
+        //Get Order Products
+        $order_products = $this->order_product()->getOrderProducts($order_details->id);
+        $products = [];
+        foreach ($order_products as $product) {
+            $product_details = $this->product()->getProduct($product->product_id);
+            $pot_details = $this->pot()->getPot($product->pot_id);
+            $products[] = [
+                'code' => $product_details->code,
+                'name' => $product_details->name,
+                'pot_type' => $pot_details->name,
+                'price' => $product->sub_total/$product->quantity,
+                'quantity' => $product->quantity,
+                'sub_total' => $product->sub_total
+            ];
+        }
+
+        //Get Shipping Fee
+        $shipping_fee_details = $this->shipping_fee()->getShippingFee($order_details->shipping_fees_id);
+        
+        //Get Shipping Agent
+        $shipping_agent_details = $shipping_fee_details->courier()->get()->first();
+
+        //Get City Province
+        $city_province_details = $this->city()->getCity($shipping_fee_details->city_province_id);
+        
+        //Get Province
+        $province_details = $this->province()->getProvince($city_province_details->province_id);
+
+        $data = [
+            'order' => $order_details,
+            'customer' => $customer_details,
+            'recipient' => $recipient,
+            'products' => $products,
+            'logo_url' => route('image', ['logo', 'logo.jpg']),
+            'shipping_agent' => $shipping_agent_details,
+            'city' => $city_province_details->city,
+            'province' => $province_details->name,
+            'shipping_fee' => $shipping_fee_details
+        ];
+
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        $pdf->loadView('pages.order.order_print', compact('data'));
+
+        return $pdf->stream('order_print.pdf');
+        
+        $path = "/app/order";
+        $now = Carbon::now()->format('m-d-Y_h-i-sA');
+        $filename = "[".$now."]-$order_code._Order.pdf";
+        $full_path = storage_path().$path."/".$filename;
+        $pdf->save($full_path);
+
+        return Storage::disk('local')->download('reports/'.$filename);
     }
 }
