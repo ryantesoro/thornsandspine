@@ -23,7 +23,7 @@ class Order extends Model
     protected $hidden = ['pivot'];
 
     //Get All Orders
-    public function getOrders($code, $start_date, $end_date)
+    public function getOrders($code, $status)
     {
         $orders = DB::table('orders')
             ->selectRaw('orders.code, recipients.first_name r_fname, recipients.last_name r_lname, customers.first_name c_fname, customers.last_name c_lname, orders.status, orders.expires_at')
@@ -39,15 +39,20 @@ class Order extends Model
 
         if ($code != null && !empty($code)) {
             $search = '%'.$code.'%';
-            $orders->whereRaw('orders.code LIKE ?', [
+            $orders = $orders->whereRaw('orders.code LIKE ?', [
                 $search
             ]);
         }
 
-        if ($start_date != null && $end_date != null) {
-            $start_range = Carbon::createFromFormat('m/d/Y', $start_date)->startOfDay()->format('Y-m-d H:i:s');
-            $end_range = Carbon::createFromFormat('m/d/Y', $end_date)->endOfDay()->format('Y-m-d H:i:s');
-            $orders->whereBetween('orders.created_at', [$start_range, $end_range]);
+        if ($status != 'all' && $status != null) {
+            $now = Carbon::now();
+            if ($status == 'expired') {
+                $orders = $orders->where('orders.expires_at', '<', $now);
+            } else if ($status == 0) {
+                $orders = $orders->where('orders.expires_at', '>', $now);
+            } else {
+                $orders = $orders->where('orders.status', $status);
+            }
         }
 
         return $orders->orderBy('code', 'DESC')->get();
@@ -113,7 +118,7 @@ class Order extends Model
         
         $orders = DB::table('orders');
 
-        $select_query = ", COUNT(orders.id) total_orders, SUM(total) total_sales";
+        $select_query = ", COUNT(orders.id) total_orders, SUM(total) total_sales, GROUP_CONCAT(orders.code) as codes";
         if ($order_by == "week") {
             $orders->selectRaw('WEEK(orders.created_at) date'.$select_query);
         } else if ($order_by == "month") {
