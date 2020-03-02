@@ -30,6 +30,9 @@ Route::group(['prefix' => 'shipping'], function () {
 
     //Shipping province
     Route::get('province/{province_id}/city', ['as' => 'shipping_fee.province', 'uses' => 'ShippingFeeController@cities']);
+
+    //Shipping quotation
+    Route::post('province/quotation', ['as' => 'shipping_fee.quotation', 'uses' => 'ShippingFeeController@quotation']);
 });
 
 //CONFIGURATION

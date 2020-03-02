@@ -4,6 +4,8 @@ namespace App\Http\Controllers\ApiController;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+
 
 class ShippingFeeController extends Controller
 {
@@ -25,6 +27,38 @@ class ShippingFeeController extends Controller
         return response()->json([
             'success' => true,
             'data' => $cities
+        ]);
+    }
+
+    public function quotation(Request $request)
+    {
+        $city_province_id = $request->get('city_province_id');
+        $courier_id = $request->get('courier_id');
+        
+        $validator = Validator::make(['city_province_id' => $city_province_id, 'courier_id' => $courier_id], [
+            'city_province_id' => 'required|exists:city_province,id',
+            'courier_id' => 'required|exists:couriers,id'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Invalid Input'
+            ]);
+        }
+
+        $shipping_fees = $this->shipping_fee()->getShippingFeeByCityProvinceAndCourier($city_province_id, $courier_id);
+
+        if (empty($shipping_fees)) {
+            return response()->json([
+                'success' => false,
+                'msg' => "The shipping agent does not deliver to your place."
+            ]);
+        }
+        
+        return response()->json([
+            'success' => false,
+            'data' => $shipping_fees->price
         ]);
     }
 }
