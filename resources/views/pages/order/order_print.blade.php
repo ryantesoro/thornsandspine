@@ -119,7 +119,7 @@
                 <tr>
                     <td colspan="4"></td>
                     <th scope="row" class="text-right">Loyalty Points</th>
-                    <td class="text-right">-{{ $data['order']->loyalty_points }}</td>
+                    <td class="text-right">-{{ $data['order']->loyalty_points }}.00 PHP</td>
                 </tr>
                 @endif
                 <tr>
