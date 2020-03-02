@@ -13,10 +13,15 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $code = $request->get('code');
-        $start_date = $request->get('start_date');
-        $end_date = $request->get('end_date');
+        $status = $request->get('status');
+        $codes = $request->get('codes');
 
-        $orders = $this->order()->getOrders($code, $start_date, $end_date);
+        $orders = $this->order()->getOrders($code, $status);
+
+        if (!empty($codes) && $codes != null) {
+            $orders = $orders->whereIn('code', $codes);
+        } 
+
         return view('pages.order.order_index')->with('orders', $orders);
     }
 

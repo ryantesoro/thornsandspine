@@ -17,6 +17,22 @@
     <div class="row">
       <div class="col-3 offset-9">
         <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <div class="input-group-prepend">
+              {!! Form::select('status', [
+                'all' => 'All',
+                '0' => 'Pending',
+                '1' => 'Processing',
+                '2' => 'Completed',
+                '3' => 'Cancelled'
+              ], Request::input('status') ?? '',
+              [
+              'class' => 'form-control form-control-sm',
+              'tab_index' => '1',
+              'required' => true
+              ]) !!}
+            </div>
+          </div>
           {!! Form::text('code', Request::input('code') ?? '',
           [
           'class' => 'form-control form-control-sm',

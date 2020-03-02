@@ -135,8 +135,7 @@
               <a href="#" class="btn btn-sm btn-outline-secondary font-weight-bold disabled">View Orders</a>
               @else
               <a href="{{ route('admin.order.index', [
-                  'start_date' => Request::input('start_date'),
-                  'end_date' => Request::input('end_date')
+                  'codes' => $sale['codes']
                 ]) }}" class="btn btn-sm btn-primary font-weight-bold">View Orders</a>
               @endif
             </td>

@@ -40,7 +40,8 @@ class SalesController extends Controller
             $this->sales_array[] = [
                 'date' => $date,
                 'total_orders' => 0,
-                'total_sales' => 0
+                'total_sales' => 0,
+                'codes' => []
             ];
         }
 
@@ -122,7 +123,8 @@ class SalesController extends Controller
             $this->sales_array[] = [
                 'date' => $sale->date,
                 'total_orders' => $sale->total_orders,
-                'total_sales' => $sale->total_sales
+                'total_sales' => $sale->total_sales,
+                'codes' => explode(',', $sale->codes)
             ];
         }
     }
