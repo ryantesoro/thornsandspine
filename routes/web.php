@@ -33,6 +33,14 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/', ['as' => 'admin.config.update', 'uses' => 'ConfigurationController@update']);
         });
 
+        //LOGS 
+        Route::group(['prefix' => 'logs'], function () {
+
+            //Products Index
+            Route::get('/', ['as' => 'admin.log.index', 'uses' => 'LogController@index']);
+            
+        });
+
         //PRODUCTS
         Route::group(['prefix' => 'products'], function () {
 
