@@ -105,6 +105,28 @@
                     <td>{{ number_format($product['sub_total'], 2, '.', ',') }} PHP</td>
                 </tr>
                 @endforeach
+                <tr>
+                    <td colspan="4"></td>
+                    <th scope="row" class="text-right">Total</th>
+                    <td>{{ number_format($data['total']['total_product_price'], 2, '.', ',') }} PHP</td>
+                </tr>
+                <tr>
+                    <td colspan="4"></td>
+                    <th scope="row" class="text-right">Shipping Fee</th>
+                    <td>{{ number_format($data['shipping_fee']['price'], 2, '.', ',') }} PHP</td>
+                </tr>
+                @if ($data['order']->loyalty_points != 0)
+                <tr>
+                    <td colspan="4"></td>
+                    <th scope="row" class="text-right">Loyalty Points</th>
+                    <td>{{ $data['order']->loyalty_points }} pts.</td>
+                </tr>
+                @endif
+                <tr>
+                    <td colspan="4"></td>
+                    <th scope="row" class="text-right">Grand Total</th>
+                    <td>{{ number_format($data['total']['grand_total'], 2, '.', ',') }} PHP</td>
+                </tr>
             </tbody>
         </table>
     </div>

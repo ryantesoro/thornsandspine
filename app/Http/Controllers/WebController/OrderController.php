@@ -155,6 +155,14 @@ class OrderController extends Controller
         //Get Province
         $province_details = $this->province()->getProvince($city_province_details->province_id);
 
+        //Get Total
+        $total_product_price = collect($products)->sum('price');
+        $grand_total = ($total_product_price + $shipping_fee_details->price) - $order_details->loyalty_points;
+        $total = [
+            'total_product_price' => $total_product_price,
+            'grand_total' => $grand_total
+        ];
+
         $data = [
             'order' => $order_details,
             'customer' => $customer_details,
@@ -164,13 +172,14 @@ class OrderController extends Controller
             'shipping_agent' => $shipping_agent_details,
             'city' => $city_province_details->city,
             'province' => $province_details->name,
-            'shipping_fee' => $shipping_fee_details
+            'shipping_fee' => $shipping_fee_details,
+            'total' => $total
         ];
 
         $pdf = \App::make('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->loadView('pages.order.order_print', compact('data'));
-        
+
         $path = "/app/order";
         $now = Carbon::now()->format('m-d-Y_h-i-sA');
         $filename = "[".$now."]-$order_code._Order.pdf";
