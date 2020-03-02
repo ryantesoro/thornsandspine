@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\File;
 use Carbon\Carbon;
 use Image;
+use Mail\OrderPlaced;
 
 
 class OrderController extends Controller
@@ -134,6 +135,7 @@ class OrderController extends Controller
 
         //Inserts recipient
         $insertedRecipient = false;
+        $recipient_details = [];
         if (!empty($recipient_first) && $recipient_first != null) {
             $city_province_id = $request->post('city_province_id');
             $recipient_details = [
@@ -200,6 +202,7 @@ class OrderController extends Controller
         $update_order = $this->order()->updateOrder(['code' => $order_code], $order->id);
 
         $carts = $customer_cart->get();
+        $temp_products = [];
         foreach ($carts as $cart) {
             $product_details = $this->product()->getProduct($cart->product_id);
             $order_product_details = [
@@ -210,10 +213,49 @@ class OrderController extends Controller
                 'sub_total' => $cart->quantity * $product_details->price
             ];
 
+            $temp_products[] = $order_product_details; 
+
             $store_order_product = $this->order_product()->storeOrderProduct($order_product_details);
         }
 
         $this->cart()->clearCart($customer_cart);
+
+        //Mail Order Details
+        $shipping_fees = $this->shipping_fee()->getShippingFee($shipping_fee->id);
+        $city_province = $this->city()->getCity($shipping_fees->city_province_id);
+        $order = $this->order()->getOrder($order_code);
+        $order_product = $this->order_product()->getOrderProducts($order->id);
+
+        $products = [];
+        $sub_total = 0;
+        foreach ($order_product as $product) {
+            $temp_array = [];
+            $temp_array['name'] = $this->product()->getProduct($product->product_id)->name;
+            $temp_array['price'] = $product->sub_total/$product->quantity;
+            $temp_array['pot_type'] = $this->pot()->getPot($product->pot_id)->name;
+            $temp_array['quantity'] = $product->quantity;
+            $temp_array['sub_total'] = $product->sub_total;
+            $products[] = $temp_array;
+            $sub_total += $product->sub_total;
+        }
+
+        $total = [
+            'sub_total' => $sub_total,
+            'grand_total' => ($sub_total + $shipping_fees->price) - $order->loyalty_points
+        ];
+
+        $data = [
+            'order' => $order,
+            'products' => $products,
+            'recipient' => $recipient_details,
+            'shipping_agent' => $this->courier()->getCourier($courier_id)->name,
+            'city' => $city_province->city,
+            'province' => $this->province()->getProvince($city_province->province_id)->name,
+            'shipping_price' => $shipping_fees->price
+        ];
+
+        $now = Carbon::now()->addSeconds(5);
+        Mail::to(auth()->user()->email)->later($now, new OrderPlaced($data));
 
         return response()->json([
             'success' => true,

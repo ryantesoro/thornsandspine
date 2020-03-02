@@ -7,10 +7,52 @@ use App\Http\Controllers\Controller;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
 use Storage;
+use App\Mail\OrderPlaced;
 
 
 class OrderController extends Controller
 {
+    public function test()
+    {
+        $order = $this->order()->getOrder('20200003');
+        $order_product = $this->order_product()->getOrderProducts($order->id);
+
+        $products = [];
+        $sub_total = 0;
+        foreach ($order_product as $product) {
+            $temp_array = [];
+            $temp_array['name'] = $this->product()->getProduct($product->product_id)->name;
+            $temp_array['price'] = $product->sub_total/$product->quantity;
+            $temp_array['pot_type'] = $this->pot()->getPot($product->pot_id)->name;
+            $temp_array['quantity'] = $product->quantity;
+            $temp_array['sub_total'] = $product->sub_total;
+            $products[] = $temp_array;
+            $sub_total += $product->sub_total;
+        }
+
+        $recipient_details = $this->recipient()->getRecipient($order->recipient_id);
+        $shipping_fees = $this->shipping_fee()->getShippingFee($order->shipping_fees_id);
+        $city_province = $this->city()->getCity($shipping_fees->city_province_id);
+        $total = [
+            'sub_total' => $sub_total,
+            'grand_total' => ($sub_total + $shipping_fees->price) - $order->loyalty_points
+        ];
+
+        $data = [
+            'order' => $order,
+            'products' => $products,
+            'recipient' => $recipient_details,
+            'shipping_agent' => $shipping_fees->courier()->get()->first()->name,
+            'city' => $city_province->city,
+            'province' => $this->province()->getProvince($city_province->province_id)->name,
+            'shipping_price' => $shipping_fees->price,
+            'total' => $total
+        ];
+
+        //Mail::to(auth()->user()->email)->later($now, new OrderPlaced($data));
+        return new OrderPlaced($data);
+    }
+
     public function index(Request $request)
     {
         $code = $request->get('code');

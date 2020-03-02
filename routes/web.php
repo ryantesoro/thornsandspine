@@ -17,6 +17,8 @@ Route::get('/', ['as' => 'login', 'uses' => 'HomeController@login']);
 //Login Process
 Route::post('login', ['as' => 'admin.login', 'uses' => 'UserController@login']);
 
+Route::get('test', ['uses' => 'OrderController@test']);
+
 //When Logged In 
 Route::group(['middleware' => 'auth'], function () {
 
