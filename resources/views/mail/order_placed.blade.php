@@ -26,7 +26,9 @@ ___
 |  |  |  |  |
 |  |  |  |<div style="text-align:right; margin-right: 10px;">**Shipping Fee**</div> | <div style="text-align:right;">₱ {{ number_format($data['shipping_price'], 2, '.', ',') }}</div> |
 |  |  |  |<div style="text-align:right; margin-right: 10px;">**Sub Total**</div> | <div style="text-align:right;">₱ {{ number_format($data['total']['sub_total'], 2, '.', ',') }}</div> |
+@if ($data['order']['loyalty_points'] != 0)
 |  |  |  |<div style="text-align:right; margin-right: 10px;">**Loyalty Points**</div> | <div style="text-align:right;">₱ -{{ number_format($data['order']['loyalty_points'], 2, '.', ',') }}</div> |
+@endif
 @endcomponent
 ___
 @component('mail::panel')

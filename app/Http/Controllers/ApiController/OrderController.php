@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\File;
 use Carbon\Carbon;
 use Image;
-use Mail\OrderPlaced;
+use App\Mail\OrderPlaced;
+use Mail;
 
 
 class OrderController extends Controller
@@ -251,11 +252,13 @@ class OrderController extends Controller
             'shipping_agent' => $this->courier()->getCourier($courier_id)->name,
             'city' => $city_province->city,
             'province' => $this->province()->getProvince($city_province->province_id)->name,
-            'shipping_price' => $shipping_fees->price
+            'shipping_price' => $shipping_fees->price,
+            'total' => $total
         ];
 
-        $now = Carbon::now()->addSeconds(5);
-        Mail::to(auth()->user()->email)->later($now, new OrderPlaced($data));
+        $user = $this->user()->getUser(['id' => $this->user_id]);
+
+        Mail::to($user)->queue(new OrderPlaced($data));
 
         return response()->json([
             'success' => true,
