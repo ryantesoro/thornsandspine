@@ -15,7 +15,7 @@ class UserController extends Controller
 
     public function show(Request $request)
     {
-        $customer = $this->customer()->getCustomerDetailsByUser(auth()->user());
+        $customer = $this->customer()->getCustomerDetailsByUser(auth()->user())->get();
         $customer_details = $this->customer()->getCustomer($customer->id);
 
         return $customer_details;
