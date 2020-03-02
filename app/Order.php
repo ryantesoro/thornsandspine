@@ -45,7 +45,7 @@ class Order extends Model
         }
 
         if ($status != 'all' && $status != null) {
-            $orders = $orders->whereAnd('status', $status);
+            $orders = $orders->where('orders.status', $status);
         }
 
         return $orders->orderBy('code', 'DESC')->get();
