@@ -67,7 +67,8 @@ changeCitySelect({{$shipping_fee_details->city_province_id}});
                     [
                     'class' => 'form-control',
                     'tab_index' => '1',
-                    'required' => auth()->user()->access_level != 2
+                    'required' => true,
+                    'disabled' => auth()->user()->access_level != 2
                     ]) !!}
                 </div>
             </div>
@@ -96,7 +97,8 @@ changeCitySelect({{$shipping_fee_details->city_province_id}});
                     'id' => 'city',
                     'class' => 'form-control',
                     'tab_index' => '3',
-                    'required' => auth()->user()->access_level != 2
+                    'required' => true,
+                    'disabled' => auth()->user()->access_level != 2
                     ]) !!}
                 </div>
             </div>

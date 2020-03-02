@@ -108,6 +108,7 @@
                         Shipping Agents
                     </a>
                 </li>
+                @endif
                 <li class="nav-item">
                     <a class="nav-link {{ Route::is('admin.shipping_fee.*') ? 'active' : '' }}"
                         href="{{ route('admin.shipping_fee.index') }}">
@@ -122,7 +123,6 @@
                         Shipping Fees
                     </a>
                 </li>
-                @endif
             </ul>
 
             @if(auth()->user()->access_level == 2)
