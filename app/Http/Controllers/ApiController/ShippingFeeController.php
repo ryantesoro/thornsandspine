@@ -57,7 +57,7 @@ class ShippingFeeController extends Controller
         }
         
         return response()->json([
-            'success' => false,
+            'success' => true,
             'data' => $shipping_fees->price
         ]);
     }
