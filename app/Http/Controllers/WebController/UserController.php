@@ -12,6 +12,13 @@ class UserController extends Controller
 {
     use AuthenticatesUsers;
 
+    public function show(Request $request)
+    {
+        $user = auth()->user();
+
+        return $user;
+    }
+
     public function login(Request $request) 
     {
         if ($this->hasTooManyLoginAttempts($request)) {

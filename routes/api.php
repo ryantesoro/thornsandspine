@@ -53,6 +53,9 @@ Route::group(['prefix' => 'configuration'], function () {
 //WHEN LOGGED IN
 Route::group(['middleware' => 'auth:api'], function () {
 
+    //USER INFO
+    Route::get('user/info', ['as' => 'user.info', 'uses' => 'UserController@show']);
+
     //PRODUCTS
     Route::group(['prefix' => 'product'], function () {
         //Browse Products
