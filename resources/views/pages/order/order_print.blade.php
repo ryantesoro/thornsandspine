@@ -100,32 +100,32 @@
                     <th scope="row">#{{ $product['code'] }}</th>
                     <td>{{ ucwords($product['name']) }}</td>
                     <td>{{ ucwords($product['pot_type']) }}</td>
-                    <td>{{ number_format($product['price'], 2, '.', ',') }} PHP</td>
+                    <td>PHP {{ number_format($product['price'], 2, '.', ',') }}</td>
                     <td>x{{ $product['quantity'] }}</td>
-                    <td>{{ number_format($product['sub_total'], 2, '.', ',') }} PHP</td>
+                    <td class="text-right">PHP {{ number_format($product['sub_total'], 2, '.', ',') }}</td>
                 </tr>
                 @endforeach
                 <tr>
                     <td colspan="4"></td>
                     <th scope="row" class="text-right">Sub Total</th>
-                    <td>{{ number_format($data['total']['total_product_price'], 2, '.', ',') }} PHP</td>
+                    <td class="text-right">PHP {{ number_format($data['total']['total_product_price'], 2, '.', ',') }}</td>
                 </tr>
                 <tr>
                     <td colspan="4"></td>
                     <th scope="row" class="text-right">Shipping Fee</th>
-                    <td>{{ number_format($data['shipping_fee']['price'], 2, '.', ',') }} PHP</td>
+                    <td class="text-right">PHP {{ number_format($data['shipping_fee']['price'], 2, '.', ',') }}</td>
                 </tr>
                 @if ($data['order']->loyalty_points != 0)
                 <tr>
                     <td colspan="4"></td>
                     <th scope="row" class="text-right">Loyalty Points</th>
-                    <td>{{ $data['order']->loyalty_points }} pts.</td>
+                    <td class="text-right">-{{ $data['order']->loyalty_points }}</td>
                 </tr>
                 @endif
                 <tr>
                     <td colspan="4"></td>
                     <th scope="row" class="text-right">Grand Total</th>
-                    <td>{{ number_format($data['total']['grand_total'], 2, '.', ',') }} PHP</td>
+                    <td class="text-right">PHP {{ number_format($data['total']['grand_total'], 2, '.', ',') }}</td>
                 </tr>
             </tbody>
         </table>
