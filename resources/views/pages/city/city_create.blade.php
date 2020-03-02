@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('header_name', 'Shipping Fees')
+@section('header_name', 'Cities')
 @section('content')
 @include('layouts.nav')
 
@@ -17,7 +17,7 @@
         @include('layouts.header')
         <div class="row">
             <div class="col text-left">
-                <h4>Create Shipping Fee</h4>
+                <h4>Add City</h4>
             </div>
             <div>
                 <a class="btn btn-secondary font-weight-bold" href="{{ route('admin.city.index') }}">Go Back</a>

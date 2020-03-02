@@ -38,7 +38,7 @@
         <div class="row pl-3">
             <div class="col-5">
                 <div class="form-group">
-                    <label class="font-weight-bold">Shipping Province</label>
+                    <label class="font-weight-bold">Province</label>
                     {!! Form::text('province', $province_details['name'] ?? '',
                     [
                     'class' => 'form-control',
@@ -46,7 +46,7 @@
                     'tab_index' => '1',
                     'data-toggle' => 'popover',
                     'data-trigger' => 'focus',
-                    'title' => 'Shipping Province',
+                    'title' => 'Province',
                     'data-content' => 'The province must be in the philippines',
                     'required' => true
                     ]) !!}
