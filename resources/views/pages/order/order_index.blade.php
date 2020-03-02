@@ -24,7 +24,8 @@
                 '0' => 'Pending',
                 '1' => 'Processing',
                 '2' => 'Completed',
-                '3' => 'Cancelled'
+                '3' => 'Cancelled',
+                'expired' => 'Expired'
               ], Request::input('status') ?? '',
               [
               'class' => 'form-control form-control-sm',

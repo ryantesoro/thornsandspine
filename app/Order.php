@@ -45,7 +45,14 @@ class Order extends Model
         }
 
         if ($status != 'all' && $status != null) {
-            $orders = $orders->where('orders.status', $status);
+            $now = Carbon::now();
+            if ($status == 'expired') {
+                $orders = $orders->where('orders.expires_at', '<', $now);
+            } else if ($status == 0) {
+                $orders = $orders->where('orders.expires_at', '>', $now);
+            } else {
+                $orders = $orders->where('orders.status', $status);
+            }
         }
 
         return $orders->orderBy('code', 'DESC')->get();
