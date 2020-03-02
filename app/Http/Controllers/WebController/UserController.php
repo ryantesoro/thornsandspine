@@ -11,15 +11,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 class UserController extends Controller
 {
     use AuthenticatesUsers;
-
-    public function show(Request $request)
-    {
-        $customer = $this->customer()->getCustomerDetailsByUser(auth()->get()->user());
-        $customer_details = $this->customer()->getCustomer($customer->id);
-
-        return $customer_details;
-    }
-
+    
     public function login(Request $request) 
     {
         if ($this->hasTooManyLoginAttempts($request)) {
