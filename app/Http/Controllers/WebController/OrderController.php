@@ -177,6 +177,6 @@ class OrderController extends Controller
         $full_path = storage_path().$path."/".$filename;
         $pdf->save($full_path);
 
-        return Storage::disk('local')->download('reports/'.$filename);
+        return Storage::disk('local')->download('order/'.$filename);
     }
 }
