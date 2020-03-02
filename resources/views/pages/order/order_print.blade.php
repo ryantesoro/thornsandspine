@@ -100,20 +100,20 @@
                     <th scope="row">#{{ $product['code'] }}</th>
                     <td>{{ ucwords($product['name']) }}</td>
                     <td>{{ ucwords($product['pot_type']) }}</td>
-                    <td>PHP {{ number_format($product['price'], 2, '.', ',') }}</td>
+                    <td>{{ number_format($product['price'], 2, '.', ',') }} PHP</td>
                     <td>x{{ $product['quantity'] }}</td>
-                    <td class="text-right">PHP {{ number_format($product['sub_total'], 2, '.', ',') }}</td>
+                    <td>{{ number_format($product['sub_total'], 2, '.', ',') }} PHP</td>
                 </tr>
                 @endforeach
                 <tr>
                     <td colspan="4"></td>
                     <th scope="row" class="text-right">Sub Total</th>
-                    <td class="text-right">PHP {{ number_format($data['total']['total_product_price'], 2, '.', ',') }}</td>
+                    <td class="text-right">{{ number_format($data['total']['total_product_price'], 2, '.', ',') }} PHP</td>
                 </tr>
                 <tr>
                     <td colspan="4"></td>
                     <th scope="row" class="text-right">Shipping Fee</th>
-                    <td class="text-right">PHP {{ number_format($data['shipping_fee']['price'], 2, '.', ',') }}</td>
+                    <td class="text-right">{{ number_format($data['shipping_fee']['price'], 2, '.', ',') }} PHP</td>
                 </tr>
                 @if ($data['order']->loyalty_points != 0)
                 <tr>
@@ -125,7 +125,7 @@
                 <tr>
                     <td colspan="4"></td>
                     <th scope="row" class="text-right">Grand Total</th>
-                    <td class="text-right">PHP {{ number_format($data['total']['grand_total'], 2, '.', ',') }}</td>
+                    <td class="text-right">{{ number_format($data['total']['grand_total'], 2, '.', ',') }} PHP</td>
                 </tr>
             </tbody>
         </table>
