@@ -170,8 +170,6 @@ class OrderController extends Controller
         $pdf = \App::make('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->loadView('pages.order.order_print', compact('data'));
-
-        return $pdf->stream('order_print.pdf');
         
         $path = "/app/order";
         $now = Carbon::now()->format('m-d-Y_h-i-sA');
