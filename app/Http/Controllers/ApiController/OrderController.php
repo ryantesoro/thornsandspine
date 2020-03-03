@@ -409,17 +409,36 @@ class OrderController extends Controller
         $city_province_id = $request->get('city_province_id');
         $courier_id = $request->get('courier_id');
         $use_loyalty_points = $request->post('use_loyalty_points');
+        $use_mine = $request->post('use_mine');
 
-        $validator = Validator::make(['city_province_id' => $city_province_id, 'courier_id' => $courier_id], [
-            'city_province_id' => 'required|exists:city_province,id',
+        $validate_input = [
+            'courier_id' => $courier_id
+        ];
+        $options = [
             'courier_id' => 'required|exists:couriers,id'
-        ]);
+        ];
+
+        if (!$use_mine) {
+            $validate_input['city_province_id'] = $city_province_id;
+            $options['city_province_id'] = 'required|exists:city_province,id';
+        }
+
+        $validator = Validator::make($validate_input, $options);
 
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'msg' => 'Invalid Input'
             ]);
+        }
+
+        $customer_details = $this->customer()->getCustomer($customer->id);
+
+        if ($use_mine) {
+            $province = $this->province()->getProvinceByName($customer_details->province);
+            $city_province = $this->city()->getCityByNameAndProvince($customer_details->city, $province->id);
+            
+            $city_province_id = $city_province->id;
         }
 
         $shipping_fees = $this->shipping_fee()->getShippingFeeByCityProvinceAndCourier($courier_id, $city_province_id);
@@ -432,7 +451,6 @@ class OrderController extends Controller
         }
 
         $cart_total = $this->cart()->getCartTotal($customer_cart);
-        $customer_details = $this->customer()->getCustomer($customer->id);
 
         $grand_total = ($cart_total + $shipping_fees->price);
         $discount = 0;
