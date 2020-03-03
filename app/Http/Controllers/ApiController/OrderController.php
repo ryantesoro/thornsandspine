@@ -391,6 +391,67 @@ class OrderController extends Controller
         ]);
     }
 
+    public function summary(Request $request)
+    {
+        $this->setUserId(auth()->user()->id);
+
+        //Getting Customer's Cart
+        $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
+        $customer_cart = $this->customer()->getCustomerCart($customer);
+
+        if ($customer_cart->count() == 0) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Your cart is empty!'
+            ]);
+        }
+
+        $city_province_id = $request->get('city_province_id');
+        $courier_id = $request->get('courier_id');
+        $use_loyalty_points = $request->post('use_loyalty_points');
+
+        $validator = Validator::make(['city_province_id' => $city_province_id, 'courier_id' => $courier_id], [
+            'city_province_id' => 'required|exists:city_province,id',
+            'courier_id' => 'required|exists:couriers,id'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Invalid Input'
+            ]);
+        }
+
+        $shipping_fees = $this->shipping_fee()->getShippingFeeByCityProvinceAndCourier($courier_id, $city_province_id);
+
+        if (empty($shipping_fees)) {
+            return response()->json([
+                'success' => false,
+                'msg' => "The shipping agent does not deliver to your place."
+            ]);
+        }
+
+        $cart_total = $this->cart()->getCartTotal($customer_cart);
+        $customer_details = $this->customer()->getCustomer($customer->id);
+
+        $grand_total = ($cart_total + $shipping_fees->price);
+
+        if ($use_loyalty_points) {
+            $grand_total -= $customer_details->loyalty_points;
+        }        
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'customer_details' => $customer_details,
+                'total_items' => count($customer_cart->get()),
+                'cart_total' => $cart_total,
+                'shipping_fee' => $shipping_fees->price,
+                'grand_total' => $grand_total
+            ]
+        ]);        
+    }
+
     private function setUserId($user_id)
     {
         $this->user_id = $user_id;
