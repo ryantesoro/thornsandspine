@@ -101,6 +101,10 @@ class OrderController extends Controller
         $order = $this->order()->getOrder($order_code);
         $update_order = $this->order()->updateOrder(['status' => 2, 'expires_at' => null], $order->id);
 
+        $customer = $order->customer()->get()->first();
+        $loyalty_points = floor($order->total/100);
+        $customer_update = $this->customer()->updateCustomer(['loyalty_points' => $loyalty_points], $customer->id);
+
         $store_logs = $this->logs()->storeLog([
             'user_id' => auth()->user()->id,
             'action' => 'Completed Order #'.$order_code
