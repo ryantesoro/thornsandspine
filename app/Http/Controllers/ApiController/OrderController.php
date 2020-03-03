@@ -455,7 +455,8 @@ class OrderController extends Controller
                 'cart_total' => $cart_total,
                 'shipping_fee' => $shipping_fees->price,
                 'grand_total' => $grand_total,
-                'discount' => $discount
+                'discount' => $discount,
+                'loyalty_points_left' => $loyalty_points_left
             ]
         ]);        
     }
