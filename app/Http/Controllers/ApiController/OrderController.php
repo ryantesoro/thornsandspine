@@ -436,9 +436,15 @@ class OrderController extends Controller
 
         $grand_total = ($cart_total + $shipping_fees->price);
         $discount = 0;
+        $loyalty_points_left = 0;
         if ($use_loyalty_points) {
+            $loyalty_points = $customer_details->loyalty_points;
+            if ($grand_total < $loyalty_points) {
+                $loyalty_points_left = $loyalty_points - $grand_total;
+            }
+
+            $discount = $loyalty_points;
             $grand_total -= $customer_details->loyalty_points;
-            $discount = $customer_details->loyalty_points;
         }        
 
         return response()->json([
