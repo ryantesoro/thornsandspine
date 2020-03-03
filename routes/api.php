@@ -102,6 +102,9 @@ Route::group(['middleware' => 'auth:api'], function () {
 
         //Cancel Order
         Route::get('cancel/{order_code}', ['as' => 'order.cancel', 'uses' => 'OrderController@cancel']);
+
+        //Cancel Summary
+        Route::post('summary', ['as' => 'order.summary', 'uses' => 'OrderController@summary']);
     });
 });
 

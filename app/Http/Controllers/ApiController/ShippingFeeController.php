@@ -47,7 +47,7 @@ class ShippingFeeController extends Controller
             ]);
         }
 
-        $shipping_fees = $this->shipping_fee()->getShippingFeeByCityProvinceAndCourier($city_province_id, $courier_id);
+        $shipping_fees = $this->shipping_fee()->getShippingFeeByCityProvinceAndCourier($courier_id, $city_province_id);
 
         if (empty($shipping_fees)) {
             return response()->json([
