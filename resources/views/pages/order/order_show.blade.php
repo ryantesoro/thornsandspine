@@ -227,7 +227,7 @@
                         <th>Product Name</th>
                         <th>Pot Type</th>
                         <th>Quantity</th>
-                        <th>Sub Total</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -242,6 +242,13 @@
                     <tr>
                         <td></td>
                         <td></td>
+                        <td class="text-right font-weight-bold">Sub Total:</td>
+                        <td class="text-left font-weight-bold border">₱
+                            {{ number_format($order->total, 2, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
                         <td class="text-right font-weight-bold">Shipping Fee:</td>
                         <td class="text-left font-weight-bold border">₱
                             {{ number_format($shipping_price, 2, '.', ',') }}</td>
@@ -251,7 +258,7 @@
                         <td></td>
                         <td></td>
                         <td class="text-right font-weight-bold">Loyalty Points Used:</td>
-                        <td class="text-left font-weight-bold border">{{ $order->loyalty_points }} pts.
+                        <td class="text-left font-weight-bold border">₱ -{{ number_format($order->loyalty_points, 2, '.', ',') }}
                         </td>
                     </tr>
                     @endif
