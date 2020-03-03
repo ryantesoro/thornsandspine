@@ -107,13 +107,20 @@
               "order_by" => "date",
               "sort" => Request::input('order_by') == 'date' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
              ]) }}">Date</a></th>
-            <th scope="col" class="col-3"><a href="{{ route('admin.sales.index', [
+            <th scope="col" class="col-2"><a href="{{ route('admin.sales.index', [
               "start_date" => Request::input('start_date'),
               "end_date" => Request::input('end_date'),
               "group_by" => Request::input('group_by'),
               "order_by" => "total_orders",
               "sort" => Request::input('order_by') == 'total_orders' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
              ]) }}">Total Orders</a></th>
+             <th scope="col" class="col-2"><a href="{{ route('admin.sales.index', [
+              "start_date" => Request::input('start_date'),
+              "end_date" => Request::input('end_date'),
+              "group_by" => Request::input('group_by'),
+              "order_by" => "total_loyalty_points",
+              "sort" => Request::input('order_by') == 'total_loyalty_points' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
+             ]) }}">Loyalty Points</a></th>
             <th scope="col" class="col-3"><a href="{{ route('admin.sales.index', [
               "start_date" => Request::input('start_date'),
               "end_date" => Request::input('end_date'),
@@ -121,16 +128,17 @@
               "order_by" => "total_sales",
               "sort" => Request::input('order_by') == 'total_sales' && Request::input('sort') == 'desc' ? 'asc' : 'desc' 
              ]) }}">Total Sales</a></th>
-            <th scope="col" class="col-3">Options</th>
+            <th scope="col" class="col-2">Options</th>
           </tr>
         </thead>
         <tbody>
           @foreach($sales as $sale)
           <tr>
             <th scope="row" class="col-3">{{ $sale['date'] }}</th>
-            <td class="col-3">{{ $sale['total_orders'] }}</td>
+            <td class="col-2">{{ $sale['total_orders'] }}</td>
+            <td class="col-2">{{ $sale['total_loyalty_points'] }}</td>
             <td class="col-3">₱ {{ number_format($sale['total_sales'], 2, '.', ',') }}</td>
-            <td class="col-3">
+            <td class="col-2">
               @if ($sale['total_orders'] == 0)
               <a href="#" class="btn btn-sm btn-outline-secondary font-weight-bold disabled">View Orders</a>
               @else
@@ -145,9 +153,10 @@
         <thead>
           <tr>
             <th scope="col" class="col-3">TOTALS</th>
-            <th scope="col" class="col-3">{{ $total['orders'] }}</th>
+            <th scope="col" class="col-2">{{ $total['orders'] }}</th>
+            <th scope="col" class="col-2">{{ $total['loyalty_points'] }}</th>
             <th scope="col" class="col-3">₱ {{ number_format($total['sales'], 2, '.', ',') }}</th>
-            <th scope="col" class="col-3"></th>
+            <th scope="col" class="col-2"></th>
           </tr>
         </thead>
       </table>

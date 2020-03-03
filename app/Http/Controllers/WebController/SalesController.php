@@ -41,6 +41,7 @@ class SalesController extends Controller
                 'date' => $date,
                 'total_orders' => 0,
                 'total_sales' => 0,
+                'total_loyalty_points' => 0,
                 'codes' => []
             ];
         }
@@ -100,7 +101,8 @@ class SalesController extends Controller
     {
         $this->total = [
             'orders' => $this->sales_collection != null ? $this->sales_collection->sum('total_orders') : 0,
-            'sales' => $this->sales_collection != null ? $this->sales_collection->sum('total_sales') : 0
+            'sales' => $this->sales_collection != null ? $this->sales_collection->sum('total_sales') : 0,
+            'loyalty_points' => $this->sales_collection != null ? $this->sales_collection->sum('total_loyalty_points') : 0
         ];
     }
 
@@ -125,11 +127,29 @@ class SalesController extends Controller
                 unset($this->sales_array[$key]);
             }
 
+            $codes = explode(',', $sale->codes);
+
+            $total_sales = 0;
+            $total_loyalty_points = 0;
+            foreach ($codes as $code) {
+                $order = $this->order()->getOrder($code);
+                $loyalty_points = $order->loyalty_points;
+                $order_total = $order->total;
+
+                if ($loyalty_points > $order_total) {
+                    $total_loyalty_points += $order_total;
+                } else {
+                    $total_loyalty_points += $loyalty_points;
+                    $total_sales += ($order_total - $loyalty_points);
+                }
+            }
+
             $this->sales_array[] = [
                 'date' => $sale->date,
                 'total_orders' => $sale->total_orders,
-                'total_sales' => $sale->total_sales,
-                'codes' => explode(',', $sale->codes)
+                'total_sales' => $total_sales,
+                'total_loyalty_points' => $total_loyalty_points,
+                'codes' => $codes
             ];
         }
     }

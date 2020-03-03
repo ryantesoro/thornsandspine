@@ -61,6 +61,7 @@
                 <tr>
                     <th scope="col">Date</th>
                     <th scope="col">Total Orders</th>
+                    <th scope="col">Loyalty Points</th>
                     <th scope="col">Total Sales</th>
                 </tr>
             </thead>
@@ -69,12 +70,14 @@
                 <tr>
                     <th scope="row">{{ $row['date'] }}</th>
                     <td>{{ $row['total_orders'] }}</td>
+                    <td>{{ $row['total_loyalty_points'] }}</td>
                     <td>{{ number_format($row['total_sales'], 2, '.', ',') }} PHP</td>
                 </tr>
                 @endforeach
                 <tr>
                     <th scope="row" class="text-right">Total</th>
                     <td>{{ $data['total']['orders'] }}</td>
+                    <td>{{ $data['total']['loyalty_points'] }}</td>
                     <td>{{ number_format($data['total']['sales'], 2, '.', ',') }} PHP</td>
                 </tr>
             </tbody>
