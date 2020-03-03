@@ -435,9 +435,10 @@ class OrderController extends Controller
         $customer_details = $this->customer()->getCustomer($customer->id);
 
         $grand_total = ($cart_total + $shipping_fees->price);
-
+        $discount = 0;
         if ($use_loyalty_points) {
             $grand_total -= $customer_details->loyalty_points;
+            $discount = $customer_details->loyalty_points;
         }        
 
         return response()->json([
@@ -447,7 +448,8 @@ class OrderController extends Controller
                 'total_items' => count($customer_cart->get()),
                 'cart_total' => $cart_total,
                 'shipping_fee' => $shipping_fees->price,
-                'grand_total' => $grand_total
+                'grand_total' => $grand_total,
+                'discount' => $discount
             ]
         ]);        
     }
