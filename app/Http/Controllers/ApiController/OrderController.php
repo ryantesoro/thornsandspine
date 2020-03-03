@@ -441,10 +441,12 @@ class OrderController extends Controller
             $loyalty_points = $customer_details->loyalty_points;
             if ($grand_total < $loyalty_points) {
                 $loyalty_points_left = $loyalty_points - $grand_total;
+                $discount = $grand_total;
+                $grand_total = 0;
+            } else {
+                $grand_total -= $customer_details->loyalty_points;
+                $discount = $loyalty_points;
             }
-
-            $discount = $loyalty_points;
-            $grand_total -= $customer_details->loyalty_points;
         }        
 
         return response()->json([
