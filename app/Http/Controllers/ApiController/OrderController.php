@@ -260,9 +260,24 @@ class OrderController extends Controller
 
         Mail::to($user)->queue(new OrderPlaced($data));
 
+        $payment_method = $order->payment_method;
+
+        if ($payment_method == 'gcash') {
+            $gcash_number = $this->configuration()->getConfiguration($payment_method);
+            $msg = 'You can send us the money in our GCASH number: '.$gcash_number;
+        } else {
+            $bank_name = $this->configuration()->getConfiguration($payment_method);
+            $bank_number = $this->configuration()->getConfiguration('card_number');
+
+            $msg = 'You can send us the money in our Bank Account.\nBank Name: '.$bank_name.'\nAccount Number: '.$bank_number;
+        }
         return response()->json([
             'success' => true,
-            'msg' => 'Successfully ordered!'
+            'msg' => 'You have successfully ordered! 
+            \n Before we deliver your order, make sure to pay us using '.strToUpper($order->payment_method).
+            'before '.$order->expires_at.'\n'.$msg.'\n'.
+            "If you didn't know how to send money using ".strToUpper($order->payment_method).'\n'.
+            "Check out our FAQs!"
         ]);
     }
 
