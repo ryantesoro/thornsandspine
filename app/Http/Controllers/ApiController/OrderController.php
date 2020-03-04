@@ -412,6 +412,14 @@ class OrderController extends Controller
         //Getting Customer's Cart
         $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
         $customer_cart = $this->customer()->getCustomerCart($customer);
+
+        if ($request->post('delivery_date') == null) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Please specify the delivery date!'
+            ]);
+        }
+        
         $delivery_date = Carbon::createFromFormat('m-d-Y', $request->post('delivery_date'));
 
         if ($customer_cart->count() == 0) {
