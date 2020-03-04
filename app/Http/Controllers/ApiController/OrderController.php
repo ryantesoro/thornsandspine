@@ -465,6 +465,7 @@ class OrderController extends Controller
                 $grand_total -= $customer_details->loyalty_points;
                 $discount = $loyalty_points;
             }
+            $customer_details['email'] = auth()->user()->email;
         }        
 
         return response()->json([
