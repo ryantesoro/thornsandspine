@@ -104,7 +104,7 @@ class OrderController extends Controller
 
         $recipient_first = $request->post('recipient_first');
         $courier_id = $request->post('courier_id');
-        $delivery_date = Carbon::createFromFormat('m-d-Y', $request->post('delivery_date'))->startOfDay();
+        $delivery_date = Carbon::createFromFormat('m-d-Y', $request->post('delivery_date'))->endOfDay();
         $use_loyalty_points = $request->post('use_loyalty_points');
 
         //Getting Customer's Cart
@@ -420,7 +420,7 @@ class OrderController extends Controller
             ]);
         }
 
-        $delivery_date = Carbon::createFromFormat('m-d-Y', $request->post('delivery_date'))->startOfDay();
+        $delivery_date = Carbon::createFromFormat('m-d-Y', $request->post('delivery_date'))->endOfDay();
 
         if ($customer_cart->count() == 0) {
             return response()->json([
