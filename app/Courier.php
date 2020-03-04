@@ -9,7 +9,7 @@ class Courier extends Model
     protected $table = "couriers";
 
     protected $fillable = [
-        'name'
+        'name', 'same_day'
     ];
 
     protected $hidden = ['pivot'];

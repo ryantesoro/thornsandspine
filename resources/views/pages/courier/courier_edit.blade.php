@@ -41,6 +41,18 @@
                 </div>
             </div>
         </div>
+        <div class="row pl-3">
+            <div class="col-5">
+                <div class="form-check">
+                    {!! Form::checkbox('shipping_agent_same_day', 1,  $courier_details->same_day == 1, [
+                        'class' => 'form-check-input'
+                    ]) !!}
+                    <label class="form-check-label">
+                    Same Day Delivery
+                    </label>
+                </div>
+            </div>
+        </div>
         <hr>
         <div class="d-flex justify-content-center">
             <button type="reset" class="btn btn-danger">

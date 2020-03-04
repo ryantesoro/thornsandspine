@@ -23,6 +23,7 @@
         <thead>
           <tr>
             <th>Name</th>
+            <th>Same Day Delivery?</th>
             <th>Options</th>
           </tr>
         </thead>
@@ -30,6 +31,13 @@
           @foreach($couriers as $courier)
           <tr>
             <td>{{ $courier->name }}</td>
+            <td>
+              @if ($courier->same_day == 1)
+                Yes
+              @else
+                No
+              @endif
+            </td>
             <td>
               <a href="{{ route('admin.courier.edit', $courier->id) }}"
                 class="btn btn-sm btn-warning font-weight-bold">Edit</a>

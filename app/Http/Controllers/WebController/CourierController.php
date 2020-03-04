@@ -25,11 +25,13 @@ class CourierController extends Controller
     public function store(Request $request)
     {
         $shipping_agent_details = [
-            'shipping_agent_name' => $request->post('shipping_agent_name')
+            'shipping_agent_name' => $request->post('shipping_agent_name'),
+            'shipping_agent_same_day' => $request->post('shipping_agent_same_day') ?? 0
         ];
 
         $validator = Validator::make($shipping_agent_details,[
-            'shipping_agent_name' => 'required|unique:couriers,name'
+            'shipping_agent_name' => 'required|unique:couriers,name',
+            'shipping_agent_same_day' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -40,7 +42,8 @@ class CourierController extends Controller
         }
 
         $store_courier = $this->courier()->storeCourier([
-            'name' => $shipping_agent_details['shipping_agent_name']
+            'name' => $shipping_agent_details['shipping_agent_name'],
+            'same_day' => $shipping_agent_details['shipping_agent_same_day']
         ]);
 
         $store_logs = $this->logs()->storeLog([
@@ -63,11 +66,13 @@ class CourierController extends Controller
     public function update(Request $request, $courier_id)
     {
         $shipping_agent_details = [
-            'shipping_agent_name' => $request->post('shipping_agent_name')
+            'shipping_agent_name' => $request->post('shipping_agent_name'),
+            'shipping_agent_same_day' => $request->post('shipping_agent_same_day') ?? 0
         ];
 
         $validator = Validator::make($shipping_agent_details,[
-            'shipping_agent_name' => 'required|unique:couriers,name,'.$courier_id
+            'shipping_agent_name' => 'required|unique:couriers,name,'.$courier_id,
+            'shipping_agent_same_day' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -77,7 +82,10 @@ class CourierController extends Controller
                 ->withErrors($validator->errors());
         }
 
-        $update_courier = $this->courier()->updateCourier(['name' => $shipping_agent_details['shipping_agent_name']], $courier_id);
+        $update_courier = $this->courier()->updateCourier([
+            'name' => $shipping_agent_details['shipping_agent_name'],
+            'same_day' => $shipping_agent_details['shipping_agent_same_day']
+        ], $courier_id);
 
         $store_logs = $this->logs()->storeLog([
             'user_id' => auth()->user()->id,
