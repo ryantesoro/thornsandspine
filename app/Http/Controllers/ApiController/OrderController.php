@@ -273,11 +273,10 @@ class OrderController extends Controller
         }
         return response()->json([
             'success' => true,
-            'msg' => 'You have successfully ordered! 
-            \n Before we deliver your order, make sure to pay us using '.strToUpper($order->payment_method).
-            'before '.$order->expires_at.'\n'.$msg.'\n'.
+            'msg' => 'You have successfully ordered!\nBefore we deliver your order, make sure to pay us using '.strToUpper($order->payment_method).
+            ' before '.$order->expires_at.'\n'.$msg.'\n'.
             "If you didn't know how to send money using ".strToUpper($order->payment_method).'\n'.
-            "Check out our FAQs!"
+            "You check out our the FAQs"
         ]);
     }
 
@@ -413,11 +412,19 @@ class OrderController extends Controller
         //Getting Customer's Cart
         $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
         $customer_cart = $this->customer()->getCustomerCart($customer);
+        $delivery_date = Carbon::createFromFormat('m-d-Y', $request->post('delivery_date'));
 
         if ($customer_cart->count() == 0) {
             return response()->json([
                 'success' => false,
                 'msg' => 'Your cart is empty!'
+            ]);
+        }
+
+        if ($delivery_date->isPast()) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Delivery date must not be from the past!'
             ]);
         }
 
