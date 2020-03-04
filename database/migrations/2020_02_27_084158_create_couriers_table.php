@@ -16,7 +16,7 @@ class CreateCouriersTable extends Migration
         Schema::create('couriers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->boolean('same_day');
+            $table->boolean('same_day')->default(0);
         });
     }
 

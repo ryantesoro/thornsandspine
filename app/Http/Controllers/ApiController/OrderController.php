@@ -125,6 +125,17 @@ class OrderController extends Controller
             ]);
         }
 
+        $shipping_agent = $this->courier()->getCourier($courier_id);
+        $now = Carbon::now();
+        if ($shipping_agent->same_day == 0) {
+            if ($now->isSameDay($delivery_date)) {
+                return response()->json([
+                    'success' => false,
+                    'msg' => 'Shipping Agent does not do same day delivery. Please pick another shipping agent.'
+                ]);
+            }
+        }
+
         $cart_total = $this->cart()->getCartTotal($customer_cart);
 
         $order_details = [
@@ -420,6 +431,8 @@ class OrderController extends Controller
             ]);
         }
 
+        $now = Carbon::now();
+
         $delivery_date = Carbon::createFromFormat('m-d-Y', $request->post('delivery_date'))->endOfDay();
 
         if ($customer_cart->count() == 0) {
@@ -436,8 +449,8 @@ class OrderController extends Controller
             ]);
         }
 
-        $city_province_id = $request->get('city_province_id');
-        $courier_id = $request->get('courier_id');
+        $city_province_id = $request->post('city_province_id');
+        $courier_id = $request->post('courier_id');
         $use_loyalty_points = $request->post('use_loyalty_points');
         $use_mine = $request->post('use_mine');
 
@@ -462,7 +475,22 @@ class OrderController extends Controller
             ]);
         }
 
+        $shipping_agent = $this->courier()->getCourier($courier_id);
+
+        if ($shipping_agent->same_day == 0) {
+            if ($now->isSameDay($delivery_date)) {
+                return response()->json([
+                    'success' => false,
+                    'msg' => 'Shipping Agent does not do same day delivery. Please pick another shipping agent.'
+                ]);
+            }
+        }
+
         $customer_details = $this->customer()->getCustomer($customer->id);
+    
+        $customer_details->first_name = ucwords($customer_details->first_name);
+        $customer_details->last_name = ucwords($customer_details->last_name);
+        $customer_details->address = ucwords($customer_details->address);
 
         if ($use_mine) {
             $province = $this->province()->getProvinceByName($customer_details->province);
