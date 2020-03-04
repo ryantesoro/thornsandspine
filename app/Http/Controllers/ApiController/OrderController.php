@@ -419,7 +419,7 @@ class OrderController extends Controller
                 'msg' => 'Please specify the delivery date!'
             ]);
         }
-        
+
         $delivery_date = Carbon::createFromFormat('m-d-Y', $request->post('delivery_date'));
 
         if ($customer_cart->count() == 0) {
@@ -495,8 +495,9 @@ class OrderController extends Controller
                 $grand_total -= $customer_details->loyalty_points;
                 $discount = $loyalty_points;
             }
-            $customer_details['email'] = auth()->user()->email;
-        }        
+        }    
+        
+        $customer_details['email'] = auth()->user()->email;    
 
         return response()->json([
             'success' => true,
