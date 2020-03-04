@@ -179,6 +179,7 @@ class OrderController extends Controller
             $shipping_fee = $this->shipping_fee()->getShippingFeeByCityProvinceAndCourier($courier_id, $city_province_id);
 
             $order_details['shipping_fees_id'] = $shipping_fee->id;
+            $recipient_details = $customer_details;
         }
 
         //If loyalty points is checked
