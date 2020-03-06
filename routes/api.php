@@ -35,26 +35,38 @@ Route::group(['prefix' => 'shipping'], function () {
     Route::post('quotation', ['as' => 'shipping_fee.quotation', 'uses' => 'ShippingFeeController@quotation']);
 });
 
+//FAQs
+Route::group(['prefix' => 'faq'], function () {
+    //FAQ Index
+    Route::get('/', ['as' => 'faq.index', 'uses' => 'FaqController@index']);
+
+    //FAQ Show
+    Route::get('{faq_id}', ['as' => 'faq.show', 'uses' => 'FaqController@show']);
+});
+
 //CONFIGURATION
 Route::group(['prefix' => 'configuration'], function () {
-    //Configuration Index
-    Route::get('/', ['as' => 'configuration.index', 'uses' => 'ConfigurationController@index']);
-
-    //Configuration Bank Information
-    Route::get('bank', ['as' => 'configuration.bank', 'uses' => 'ConfigurationController@bank']);
-
-    //Configuration GCash
-    Route::get('gcash', ['as' => 'configuration.gcash', 'uses' => 'ConfigurationController@gcash']);
-
-    //Configuration Contact
-    Route::get('contact', ['as' => 'configuration.contact', 'uses' => 'ConfigurationController@contact']);
-});
 
 //WHEN LOGGED IN
 Route::group(['middleware' => 'auth:api'], function () {
 
     //USER INFO
     Route::get('user/info', ['as' => 'user.info', 'uses' => 'UserController@show']);
+
+    //CONFIGURATION
+    Route::group(['prefix' => 'configuration'], function () {
+        //Configuration Index
+        Route::get('/', ['as' => 'configuration.index', 'uses' => 'ConfigurationController@index']);
+
+        //Configuration Bank Information
+        Route::get('bank', ['as' => 'configuration.bank', 'uses' => 'ConfigurationController@bank']);
+
+        //Configuration GCash
+        Route::get('gcash', ['as' => 'configuration.gcash', 'uses' => 'ConfigurationController@gcash']);
+
+        //Configuration Contact
+        Route::get('contact', ['as' => 'configuration.contact', 'uses' => 'ConfigurationController@contact']);
+    });
 
     //PRODUCTS
     Route::group(['prefix' => 'product'], function () {
