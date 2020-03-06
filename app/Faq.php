@@ -19,8 +19,7 @@ class Faq extends Model
     //Get Faqs
     public function getFaqs()
     {
-        $faqs = Faq::select('*')->get()
-            ->sortByDesc('id');
+        $faqs = Faq::select('*')->orderBy('id', 'DESC')->get();
         
         return $faqs;
     }
