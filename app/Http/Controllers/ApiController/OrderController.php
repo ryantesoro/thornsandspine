@@ -27,74 +27,97 @@ class OrderController extends Controller
         
         $orders = $this->order()->getOrdersByStatus($order_model, $status ?? 0);
 
+        $now = Carbon::now()->endOfDay();
+        $order_list = [];
         foreach ($orders as $order) {
-            //Fetching all products of the order
-            $order_id = $order->id;
-            $order_product = $this->order_product()->getOrderProducts($order_id);
-            $products = [];
-            foreach ($order_product as $product) {
-                $pot_name = $this->pot()->getPot($product->pot_id)->name;
-                $product_name = $this->product()->getProduct($product->product_id)->name;
-                $quantity = $product->quantity;
-                $sub_total = $product->sub_total;
-                $price = $sub_total/$quantity;
-                $products[] = [
-                    'name' => $product_name,
-                    'pot_name' => $pot_name,
-                    'price' => $price,
-                    'quantity' => $quantity
+            $expiry_date = $order->expires_at;
+            if (!$now->isPast($expiry_date)) {
+                $order_list[] = [
+                    'code' => $order->code,
+                    'created_at' => $order->created_at->format('l, F d, Y h:i A')
                 ];
             }
-            $order['products'] = $products;
-
-            //Fetch the recipient of the order
-            $recipient_details = [];
-            $recipient_address = "";
-            if ($order->recipient_id !== null) {
-                $recipient = $this->recipient()->getRecipient($order->recipient_id);
-                $recipient_address = ucwords($recipient->address);
-                $recipient_details = [
-                    'first_name' => ucwords($recipient->first_name),
-                    'last_name' => ucwords($recipient->last_name),
-                    'contact_number' => $recipient->contact_number,
-                    'email' => $recipient->email
-                ];
-            } else {
-                $customer_details = $this->customer()->getCustomer($customer->id);
-                $user_email = auth()->user()->email;
-                $recipient_address = ucwords($customer_details->address);
-                $recipient_details = [
-                    'first_name' => ucwords($customer_details->first_name),
-                    'last_name' => ucwords($customer_details->last_name),
-                    'contact_number' => $customer_details->contact_number,
-                    'email' => $user_email
-                ];
-            }
-            unset($order['recipient_id']); 
-
-            //Fetch Shipping Agent
-            $shipping_fee = $this->shipping_fee()->getShippingFee($order->shipping_fees_id);
-            $courier_name = $shipping_fee->courier()->get()->first()->name;
-            $order['shipping_agent'] = $courier_name;
-            $order['shipping_fee'] = $shipping_fee->price;
-            unset($order['shipping_fees_id']); 
-
-            //Fetch City and Province
-            $city_province = $this->city()->getCity($shipping_fee->city_province_id);
-            $city_name = $city_province->city;
-            $province_id = $city_province->province_id;
-            
-            $province_name = $this->province()->getProvince($province_id)->name;
-            $new_address = $recipient_address.', '.ucwords($city_name).', '.ucwords($province_name);
-            $recipient_details['address'] = $new_address;
-
-            $order['recipient'] = $recipient_details;
-            $order['grand_total'] = ($order->total + $shipping_fee->price) - $order->loyalty_points;
         }
 
         return response()->json([
             'success' => true,
-            'data' => $orders
+            'data' => $order_list
+        ]);
+    }
+
+    public function show($order_code)
+    {
+        $this->setUserId(auth()->user()->id);
+
+        $order = $this->order()->getOrder($order_code);
+
+        //Fetching all products of the order
+        $order_id = $order->id;
+        $order_product = $this->order_product()->getOrderProducts($order_id);
+        $products = [];
+        foreach ($order_product as $product) {
+            $pot_name = $this->pot()->getPot($product->pot_id)->name;
+            $product_name = $this->product()->getProduct($product->product_id)->name;
+            $quantity = $product->quantity;
+            $sub_total = $product->sub_total;
+            $price = $sub_total/$quantity;
+            $products[] = [
+                'name' => $product_name,
+                'pot_name' => $pot_name,
+                'price' => $price,
+                'quantity' => $quantity
+            ];
+        }
+        $order['products'] = $products;
+
+        //Fetch the recipient of the order
+        $recipient_details = [];
+        $recipient_address = "";
+        if ($order->recipient_id !== null) {
+            $recipient = $this->recipient()->getRecipient($order->recipient_id);
+            $recipient_address = ucwords($recipient->address);
+            $recipient_details = [
+                'first_name' => ucwords($recipient->first_name),
+                'last_name' => ucwords($recipient->last_name),
+                'contact_number' => $recipient->contact_number,
+                'email' => $recipient->email
+            ];
+        } else {
+            $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
+            $customer_details = $this->customer()->getCustomer($customer->id);
+            $user_email = auth()->user()->email;
+            $recipient_address = ucwords($customer_details->address);
+            $recipient_details = [
+                'first_name' => ucwords($customer_details->first_name),
+                'last_name' => ucwords($customer_details->last_name),
+                'contact_number' => $customer_details->contact_number,
+                'email' => $user_email
+            ];
+        }
+        unset($order['recipient_id']); 
+
+        //Fetch Shipping Agent
+        $shipping_fee = $this->shipping_fee()->getShippingFee($order->shipping_fees_id);
+        $courier_name = $shipping_fee->courier()->get()->first()->name;
+        $order['shipping_agent'] = $courier_name;
+        $order['shipping_fee'] = $shipping_fee->price;
+        unset($order['shipping_fees_id']); 
+
+        //Fetch City and Province
+        $city_province = $this->city()->getCity($shipping_fee->city_province_id);
+        $city_name = $city_province->city;
+        $province_id = $city_province->province_id;
+        
+        $province_name = $this->province()->getProvince($province_id)->name;
+        $new_address = $recipient_address.', '.ucwords($city_name).', '.ucwords($province_name);
+        $recipient_details['address'] = $new_address;
+
+        $order['recipient'] = $recipient_details;
+        $order['grand_total'] = ($order->total + $shipping_fee->price) - $order->loyalty_points;
+
+        return response()->json([
+            'success' => true,
+            'data' => $order
         ]);
     }
 

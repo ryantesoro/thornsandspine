@@ -91,6 +91,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         //Browse Orders
         Route::get('/', ['as' => 'order.index', 'uses' => 'OrderController@index']);
 
+        //Show Orders
+        Route::get('{order_code}', ['as' => 'order.show', 'uses' => 'OrderController@show']);
+
         //Cancel Order
         Route::get('create', ['as' => 'order.create', 'uses' => 'OrderController@create']);
 
