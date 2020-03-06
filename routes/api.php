@@ -44,9 +44,6 @@ Route::group(['prefix' => 'faq'], function () {
     Route::get('{faq_id}', ['as' => 'faq.show', 'uses' => 'FaqController@show']);
 });
 
-//CONFIGURATION
-Route::group(['prefix' => 'configuration'], function () {
-
 //WHEN LOGGED IN
 Route::group(['middleware' => 'auth:api'], function () {
 
