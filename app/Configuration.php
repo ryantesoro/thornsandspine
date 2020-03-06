@@ -24,9 +24,8 @@ class Configuration extends Model
         foreach ($configurations as $configuration) {
             if ($configuration->name == 'card_number') {
                 $config['account_number'] = $configuration->value;
-            } else {
-                $config[$configuration->name] = $configuration->value;
-            }
+            } 
+            $config[$configuration->name] = $configuration->value;  
         }
 
         $card_number = $config['card_number'];
