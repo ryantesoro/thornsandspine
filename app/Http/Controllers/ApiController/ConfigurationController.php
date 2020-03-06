@@ -15,6 +15,7 @@ class ConfigurationController extends Controller
         unset($configurations['card_number_2']);
         unset($configurations['card_number_3']);
         unset($configurations['card_number_4']);
+        unset($configurations['card_number']);
 
         return response()->json([
             'success' => true,
