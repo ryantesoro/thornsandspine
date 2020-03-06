@@ -11,6 +11,11 @@ class ConfigurationController extends Controller
     {
         $configurations = $this->configuration()->getConfigurations();
 
+        unset($configurations['card_number_1']);
+        unset($configurations['card_number_2']);
+        unset($configurations['card_number_3']);
+        unset($configurations['card_number_4']);
+
         return response()->json([
             'success' => true,
             'data' => $configurations

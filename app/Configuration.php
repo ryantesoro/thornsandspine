@@ -22,7 +22,11 @@ class Configuration extends Model
 
         $config = [];
         foreach ($configurations as $configuration) {
-            $config[$configuration->name] = $configuration->value;
+            if ($configuration->name == 'card_number') {
+                $config['account_number'] = $configuration->value;
+            } else {
+                $config[$configuration->name] = $configuration->value;
+            }
         }
 
         $card_number = $config['card_number'];
@@ -30,8 +34,6 @@ class Configuration extends Model
         $config['card_number_2'] = substr($card_number, 4, 4);
         $config['card_number_3'] = substr($card_number, 8, 4);
         $config['card_number_4'] = substr($card_number, 12, 4);
-
-        unset($config['card_number']);
 
         return $config;
     }
