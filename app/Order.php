@@ -78,8 +78,11 @@ class Order extends Model
     //Get Orders by status
     public function getOrdersByStatus($order_model, $status)
     {
-        $orders = $order_model->where('status', $status)
-            ->get();
+        $orders = $order_model->get();
+
+        if ($status != null && $status != 5 && $status != 'all') {
+            $orders = $orders->where('status', $status);
+        }
         
         return $orders;
     }

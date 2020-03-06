@@ -25,16 +25,34 @@ class OrderController extends Controller
         $customer = $this->customer()->getCustomerDetailsByUser($this->user_id);
         $order_model = $this->customer()->getCustomerOrders($customer);
         
-        $orders = $this->order()->getOrdersByStatus($order_model, $status ?? 0);
+        $orders = $this->order()->getOrdersByStatus($order_model, $status);
 
-        $now = Carbon::now()->endOfDay();
         $order_list = [];
         foreach ($orders as $order) {
-            $expiry_date = $order->expires_at;
-            if (!$now->isPast($expiry_date)) {
+            $should_add = false;
+
+            if ($order->expires_at != null) {
+                $expiry_date = Carbon::createFromFormat('Y-m-d H:i:s', $order->expires_at)->endOfDay();
+                if ($status == 5 && $expiry_date->isPast()) {
+                    $should_add = true;
+                } else if (!$expiry_date->isPast()) {
+                    $should_add = true;
+                }
+            }
+
+            if ($order->status == $status) {
+                $should_add = true;
+            }
+
+            if ($status == 'all') {
+                $should_add = true;
+            }
+
+            if ($should_add) {
                 $order_list[] = [
                     'code' => $order->code,
-                    'created_at' => $order->created_at->format('l, F d, Y h:i A')
+                    'created_at' => $order->created_at->format('l, F d, Y h:i A'),
+                    'status' => $order->status
                 ];
             }
         }
@@ -50,6 +68,14 @@ class OrderController extends Controller
         $this->setUserId(auth()->user()->id);
 
         $order = $this->order()->getOrder($order_code);
+
+        //Changing status of order if expired
+        if ($order->expires_at != null) {
+            $expiry_date = Carbon::createFromFormat('Y-m-d H:i:s', $order->expires_at)->endOfDay();
+            if ($expiry_date->isPast()) {
+                $order->status = 5;
+            }
+        }
 
         //Fetching all products of the order
         $order_id = $order->id;
