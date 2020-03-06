@@ -36,6 +36,47 @@ class Product extends Model
             ->sortByDesc('created_at');
     }
 
+    //Get Newst Products
+    public function getNewestProducts($limit)
+    {
+        $start_date = Carbon::now()->subMonth(1);
+        $end_date = Carbon::now();
+
+        $products = Product::select(['code', 'img'])
+            ->whereBetween('created_at', [$start_date, $end_date]);
+
+        if ($limit != null) {
+            $products = $products->limit($limit);
+        }
+        
+        return $products->get()->sortByDesc('created_at');
+    }
+
+    //Get Best Selling Products
+    public function getBestSellingProducts($limit)
+    {
+        $start_date = Carbon::now()->subMonth(1);
+        $end_date = Carbon::now();
+
+        $products = DB::table('products')
+            ->selectRaw('products.code, products.img, COUNT(orders.id) AS sales')
+            ->leftJoin('order_product', function ($query) {
+                $query->on('order_product.product_id', 'products.id');
+            })
+            ->leftJoin('orders', function ($query) {
+                $query->on('orders.id', 'order_product.order_id');
+            })
+            ->where('status', 2)
+            ->whereBetween('orders.created_at', [$start_date, $end_date])
+            ->groupBy('products.code', 'products.img');
+
+        if ($limit != null) {
+            $products = $products->limit($limit);
+        }
+        
+        return $products->get()->sortByDesc('sales');
+    }
+
     //Browse products
     public function browseProducts($where)
     {

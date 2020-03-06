@@ -61,6 +61,12 @@ Route::group(['middleware' => 'auth:api'], function () {
         //Browse Products
         Route::get('/', ['as' => 'product.index', 'uses' => 'ProductController@index']);
 
+        //Best Seller Products
+        Route::get('seller', ['as' => 'product.seller', 'uses' => 'ProductController@bestSeller']);
+
+        //Best Seller Products
+        Route::get('newest', ['as' => 'product.newest', 'uses' => 'ProductController@newestProduct']);
+
         //Search Products
         Route::get('search', ['as' => 'product.show', 'uses' => 'ProductController@search']);
 

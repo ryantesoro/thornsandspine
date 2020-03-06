@@ -9,25 +9,11 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $products = $this->product()->browseProducts(null);
+        $fetched_best_sellers = $this->product()->getBestSellingProducts(8);
+        $fetched_new_products = $this->product()->getNewestProducts(8);
 
-        $new_products = [];
-
-        $limit = 1;
-        foreach ($products as $product) {
-            $new_products[] = [
-                'code' => $product->code,
-                'img' => route('image.api', [$product->img, 'size' => 'thumbnail'])
-            ];
-
-            if ($limit == 8) {
-                break;
-            }
-            $limit++;
-        }
-
-        $newest_products = $new_products;
-        $best_seller_products = $new_products;
+        $best_seller_products = $this->addImageUrl($fetched_best_sellers);
+        $newest_products = $this->addImageUrl($fetched_new_products);
 
         return response()->json([
             'success' => true,
@@ -35,6 +21,28 @@ class ProductController extends Controller
                 'newest_products' => $newest_products,
                 'best_seller_products' => $best_seller_products
             ]
+        ]);
+    }
+
+    public function bestSeller()
+    {
+        $fetched_best_sellers = $this->product()->getBestSellingProducts(null);
+        $best_seller_products = $this->addImageUrl($fetched_best_sellers);
+
+        return response()->json([
+            'success' => true,
+            'data' => $best_seller_products
+        ]);
+    }
+
+    public function newestProduct()
+    {
+        $fetched_new_products = $this->product()->getNewestProducts(null);
+        $newest_products = $this->addImageUrl($fetched_new_products);
+
+        return response()->json([
+            'success' => true,
+            'data' => $newest_products
         ]);
     }
 
@@ -81,5 +89,18 @@ class ProductController extends Controller
                 'pots' => $new_pots
             ]
         ]);
+    }
+
+    private function addImageUrl($product_collection)
+    {
+        $products = [];
+        foreach ($product_collection as $product) {
+            $products[] = [
+                'code' => $product->code,
+                'img' => route('image.api', [$product->img, 'size' => 'thumbnail'])
+            ];
+        }
+
+        return $products;
     }
 }
