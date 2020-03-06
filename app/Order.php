@@ -78,13 +78,13 @@ class Order extends Model
     //Get Orders by status
     public function getOrdersByStatus($order_model, $status)
     {
-        $orders = $order_model->get();
+        $orders = $order_model;
 
         if ($status != null && $status != 5 && $status != 'all') {
             $orders = $orders->where('status', $status);
         }
         
-        return $orders;
+        return $orders->get()->sortByDesc('created_at');
     }
 
     //Store Order
