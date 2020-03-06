@@ -29,7 +29,7 @@ class ConfigurationController extends Controller
         $card_number = $this->configuration()->getConfiguration('card_number');
         $bank_configuration = [
             $bank_name->name => $bank_name->value,
-            $card_number->name => $card_number->value
+            'account_number' => $card_number->value
         ];
 
         return response()->json([
