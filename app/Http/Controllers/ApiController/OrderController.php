@@ -51,8 +51,7 @@ class OrderController extends Controller
             if ($should_add) {
                 $order_list[] = [
                     'code' => $order->code,
-                    'created_at' => $order->created_at->format('l, F d, Y h:i A'),
-                    'status' => $order->status
+                    'created_at' => $order->created_at->format('l, F d, Y h:i A')
                 ];
             }
         }
