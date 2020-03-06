@@ -107,7 +107,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/', ['as' => 'order.index', 'uses' => 'OrderController@index']);
 
         //Show Orders
-        Route::get('{order_code}', ['as' => 'order.show', 'uses' => 'OrderController@show']);
+        Route::get('show/{order_code}', ['as' => 'order.show', 'uses' => 'OrderController@show']);
 
         //Cancel Order
         Route::get('create', ['as' => 'order.create', 'uses' => 'OrderController@create']);
