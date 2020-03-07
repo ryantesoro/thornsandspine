@@ -82,13 +82,16 @@ class OrderController extends Controller
         $products = [];
         foreach ($order_product as $product) {
             $pot_name = $this->pot()->getPot($product->pot_id)->name;
-            $product_name = $this->product()->getProduct($product->product_id)->name;
+            $product_details = $this->product()->getProduct($product->product_id);
+            $product_name = $product_details->name;
             $quantity = $product->quantity;
             $sub_total = $product->sub_total;
             $price = $sub_total/$quantity;
+            $product_img = route('image.api', [$product_details->img, 'size' => 'thumbnail']);
             $products[] = [
-                'name' => $product_name,
-                'pot_name' => $pot_name,
+                'img' => $product_img,
+                'name' => ucwords($product_name),
+                'pot_name' => ucwords($pot_name),
                 'price' => $price,
                 'quantity' => $quantity
             ];
