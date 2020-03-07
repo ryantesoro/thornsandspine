@@ -55,6 +55,11 @@
                 <p class="text-left">
                     <b>Shipping Agent: </b>{{ $data['shipping_agent']->name }}
                 </p>
+                @if ($data['order']->status == 2)
+                <p class="text-left">
+                    <b>Tracking Number: </b>{{ $data['order']->tracking_number }}
+                </p>
+                @endif
                 <p class="text-left">
                     <b>Total Items: </b>{{ count($data['products']) }}
                 </p>

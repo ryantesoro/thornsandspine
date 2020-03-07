@@ -86,9 +86,11 @@ class OrderController extends Controller
             $quantity = $product->quantity;
             $sub_total = $product->sub_total;
             $price = $sub_total/$quantity;
+            $img = route('image.api', [$product->img, 'size' => 'thumbnail']);
             $products[] = [
-                'name' => $product_name,
-                'pot_name' => $pot_name,
+                'img' => $img,
+                'name' => ucwords($product_name),
+                'pot_name' => ucwords($pot_name),
                 'price' => $price,
                 'quantity' => $quantity
             ];
