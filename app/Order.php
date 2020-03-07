@@ -15,7 +15,7 @@ class Order extends Model
         'code', 'recipient_id', 'loyalty_points', 'status',
         'total', 'shipping_fees_id', 'remarks',
         'comment', 'payment_method', 'expires_at',
-        'delivery_date'
+        'delivery_date', 'tracking_number'
     ];
 
     public $timestamps = true;

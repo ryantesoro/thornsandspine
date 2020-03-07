@@ -163,6 +163,16 @@
                                             {{ strtoupper($shipping_agent) }}
                                         </td>
                                     </tr>
+                                    @if ($order->status == 2)
+                                    <tr>
+                                        <td class="font-weight-bold">
+                                            Tracking Number
+                                        </td>
+                                        <td>
+                                            {{ $order->tracking_number }}
+                                        </td>
+                                    </tr>
+                                    @endif
                                     <tr>
                                         <td class="font-weight-bold">
                                             Payment Method

@@ -10,11 +10,23 @@
                 </button>
             </div>
             <div class="modal-body">
-                Are you sure you want to complete this order?
+                <div class="form-group">
+                    <label class="font-weight-bold">Tracking Number</label>
+                    {!! Form::text('tracking_number', old('tracking_number') ?? '',
+                    [
+                    'class' => 'form-control form-control-sm',
+                    'tab_index' => '2',
+                    'data-toggle' => 'popover',
+                    'data-trigger' => 'focus',
+                    'title' => 'Tracking number',
+                    'data-content' => 'Enter here the tracking number of the order',
+                    'required' => true
+                    ]) !!}
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <button type="submit" class="btn btn-primary">Yes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </div>
     </div>
