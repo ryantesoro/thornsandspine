@@ -98,8 +98,14 @@ class OrderController extends Controller
             return redirect()->route('admin.order.index');
         }
 
+        $tracking_number = $request->post('tracking_number');
+        if ($tracking_number == null) {
+            Alert::warning('Complete Order Failed', 'Tracking Number is required');
+            return redirect()->back();
+        }
+
         $order = $this->order()->getOrder($order_code);
-        $update_order = $this->order()->updateOrder(['status' => 2, 'expires_at' => null], $order->id);
+        $update_order = $this->order()->updateOrder(['status' => 2, 'expires_at' => null, 'tracking_number' => $tracking_number], $order->id);
 
         $customer = $order->customer()->get()->first();
         $loyalty_points = floor($order->total/100);

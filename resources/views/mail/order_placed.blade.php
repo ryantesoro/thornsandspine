@@ -15,6 +15,10 @@ Before we deliver your order, make sure to pay us using **{{ strtoupper($data['o
 <br>
 <small>**Shipping Agent: {{ $data['shipping_agent'] }}**</small>
 <br>
+@if ($data['order']['status'] == 2)
+<small>**Tracking Number: {{ $data['order']['tracking_number'] }}**</small>
+<br>
+@endif
 <small>**Delivery date: {{ $data['order']['delivery_date'] }}**</small>
 @endcomponent
 ___
