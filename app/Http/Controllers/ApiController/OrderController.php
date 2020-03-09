@@ -425,7 +425,7 @@ class OrderController extends Controller
             $indx++;
         }
 
-        $update_order = $this->order()->updateOrder(['status' => 1, 'expires_at' => null], $order_details->id);
+        $update_order = $this->order()->updateOrder(['status' => 1, 'expires_at' => null, 'comment' => null], $order_details->id);
 
         return response()->json([
             'success' => true,
