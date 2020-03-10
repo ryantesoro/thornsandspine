@@ -50,17 +50,18 @@ class ProductController extends Controller
     {
         $products = $this->product()->browseProducts($request->get('search'));
 
-        $new_products = [];
+        $searched_products = [];
         foreach ($products as $product) {
-            $new_products[] = [
+            $searched_products[] = [
                 'code' => $product->code,
+                'name' => $product->name,
                 'img' => route('image.api', [$product->img, 'size' => 'thumbnail'])
             ];
         }
 
         return response()->json([
             'success' => true,
-            'data' => $new_products
+            'data' => $searched_products
         ]);
     }
 
