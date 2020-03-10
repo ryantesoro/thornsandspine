@@ -98,6 +98,7 @@ class ProductController extends Controller
         foreach ($product_collection as $product) {
             $products[] = [
                 'code' => $product->code,
+                'name' => ucwords($product->name),
                 'img' => route('image.api', [$product->img, 'size' => 'thumbnail'])
             ];
         }

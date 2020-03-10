@@ -42,7 +42,7 @@ class Product extends Model
         $start_date = Carbon::now()->subMonth(1);
         $end_date = Carbon::now();
 
-        $products = Product::select(['code', 'img'])
+        $products = Product::select(['code', 'name', 'img'])
             ->whereBetween('created_at', [$start_date, $end_date]);
 
         if ($limit != null) {
@@ -59,7 +59,7 @@ class Product extends Model
         $end_date = Carbon::now();
 
         $products = DB::table('products')
-            ->selectRaw('products.code, products.img, COUNT(orders.id) AS sales')
+            ->selectRaw('products.code, products.name, products.img, COUNT(orders.id) AS sales')
             ->leftJoin('order_product', function ($query) {
                 $query->on('order_product.product_id', 'products.id');
             })
@@ -68,7 +68,7 @@ class Product extends Model
             })
             ->where('status', 2)
             ->whereBetween('orders.created_at', [$start_date, $end_date])
-            ->groupBy('products.code', 'products.img');
+            ->groupBy('products.code', 'products.name', 'products.img');
 
         if ($limit != null) {
             $products = $products->limit($limit);
