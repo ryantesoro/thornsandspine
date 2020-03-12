@@ -52,9 +52,15 @@ class UserController extends Controller
             'loyalty_points' => $customer_details['loyalty_points']
         ];
 
+        $provinces = $this->province()->getProvinces();
+        $plucked_provinces = $provinces->pluck('name', 'id');
+
         return response()->json([
             'success' => true,
-            'data' => $user_details
+            'data' => [
+                'user_details' => $user_details,
+                'provinces' => $plucked_provinces
+            ]
         ]);
     }
 
