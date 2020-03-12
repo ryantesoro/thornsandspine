@@ -15,10 +15,75 @@ class UserController extends Controller
 
     public function show(Request $request)
     {
-        $customer = $this->customer()->getCustomerDetailsByUser(auth()->user()->id)->get()->first();
-        $customer_details = $this->customer()->getCustomer($customer->id);
+        $customer_details = auth()->user()->customer->first()->toArray();
 
-        return $customer_details;
+        $province_id = $this->province()->getProvinceByName($customer_details['province'])->id;
+        $city_province_id = $this->city()->getCityByNameAndProvince($customer_details['city'], $province_id)->id;
+
+        $user_details = [
+            'email' => auth()->user()->email,
+            'first_name' => ucwords($customer_details['first_name']),
+            'last_name' => ucwords($customer_details['last_name']),
+            'contact_number' => $customer_details['contact_number'],
+            'address' => ucwords($customer_details['address']),
+            'city_province_id' => $city_province_id,
+            'loyalty_points' => $customer_details['loyalty_points']
+        ];
+
+        return response()->json([
+            'success' => true,
+            'data' => $user_details
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        $options = [
+            'first_name' => 'required|min:3|max:30',
+            'last_name' => 'required|min:3|max:30',
+            'address' => 'required',
+            'city_province_id' => 'required|exists:city_province,id',
+            'contact_number' => 'required|min:7|max:11'
+        ];
+
+        if ($request->has('password') && $request->has('password1')) {
+            $options['password'] = 'required|min:8|max:21';
+            $options['password1'] = 'required|min:8|max:21|same:password';
+        }
+
+        $validator = Validator::make($request->all(), $options);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Invalid Input',
+                'errors' => $validator->errors()
+            ]);
+        }
+
+        if ($request->has('password')) {
+            $change_password = $this->user()->changePassword(['id' => auth()->user()->id],$request->post('password'));
+        }
+
+        $city_id = $request->post('city_province_id');
+        $city = $this->city()->getCity($city_id);
+        $province = $this->province()->getProvince($city->province_id);
+
+        $customer_details = [
+            'first_name' => $request->post('first_name'),
+            'last_name' => $request->post('last_name'),
+            'address' => $request->post('address'),
+            'contact_number' => $request->post('contact_number'),
+            'city' => $city->city,
+            'province' => $province->name
+        ];
+
+        $update_customer = $this->customer()->updateCustomer($customer_details, auth()->user()->customer->first()->id);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'You have successfully updated your account information'
+        ]);
     }
 
     public function login(Request $request)

@@ -49,6 +49,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     //USER INFO
     Route::get('user/info', ['as' => 'user.info', 'uses' => 'UserController@show']);
+    Route::post('user/update', ['as' => 'user.update', 'uses' => 'UserController@update']);
 
     //CONFIGURATION
     Route::group(['prefix' => 'configuration'], function () {
