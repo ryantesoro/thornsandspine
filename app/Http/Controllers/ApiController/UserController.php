@@ -13,6 +13,27 @@ class UserController extends Controller
 {
     use AuthenticatesUsers;
 
+    public function show(Request $request)
+    {
+        $customer_details = auth()->user()->customer->first()->toArray();
+
+        $user_details = [
+            'email' => auth()->user()->email,
+            'first_name' => ucwords($customer_details['first_name']),
+            'last_name' => ucwords($customer_details['last_name']),
+            'contact_number' => $customer_details['contact_number'],
+            'address' => ucwords($customer_details['address']),
+            'province' => $customer_details['province'],
+            'city' => $customer_details['city'],
+            'loyalty_points' => $customer_details['loyalty_points']
+        ];
+
+        return response()->json([
+            'success' => true,
+            'data' => $user_details
+        ]);
+    }
+
     public function edit(Request $request)
     {
         $customer_details = auth()->user()->customer->first()->toArray();

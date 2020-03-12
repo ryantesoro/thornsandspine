@@ -47,9 +47,17 @@ Route::group(['prefix' => 'faq'], function () {
 //WHEN LOGGED IN
 Route::group(['middleware' => 'auth:api'], function () {
 
-    //USER INFO
-    Route::get('user/edit', ['as' => 'user.edit', 'uses' => 'UserController@edit']);
-    Route::post('user/update', ['as' => 'user.update', 'uses' => 'UserController@update']);
+    //USER
+    Route::group(['prefix' => 'user'], function () {
+        //User Show
+        Route::get('show', ['as' => 'user.show', 'uses' => 'UserController@show']);
+
+        //User Edit
+        Route::get('edit', ['as' => 'user.edit', 'uses' => 'UserController@edit']);
+
+        //User Update
+        Route::post('update', ['as' => 'user.update', 'uses' => 'UserController@update']);
+    });
 
     //CONFIGURATION
     Route::group(['prefix' => 'configuration'], function () {
