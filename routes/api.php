@@ -48,7 +48,7 @@ Route::group(['prefix' => 'faq'], function () {
 Route::group(['middleware' => 'auth:api'], function () {
 
     //USER INFO
-    Route::get('user/info', ['as' => 'user.info', 'uses' => 'UserController@show']);
+    Route::get('user/edit', ['as' => 'user.edit', 'uses' => 'UserController@edit']);
     Route::post('user/update', ['as' => 'user.update', 'uses' => 'UserController@update']);
 
     //CONFIGURATION
