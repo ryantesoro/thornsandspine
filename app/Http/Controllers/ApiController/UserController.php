@@ -75,7 +75,7 @@ class UserController extends Controller
         ];
 
         if ($request->has('password') && $request->has('password1')) {
-            $options['password'] = 'required|min:8|max:21';
+            $options['password'] = 'required|min:8|max:21|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\X])(?=.*[!$#%]).*$/';
             $options['password1'] = 'required|min:8|max:21|same:password';
         }
 
@@ -209,7 +209,7 @@ class UserController extends Controller
     {
         $options = array(
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|max:21',
+            'password' => 'required|min:8|max:21|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\X])(?=.*[!$#%]).*$/',
             'password1' => 'required|min:8|max:21|same:password',
             'first_name' => 'required|min:3|max:30',
             'last_name' => 'required|min:3|max:30',
