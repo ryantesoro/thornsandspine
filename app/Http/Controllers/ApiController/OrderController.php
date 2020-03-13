@@ -325,7 +325,7 @@ class OrderController extends Controller
 
         $payment_method = $order->payment_method;
 
-        if ($payment_method == 'gcash') {
+        if ($payment_method == 'GCash') {
             $gcash_number = $this->configuration()->getConfiguration('gcash_number')->value;
             $msg = 'You can send us the money in our GCASH number: 0'.$gcash_number;
         } else {
