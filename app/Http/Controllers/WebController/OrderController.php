@@ -127,7 +127,7 @@ class OrderController extends Controller
 
         $store_logs = $this->logs()->storeLog([
             'user_id' => auth()->user()->id,
-            'action' => 'Asked to resend Proof Of Payment to Order #'.$order_code
+            'action' => 'Returned Order #'.$order_code
         ]);
         
         Alert::success('Ask Customer Successful', 'Success!');
