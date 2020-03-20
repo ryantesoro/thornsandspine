@@ -24,4 +24,19 @@ class PhotoController extends Controller
         $image = Storage::disk('local')->get($file_path.$image_name);
         return response()->make($image, 200, ['Content-Type' => 'Image']);
     }
+
+    public function promotionImage(Request $request, $image_name)
+    {
+        $file_path = "promotion/";
+        if ($request->has('size')) {
+            $size = $request->get('size');
+            
+            if ($size == "medium") {
+                $file_path = "promotion/medium/";
+            }
+        }
+
+        $image = Storage::disk('local')->get($file_path.$image_name);
+        return response()->make($image, 200, ['Content-Type' => 'Image']);
+    }
 }

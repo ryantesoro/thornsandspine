@@ -44,6 +44,12 @@ Route::group(['prefix' => 'faq'], function () {
     Route::get('{faq_id}', ['as' => 'faq.show', 'uses' => 'FaqController@show']);
 });
 
+//PROMOTIONS
+Route::group(['prefix' => 'promotion'], function () {
+    //Promotion Index
+    Route::get('/', ['as' => 'promotion.index', 'uses' => 'PromotionController@index']);
+});
+
 //WHEN LOGGED IN
 Route::group(['middleware' => 'auth:api'], function () {
 
@@ -137,3 +143,6 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 //Product Photo
 Route::get('image/{image_name}', ['as' => 'image.api', 'uses' => 'PhotoController@show']);
+
+//Promotion Photo
+Route::get('image/promotion/{image_name}', ['as' => 'image.promotion', 'uses' => 'PhotoController@promotionImage']);
