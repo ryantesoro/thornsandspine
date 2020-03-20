@@ -54,6 +54,11 @@ class PromotionController extends Controller
 
         $this->saveImageFile($promotion_details['promotion_image'], $file_name);
 
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Added New Promotion ID: '.$store_promotion->id
+        ]);
+
         Alert::success('Store Promotion Successful', 'Success!');
         return redirect()->route('admin.promotion.index');
     }
@@ -68,6 +73,11 @@ class PromotionController extends Controller
     public function destroy($promotion_id)
     {
         $delete_promotion = $this->promotion()->deletePromotion($promotion_id);
+
+        $store_logs = $this->logs()->storeLog([
+            'user_id' => auth()->user()->id,
+            'action' => 'Deleted Promotion ID: '.$promotion_id
+        ]);
 
         Alert::success('Delete Promotion Successful', 'Success!');
         return redirect()->route('admin.promotion.index');
