@@ -59,7 +59,7 @@ class ProductController extends Controller
         $file_name = $code.".jpg";
         $this->saveImageFile($product_details['img'], $file_name);
 
-        $update_product = $this->product()->updateProduct(['code' => $code, 'img' => $file_name], $product->id);
+        $store_product = $this->product()->updateProduct(['code' => $code, 'img' => $file_name], $product->id);
 
         $store_logs = $this->logs()->storeLog([
             'user_id' => auth()->user()->id,

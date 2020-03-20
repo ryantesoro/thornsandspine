@@ -26,6 +26,7 @@ use App\ShippingFee;
 use App\Province;
 use App\City;
 use App\Log;
+use App\Promotion;
 
 class Controller extends BaseController
 {
@@ -149,5 +150,11 @@ class Controller extends BaseController
     {
         $logs = new Log();
         return $logs;
+    }
+
+    public function promotion()
+    {
+        $promotion = new Promotion();
+        return $promotion;
     }
 }

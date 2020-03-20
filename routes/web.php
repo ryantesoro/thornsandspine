@@ -38,7 +38,6 @@ Route::group(['middleware' => 'auth'], function () {
 
             //Products Index
             Route::get('/', ['as' => 'admin.log.index', 'uses' => 'LogController@index']);
-            
         });
 
         //PRODUCTS
@@ -187,6 +186,24 @@ Route::group(['middleware' => 'auth'], function () {
 
             //Courier Update
             Route::post('update/{courier_id}', ['as' => 'admin.courier.update', 'uses' => 'CourierController@update']);
+        });
+
+        //PROMOTIONS
+        Route::group(['prefix' => 'promotions'], function () {
+            //Promotion Index
+            Route::get('/', ['as' => 'admin.promotion.index', 'uses' => 'PromotionController@index']);
+
+            //Promotion Create
+            Route::get('create', ['as' => 'admin.promotion.create', 'uses' => 'PromotionController@create']);
+
+            //Promotion Store
+            Route::post('/', ['as' => 'admin.promotion.store', 'uses' => 'PromotionController@store']);
+
+            //Promotion Show
+            Route::get('view/{promotion_id}', ['as' => 'admin.promotion.show', 'uses' => 'PromotionController@show']);
+
+            //Promotion Destroy
+            Route::post('delete/{promotion_id}', ['as' => 'admin.promotion.destroy', 'uses' => 'PromotionController@destroy']);
         });
     });
 
