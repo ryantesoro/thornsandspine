@@ -22,13 +22,14 @@ class Log extends Model
     public function getLogs()
     {
         $logs = DB::table('logs')
-            ->selectRaw('users.email, users.access_level, logs.action, logs.created_at')
+            ->selectRaw('logs.id, users.email, users.access_level, logs.action, logs.created_at')
             ->leftJoin('users', function ($query) {
                 $query->on('users.id', 'logs.user_id');
             })
+            ->orderBy('logs.id', 'DESC')
             ->limit(30);
 
-        return $logs->get()->sortByDesc('created_at');
+        return $logs->get();
     }
 
     //Store Logs
