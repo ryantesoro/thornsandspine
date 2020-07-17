@@ -43,7 +43,7 @@ class Product extends Model
         $end_date = Carbon::now();
 
         $products = Product::select(['code', 'name', 'img'])
-            ->whereBetween('created_at', [$start_date, $end_date]);
+            ->sortByDesc('created_at');
 
         if ($limit != null) {
             $products = $products->limit($limit);
