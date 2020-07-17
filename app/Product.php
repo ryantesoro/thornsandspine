@@ -42,8 +42,7 @@ class Product extends Model
         $start_date = Carbon::now()->subMonth(1);
         $end_date = Carbon::now();
 
-        $products = Product::select(['code', 'name', 'img'])
-            ->sortByDesc('created_at');
+        $products = Product::select(['code', 'name', 'img']);
 
         if ($limit != null) {
             $products = $products->limit($limit);
